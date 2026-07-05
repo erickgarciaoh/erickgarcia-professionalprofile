@@ -121,6 +121,19 @@ button:focus-visible {
 	background: var(--accent-hover);
 }
 
+/* Hero CTA: solid ink, not amber — the hero's single amber focal point is the
+   heatmap's peak cell (one-focus-per-view brand rule). */
+.btn-solid {
+	background: var(--ink-900);
+	color: var(--canvas-50);
+	border-color: var(--ink-900);
+}
+
+.btn-solid:hover {
+	background: var(--ink-700);
+	border-color: var(--ink-700);
+}
+
 .btn-ghost {
 	border-color: var(--canvas-400);
 	color: var(--text-primary);
@@ -139,9 +152,21 @@ button:focus-visible {
 
 .hero {
 	display: grid;
-	grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-	gap: clamp(var(--space-8), 6vw, var(--space-16));
+	grid-template-areas:
+		'lead viz'
+		'masthead viz';
+	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+	grid-template-rows: auto 1fr;
+	gap: clamp(var(--space-8), 5vw, var(--space-12)) clamp(var(--space-8), 5vw, var(--space-16));
 	align-items: start;
+}
+
+.hero-lead {
+	grid-area: lead;
+}
+
+.hero-viz {
+	grid-area: viz;
 }
 
 .hero-heading {
@@ -174,7 +199,10 @@ button:focus-visible {
 }
 
 .masthead {
+	grid-area: masthead;
+	align-self: end;
 	margin: 0;
+	max-width: 34rem;
 	border-top: 1px solid var(--border-default);
 }
 
@@ -485,6 +513,7 @@ button:focus-visible {
 	font-weight: 500;
 	font-family: var(--font-mono);
 	letter-spacing: -0.01em;
+	overflow-wrap: anywhere; /* the address exceeds a ≤320px viewport otherwise */
 }
 
 /* ---------- Footer ---------- */
@@ -503,11 +532,16 @@ button:focus-visible {
 
 @media (max-width: 60rem) {
 	.hero {
-		grid-template-columns: 1fr;
+		grid-template-areas:
+			'lead'
+			'viz'
+			'masthead';
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: none;
 		gap: var(--space-10);
 	}
 
-	.masthead {
+	.hero-viz {
 		max-width: 34rem;
 	}
 
@@ -520,6 +554,10 @@ button:focus-visible {
 	.project-row {
 		grid-template-columns: 1fr;
 		gap: var(--space-5);
+	}
+
+	.stack li {
+		white-space: normal; /* nowrap overflows the viewport at ≤320px */
 	}
 
 	.toolkit-group {

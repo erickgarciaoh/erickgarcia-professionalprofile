@@ -1,0 +1,428 @@
+---
+// Signature dataviz (phase 3): day × hour transaction pulse of the featured
+// coffee-shop analysis. The grid is fully rendered at build time from the
+// versioned JSON aggregate — JS only adds the hover/keyboard readout.
+import pulse from '../data/coffee-pulse.json';
+
+interface Props {
+	analysisUrl: string;
+}
+
+const { analysisUrl } = Astro.props;
+
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+type Cell = { day: number; hour: number; txns: number; revenue: number };
+const cells: Cell[] = pulse.cells.map(([day, hour, txns, revenue]) => ({ day, hour, txns, revenue }));
+
+const hours = [...new Set(cells.map((c) => c.hour))].sort((a, b) => a - b);
+const byKey = new Map(cells.map((c) => [`${c.day}-${c.hour}`, c]));
+
+// Equal-interval bins (5 classes) over transaction counts — sequential ramp,
+// one hue. Quantile breaks were tried first and rejected: they land inside the
+// dense afternoon-plateau cluster and checkerboard near-equal cells.
+const txnValues = cells.map((c) => c.txns);
+const [minT, maxT] = [Math.min(...txnValues), Math.max(...txnValues)];
+const binWidth = (maxT - minT) / 5;
+const bin = (t: number) => Math.min(5, Math.floor((t - minT) / binWidth) + 1);
+
+const peak = cells.reduce((m, c) => (c.txns > m.txns ? c : m));
+
+const fmtHour = (h: number) => `${((h + 11) % 12) + 1} ${h < 12 ? 'am' : 'pm'}`;
+const fmtTxns = (t: number) => t.toLocaleString('en-US');
+const fmtMoney = (r: number) => `$${Math.round(r).toLocaleString('en-US')}`;
+const label = (c: Cell) =>
+	`${DAYS[c.day - 1]} ${fmtHour(c.hour)} · ${fmtTxns(c.txns)} txns · ${fmtMoney(c.revenue)}`;
+
+const peakLabel = `Peak — ${label(peak)}`;
+const totalTxns = fmtTxns(pulse.meta.totalTransactions);
+const hourAxis = new Set([6, 9, 12, 15, 18]);
+
+const summary =
+	`Heatmap of ${totalTxns} coffee-shop transactions by day of week and hour, January to June 2023. ` +
+	`Every day repeats the same shape: a strong morning rush from 7 to 10 am — peaking ${DAYS[peak.day - 1]} at ` +
+	`${fmtHour(peak.hour)} with ${fmtTxns(peak.txns)} transactions — then a steady afternoon plateau that fades after 6 pm. ` +
+	`The full figures are in the table below the chart.`;
+---
+
+<figure class="pulse" data-theme="dark">
+	<figcaption class="pulse-head">
+		<p class="pulse-title">Six months of coffee, hour by hour</p>
+		<p class="pulse-sub">
+			<span class="nb">{totalTxns} POS transactions ·</span>
+			<span class="nb">{pulse.meta.stores} NYC stores ·</span>
+			<span class="nb">{pulse.meta.period}</span>
+		</p>
+	</figcaption>
+
+	<div
+		class="pulse-grid"
+		role="img"
+		aria-roledescription="heatmap"
+		aria-label={summary}
+		tabindex="0"
+		data-peak-label={peakLabel}
+	>
+		<span class="pulse-corner" aria-hidden="true"></span>
+		{DAYS.map((d) => <span class="pulse-day" aria-hidden="true">{d}</span>)}
+		{
+			hours.map((h) => (
+				<>
+					<span class="pulse-hour" aria-hidden="true">
+						{hourAxis.has(h) ? fmtHour(h) : ''}
+					</span>
+					{DAYS.map((_, i) => {
+						const c = byKey.get(`${i + 1}-${h}`)!;
+						const isPeak = c.day === peak.day && c.hour === peak.hour;
+						return (
+							<span
+								class:list={['pc', `q${bin(c.txns)}`, { 'is-peak': isPeak }]}
+								style={`--c:${i}`}
+								data-label={isPeak ? peakLabel : label(c)}
+								aria-hidden="true"
+							/>
+						);
+					})}
+				</>
+			))
+		}
+	</div>
+
+	<p class="pulse-readout">
+		<span class="pulse-mark" aria-hidden="true">◆</span>
+		<span class="pulse-readout-text" aria-live="polite">{peakLabel}</span>
+	</p>
+
+	<div class="pulse-legend" aria-hidden="true">
+		<span>fewer</span>
+		<span class="sw q1"></span><span class="sw q2"></span><span class="sw q3"></span><span class="sw q4"></span><span class="sw q5"></span>
+		<span>more transactions</span>
+	</div>
+
+	<details class="pulse-table">
+		<summary>View as table</summary>
+		<div class="pulse-table-scroll">
+			<table>
+				<caption>Transactions and revenue by weekday and hour, Jan–Jun 2023</caption>
+				<thead>
+					<tr>
+						<th scope="col">Hour</th>
+						{DAYS.map((d) => <th scope="col">{d}</th>)}
+					</tr>
+				</thead>
+				<tbody>
+					{
+						hours.map((h) => (
+							<tr>
+								<th scope="row">{fmtHour(h)}</th>
+								{DAYS.map((_, i) => {
+									const c = byKey.get(`${i + 1}-${h}`)!;
+									return (
+										<td>
+											{fmtTxns(c.txns)} · {fmtMoney(c.revenue)}
+										</td>
+									);
+								})}
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</div>
+	</details>
+
+	<p class="pulse-source">
+		Drawn from {totalTxns} real POS transactions —
+		<a href={analysisUrl}>read the full analysis <span aria-hidden="true">↗</span></a>
+	</p>
+</figure>
+
+<style>
+	.pulse {
+		/* Sequential slate ramp derived from tokens only (validated against ink-950;
+		   the near-zero step recedes toward the surface by sequential-scale design). */
+		--pulse-q1: color-mix(in oklab, var(--data-1) 34%, var(--ink-950));
+		--pulse-q2: color-mix(in oklab, var(--data-1) 60%, var(--ink-950));
+		--pulse-q3: var(--data-1);
+		--pulse-q4: color-mix(in oklab, var(--data-1) 78%, var(--canvas-200));
+		--pulse-q5: color-mix(in oklab, var(--data-1) 50%, var(--canvas-200));
+
+		margin: 0;
+		padding: clamp(var(--space-5), 2.5vw, var(--space-8));
+		background: var(--ink-950);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-lg);
+		color: var(--text-primary);
+	}
+
+	.pulse-title {
+		font-family: var(--font-display);
+		font-size: 1.75rem; /* Cormorant floor is 28px */
+		font-weight: 500;
+		line-height: 1.15;
+		letter-spacing: -0.01em;
+		text-wrap: balance;
+	}
+
+	.pulse-sub {
+		display: flex; /* flex-wrap, not text wrap: Astro strips inter-span whitespace */
+		flex-wrap: wrap;
+		column-gap: 0.75ch;
+		margin-top: var(--space-2);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.02em;
+		color: var(--text-secondary);
+	}
+
+	.nb {
+		white-space: nowrap;
+	}
+
+	/* ---------- Grid ---------- */
+
+	.pulse-grid {
+		display: grid;
+		grid-template-columns: 2.6rem repeat(7, minmax(0, 1fr));
+		gap: 2px; /* the surface gap is the separator — never borders around marks */
+		margin-top: var(--space-6);
+		border-radius: var(--radius-sm);
+	}
+
+	.pulse-grid:focus-visible {
+		outline: 2px solid var(--accent-on-dark);
+		outline-offset: 4px;
+	}
+
+	.pulse-day,
+	.pulse-hour {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		color: var(--text-secondary);
+	}
+
+	.pulse-day {
+		text-align: center;
+		padding-bottom: var(--space-1);
+	}
+
+	.pulse-hour {
+		align-self: center;
+		padding-right: var(--space-2);
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.pc {
+		height: clamp(1.05rem, 2.2vh, 1.35rem);
+		border-radius: var(--radius-sm);
+		animation: cell-in var(--motion-page) backwards;
+		animation-delay: calc(var(--c) * 90ms + 150ms);
+	}
+
+	.q1 { background: var(--pulse-q1); }
+	.q2 { background: var(--pulse-q2); }
+	.q3 { background: var(--pulse-q3); }
+	.q4 { background: var(--pulse-q4); }
+	.q5 { background: var(--pulse-q5); }
+
+	/* The one amber focal point of the hero view — plus a shape channel (ring),
+	   so emphasis never rides on hue alone. */
+	.is-peak {
+		background: var(--accent-on-dark);
+		outline: 1.5px solid var(--canvas-200);
+		outline-offset: 1px;
+	}
+
+	.pc.is-active:not(.is-peak) {
+		outline: 1.5px solid var(--canvas-400);
+		outline-offset: 1px;
+	}
+
+	@keyframes cell-in {
+		from {
+			opacity: 0;
+		}
+	}
+
+	/* ---------- Readout & legend ---------- */
+
+	.pulse-readout {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-2);
+		margin-top: var(--space-5);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--text-primary);
+		min-height: 1.6em; /* reserve the line — no layout jump on hover */
+		animation: cell-in var(--motion-page) backwards;
+		animation-delay: 800ms;
+	}
+
+	.pulse-mark {
+		color: var(--accent-on-dark);
+		font-size: 0.625rem;
+		transform: translateY(-1px);
+	}
+
+	.pulse-legend {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--space-2);
+		margin-top: var(--space-4);
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		color: var(--text-secondary);
+		animation: cell-in var(--motion-page) backwards;
+		animation-delay: 800ms;
+	}
+
+	.sw {
+		width: 1.1rem;
+		height: 0.6rem;
+		border-radius: var(--radius-sm);
+	}
+
+	/* ---------- Table view ---------- */
+
+	.pulse-table {
+		margin-top: var(--space-5);
+		font-size: 0.8125rem;
+	}
+
+	.pulse-table summary {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--text-secondary);
+		cursor: pointer;
+	}
+
+	.pulse-table summary:hover {
+		color: var(--text-primary);
+	}
+
+	.pulse-table-scroll {
+		overflow-x: auto;
+		margin-top: var(--space-3);
+	}
+
+	.pulse-table table {
+		border-collapse: collapse;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+	}
+
+	.pulse-table caption {
+		text-align: left;
+		color: var(--text-secondary);
+		padding-bottom: var(--space-2);
+	}
+
+	.pulse-table th,
+	.pulse-table td {
+		padding: 0.3em 0.7em;
+		border: 1px solid var(--ink-700);
+		color: var(--text-primary);
+		font-weight: 400;
+		text-align: right;
+	}
+
+	.pulse-table thead th,
+	.pulse-table tbody th {
+		color: var(--text-secondary);
+	}
+
+	/* ---------- Source line ---------- */
+
+	.pulse-source {
+		margin-top: var(--space-5);
+		padding-top: var(--space-4);
+		border-top: 1px solid var(--ink-700);
+		font-size: 0.875rem;
+		color: var(--text-secondary);
+		text-wrap: pretty;
+	}
+
+	.pulse-source a {
+		color: var(--text-primary);
+		text-decoration: none;
+		border-bottom: 1px solid var(--border-default);
+		padding-bottom: 1px;
+		transition: border-color var(--motion-base);
+	}
+
+	.pulse-source a:hover {
+		border-bottom-color: var(--text-primary);
+	}
+
+	@media (max-width: 26rem) {
+		.pulse-readout {
+			min-height: 3.2em; /* the peak label wraps to two lines here — keep hover from shifting layout */
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.pc,
+		.pulse-readout,
+		.pulse-legend {
+			animation: none;
+		}
+	}
+</style>
+
+<script>
+	// Enhancement only: hover / keyboard exploration of the already-rendered grid.
+	const grid = document.querySelector<HTMLElement>('.pulse-grid');
+	const readout = document.querySelector<HTMLElement>('.pulse-readout-text');
+	const mark = document.querySelector<HTMLElement>('.pulse-mark');
+
+	if (grid && readout && mark) {
+		const cells = [...grid.querySelectorAll<HTMLElement>('.pc')];
+		const peakLabel = grid.dataset.peakLabel ?? '';
+		const COLS = 7;
+		let active = cells.findIndex((c) => c.classList.contains('is-peak'));
+
+		const show = (cell: HTMLElement) => {
+			readout.textContent = cell.dataset.label ?? '';
+			mark.style.visibility = cell.classList.contains('is-peak') ? 'visible' : 'hidden';
+		};
+
+		const reset = () => {
+			cells.forEach((c) => c.classList.remove('is-active'));
+			readout.textContent = peakLabel;
+			mark.style.visibility = 'visible';
+		};
+
+		grid.addEventListener('pointerover', (e) => {
+			const cell = (e.target as HTMLElement).closest<HTMLElement>('.pc');
+			if (cell) show(cell);
+		});
+		grid.addEventListener('pointerleave', reset);
+
+		const moveTo = (index: number) => {
+			active = Math.max(0, Math.min(cells.length - 1, index));
+			cells.forEach((c) => c.classList.remove('is-active'));
+			cells[active].classList.add('is-active');
+			show(cells[active]);
+		};
+
+		grid.addEventListener('keydown', (e) => {
+			const step: Record<string, number> = {
+				ArrowLeft: -1,
+				ArrowRight: 1,
+				ArrowUp: -COLS,
+				ArrowDown: COLS,
+			};
+			if (e.key in step) {
+				e.preventDefault();
+				moveTo(active + step[e.key]);
+			}
+		});
+		grid.addEventListener('focus', () => moveTo(active));
+		grid.addEventListener('blur', reset);
+	}
+</script>

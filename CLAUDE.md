@@ -11,7 +11,7 @@ Contexto de diseño: `PRODUCT.md` (estrategia, register: brand) y `DESIGN.md` (a
 | 0 | **Fundaciones** — scaffold Astro (pnpm), copiar tokens CSS del repo de marca, fuentes self-hosted, layout base, monograma EG como favicon, deploy a GitHub Pages desde el día 1. | **Completada** (2026-07-05) |
 | 1 | **Contenido completo, sin espectáculo** — página entera con contenido real: hero (copy), perfil/skills, índice de 4 proyectos vía content collection, contacto. Responsive, accesible, legible. Idioma: inglés (alcance internacional). | **Completada** (2026-07-05) |
 | 2 | **Sistema visual con carácter** — treatment light base + ventanas dark, tipografía a escala, jerarquía del índice (destacado + lista), imagery real (screenshots de dashboards/proyectos). `/impeccable craft` por sección. | **Completada** (2026-07-05) |
-| 3 | **Pieza de firma** — dataviz viva e interactiva en el hero (canvas/SVG, datos reales). Se define con `/impeccable shape` antes de codear. Fallback estático + reduced-motion. | Pendiente |
+| 3 | **Pieza de firma** — dataviz viva e interactiva en el hero (canvas/SVG, datos reales). Se define con `/impeccable shape` antes de codear. Fallback estático + reduced-motion. | **Completada** (2026-07-05) |
 | 4 | **Motion coreografiado** — orquestación de carga del hero, transición entre mundos light/dark, micro-interacciones. `/impeccable animate`. | Pendiente |
 | 5 | **QA y publicación** — `/impeccable critique` + `audit` + `polish`, screenshots Playwright en breakpoints, contraste AA, performance (LCP), publicación final y enlace desde CV/LinkedIn. | Pendiente |
 
@@ -20,7 +20,6 @@ Regla de proceso: idea nueva a mitad de fase → se clasifica contra este plan (
 Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_SESIONES.md`.
 
 ## Backlog (explícitamente diferido)
-- Elección del dataset y concepto exacto de la dataviz de firma (se decide en fase 3 con `/impeccable shape`).
 - Sección blog/notas de análisis.
 - Toggle de tema dark completo para toda la página (hoy: dark solo por ventanas).
 - i18n ES/EN si el idioma elegido en fase 1 se queda corto para la audiencia.
@@ -35,7 +34,7 @@ Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_
 - QA visual: Playwright (screenshots por breakpoint).
 
 ## Datos
-No aplica base de datos. La dataviz de firma consume un dataset estático (JSON versionado en el repo).
+No aplica base de datos en runtime. La dataviz de firma ("Weekly Pulse", fase 3) consume `src/data/coffee-pulse.json`: agregado día×hora (txns + revenue) de las 149,116 transacciones del proyecto coffee-shop, generado one-off desde `XTREMUS\DB001/coffee_shop_sales` (`core.fact_sale_line ⋈ core.dim_date`). Para regenerarlo, re-ejecutar esa query y verificar que el total cuadre con 149,116.
 
 ## Convenciones
 <!-- Solo deltas respecto al CLAUDE.md global. -->

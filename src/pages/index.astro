@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import WeeklyPulse from '../components/WeeklyPulse.astro';
 import '../styles/page.css';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -39,10 +40,14 @@ const rest = projects.filter((project) => !project.data.featured);
 						checked before it's called a finding.
 					</p>
 					<div class="hero-actions">
-						<a href="#projects" class="btn btn-primary">View the work</a>
+						<a href="#projects" class="btn btn-solid">View the work</a>
 						<a href="#contact" class="btn btn-ghost">Get in touch</a>
 					</div>
 				</div>
+
+				<aside class="hero-viz" aria-label="Live sample of my work: weekly transaction pulse">
+					{featured && <WeeklyPulse analysisUrl={featured.data.liveUrl} />}
+				</aside>
 
 				<dl class="masthead" aria-label="At a glance">
 					<div class="masthead-row">
