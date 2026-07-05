@@ -3,6 +3,7 @@ node_modules/
 *.tmp
 dist/
 .astro/
+outputs/
 
 # Repo publico: rutas y nombres de maquina locales fuera del control de versiones.
 .claude/settings.json
