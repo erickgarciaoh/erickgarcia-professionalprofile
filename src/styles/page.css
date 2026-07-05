@@ -48,17 +48,33 @@ section {
 }
 
 a:focus-visible,
-button:focus-visible {
+button:focus-visible,
+summary:focus-visible {
 	outline: 2px solid var(--accent);
 	outline-offset: 3px;
 	border-radius: var(--radius-sm);
 }
 
-[data-theme='dark'] a:focus-visible {
+[data-theme='dark'] a:focus-visible,
+[data-theme='dark'] summary:focus-visible {
 	outline-color: var(--accent-on-dark);
 }
 
 /* ---------- Header ---------- */
+
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	border-bottom: 1px solid transparent;
+	background: color-mix(in srgb, var(--surface-page) 92%, transparent);
+	backdrop-filter: blur(8px);
+	transition: border-color var(--motion-base);
+}
+
+.site-header.is-scrolled {
+	border-bottom-color: var(--border-default);
+}
 
 .site-header .wrap {
 	display: flex;
@@ -75,20 +91,37 @@ button:focus-visible {
 	letter-spacing: 0.02em;
 	text-decoration: none;
 	color: var(--text-primary);
+	transition: color var(--motion-base);
+}
+
+.site-mark:visited {
+	color: var(--text-primary);
+}
+
+.site-mark:hover {
+	color: var(--canvas-700);
 }
 
 .primary-nav {
 	display: flex;
+	align-items: center;
 	gap: clamp(var(--space-4), 3vw, var(--space-8));
 	flex-wrap: wrap;
+	margin-block: calc(-1 * var(--space-3));
 }
 
 .primary-nav a {
+	display: inline-block;
+	padding-block: var(--space-3);
 	font-size: 0.9375rem;
 	font-weight: 500;
 	text-decoration: none;
 	color: var(--canvas-700); /* AA at body size; --text-secondary is only 4.27:1 on canvas-200 */
 	transition: color var(--motion-base);
+}
+
+.primary-nav a:visited {
+	color: var(--canvas-700);
 }
 
 .primary-nav a:hover {
@@ -123,7 +156,8 @@ button:focus-visible {
 }
 
 /* Amber lives here as a fill with ink text (5.9:1) — never as light-mode text. */
-.btn-primary {
+.btn-primary,
+.btn-primary:visited {
 	background: var(--accent);
 	color: var(--ink-950);
 }
@@ -134,7 +168,8 @@ button:focus-visible {
 
 /* Hero CTA: solid ink, not amber — the hero's single amber focal point is the
    heatmap's peak cell (one-focus-per-view brand rule). */
-.btn-solid {
+.btn-solid,
+.btn-solid:visited {
 	background: var(--ink-900);
 	color: var(--canvas-50);
 	border-color: var(--ink-900);
@@ -145,7 +180,8 @@ button:focus-visible {
 	border-color: var(--ink-700);
 }
 
-.btn-ghost {
+.btn-ghost,
+.btn-ghost:visited {
 	border-color: var(--canvas-400);
 	color: var(--text-primary);
 }
@@ -189,7 +225,7 @@ button:focus-visible {
 
 .hero-role {
 	margin-top: var(--space-4);
-	font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+	font-size: clamp(1.5rem, 2.2vw, 1.6rem);
 	font-weight: 400;
 	color: var(--text-secondary);
 }
@@ -446,6 +482,11 @@ button:focus-visible {
 	transition: color var(--motion-base);
 }
 
+.featured-title a:visited,
+.row-title a:visited {
+	color: var(--text-primary);
+}
+
 .featured-title a:hover,
 .row-title a:hover {
 	color: var(--accent-on-dark);
@@ -483,9 +524,12 @@ button:focus-visible {
 
 .link-live,
 .link-repo {
+	display: inline-block;
 	font-size: 0.9375rem;
 	font-weight: 500;
 	text-decoration: none;
+	padding-top: 1rem;
+	margin-top: -1rem;
 	padding-bottom: 2px;
 	border-bottom: 1px solid transparent;
 	transition:
@@ -494,7 +538,8 @@ button:focus-visible {
 }
 
 /* The single persistent amber in this view = the featured live-story link. */
-.featured .link-live {
+.featured .link-live,
+.featured .link-live:visited {
 	color: var(--accent-on-dark);
 	border-bottom-color: color-mix(in srgb, var(--accent-on-dark) 45%, transparent);
 }
@@ -503,7 +548,8 @@ button:focus-visible {
 	border-bottom-color: var(--accent-on-dark);
 }
 
-.link-live {
+.link-live,
+.link-live:visited {
 	color: var(--text-primary);
 	border-bottom-color: var(--border-default);
 }
@@ -513,7 +559,8 @@ button:focus-visible {
 	border-bottom-color: var(--accent-on-dark);
 }
 
-.link-repo {
+.link-repo,
+.link-repo:visited {
 	color: var(--text-secondary);
 	border-bottom-color: var(--border-default);
 }
@@ -604,12 +651,19 @@ button:focus-visible {
 
 /* ---------- Contact ---------- */
 
+.contact-actions {
+	display: flex;
+	gap: var(--space-4);
+	flex-wrap: wrap;
+	margin-top: var(--space-8);
+}
+
 .contact-list {
 	display: flex;
 	gap: var(--space-4) var(--space-8);
 	flex-wrap: wrap;
 	align-items: baseline;
-	margin-top: var(--space-8);
+	margin-top: var(--space-6);
 	padding: 0;
 	list-style: none;
 }
@@ -623,17 +677,36 @@ button:focus-visible {
 	transition: border-color var(--motion-base);
 }
 
+.contact-list a:visited {
+	color: var(--text-primary);
+}
+
 .contact-list a:hover {
 	border-bottom-color: var(--text-primary);
 }
 
 /* Contact focal by size/weight, not color — amber as light text fails AA. */
 .contact-primary {
+	display: inline-block;
+	margin-top: var(--space-8);
 	font-size: clamp(1.25rem, 2.4vw, 1.6rem);
 	font-weight: 500;
 	font-family: var(--font-mono);
 	letter-spacing: -0.01em;
 	overflow-wrap: anywhere; /* the address exceeds a ≤320px viewport otherwise */
+	text-decoration: none;
+	color: var(--text-primary);
+	border-bottom: 1px solid var(--border-default);
+	padding-bottom: 2px;
+	transition: border-color var(--motion-base);
+}
+
+.contact-primary:visited {
+	color: var(--text-primary);
+}
+
+.contact-primary:hover {
+	border-bottom-color: var(--text-primary);
 }
 
 /* ---------- Footer ---------- */
@@ -645,7 +718,7 @@ button:focus-visible {
 .site-footer .wrap {
 	padding-block: var(--space-8);
 	font-size: 0.875rem;
-	color: var(--text-muted);
+	color: var(--canvas-700); /* AA at body size; --text-secondary is only 4.27:1 on canvas-200 */
 }
 
 /* ---------- Responsive ---------- */

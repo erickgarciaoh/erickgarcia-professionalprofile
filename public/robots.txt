@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://erickgarciaoh.github.io/erickgarcia-professionalprofile/sitemap-index.xml

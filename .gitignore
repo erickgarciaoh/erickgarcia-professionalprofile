@@ -4,6 +4,7 @@ node_modules/
 dist/
 .astro/
 outputs/
+.impeccable/
 
 # Repo publico: rutas y nombres de maquina locales fuera del control de versiones.
 .claude/settings.json
