@@ -66,7 +66,7 @@ const summary =
 		<span class="pulse-corner" aria-hidden="true"></span>
 		{DAYS.map((d) => <span class="pulse-day" aria-hidden="true">{d}</span>)}
 		{
-			hours.map((h) => (
+			hours.map((h, r) => (
 				<>
 					<span class="pulse-hour" aria-hidden="true">
 						{hourAxis.has(h) ? fmtHour(h) : ''}
@@ -77,7 +77,7 @@ const summary =
 						return (
 							<span
 								class:list={['pc', `q${bin(c.txns)}`, { 'is-peak': isPeak }]}
-								style={`--c:${i}`}
+								style={`--c:${i}; --r:${r}`}
 								data-label={isPeak ? peakLabel : label(c)}
 								aria-hidden="true"
 							/>
@@ -216,8 +216,11 @@ const summary =
 	.pc {
 		height: clamp(1.05rem, 2.2vh, 1.35rem);
 		border-radius: var(--radius-sm);
-		animation: cell-in var(--motion-page) backwards;
-		animation-delay: calc(var(--c) * 90ms + 150ms);
+		/* Diagonal build (col + row): the grid resolves from the top-left corner
+		   outward as the hero's payoff, timed to start as the editorial cascade
+		   tails off (~520ms). */
+		animation: cell-in var(--motion-slow) backwards;
+		animation-delay: calc((var(--c) + var(--r)) * 32ms + 520ms);
 	}
 
 	.q1 { background: var(--pulse-q1); }
@@ -228,10 +231,14 @@ const summary =
 
 	/* The one amber focal point of the hero view — plus a shape channel (ring),
 	   so emphasis never rides on hue alone. */
+	/* The peak lands last and alone — after the whole grid has resolved — so the
+	   single amber focal of the hero view reads as the arrival, not one cell
+	   among many. Timing carries the emphasis; no glow (borders-not-shadows). */
 	.is-peak {
 		background: var(--accent-on-dark);
 		outline: 1.5px solid var(--canvas-200);
 		outline-offset: 1px;
+		animation-delay: 1240ms;
 	}
 
 	.pc.is-active:not(.is-peak) {
@@ -242,6 +249,7 @@ const summary =
 	@keyframes cell-in {
 		from {
 			opacity: 0;
+			transform: scale(0.4);
 		}
 	}
 
@@ -257,7 +265,7 @@ const summary =
 		color: var(--text-primary);
 		min-height: 1.6em; /* reserve the line — no layout jump on hover */
 		animation: cell-in var(--motion-page) backwards;
-		animation-delay: 800ms;
+		animation-delay: 1320ms; /* confirms the reading just after the peak lands */
 	}
 
 	.pulse-mark {
@@ -276,7 +284,7 @@ const summary =
 		font-size: 0.6875rem;
 		color: var(--text-secondary);
 		animation: cell-in var(--motion-page) backwards;
-		animation-delay: 800ms;
+		animation-delay: 1320ms;
 	}
 
 	.sw {

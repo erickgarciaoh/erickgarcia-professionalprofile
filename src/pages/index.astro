@@ -174,8 +174,8 @@ const rest = projects.filter((project) => !project.data.featured);
 
 				<ol class="project-list">
 					{
-						rest.map((project) => (
-							<li class="project-row">
+						rest.map((project, index) => (
+							<li class="project-row" style={`--i:${index}`}>
 								<a
 									class="row-media"
 									href={project.data.liveUrl}
@@ -250,3 +250,32 @@ const rest = projects.filter((project) => !project.data.featured);
 		</div>
 	</footer>
 </Layout>
+
+<script>
+	// Phase 4 — dark-window threshold. Reveal the projects section once, when it
+	// scrolls into view. Enhancement only: without this (or without IO support)
+	// the section is already fully visible; the from-state lives behind
+	// [data-reveal="js"], set on <html> in Layout.astro.
+	const projects = document.getElementById('projects');
+
+	if (projects) {
+		const reveal = () => projects.classList.add('is-revealed');
+
+		if (!('IntersectionObserver' in window)) {
+			reveal();
+		} else {
+			const io = new IntersectionObserver(
+				(entries, obs) => {
+					for (const entry of entries) {
+						if (entry.isIntersecting) {
+							reveal();
+							obs.disconnect();
+						}
+					}
+				},
+				{ threshold: 0.15, rootMargin: '0px 0px -8% 0px' },
+			);
+			io.observe(projects);
+		}
+	}
+</script>

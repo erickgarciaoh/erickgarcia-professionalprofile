@@ -1,7 +1,12 @@
 /* Phase 2 — visual character. Two worlds: a light editorial document that
    opens into dark dashboard windows (the projects index). Type at scale,
-   real imagery, index hierarchy. Motion choreography is deferred to phase 4;
-   only interaction-state feedback lives here. See CLAUDE.md phase plan. */
+   real imagery, index hierarchy.
+
+   Phase 4 — motion choreography (section "Motion" below): an orchestrated
+   hero load (name wipe → editorial cascade → viz payoff, coordinated with
+   WeeklyPulse.astro's grid build) and a once-only threshold reveal entering
+   the dark projects window. No library; CSS + one IntersectionObserver.
+   Every layer degrades to its natural, visible state under reduced-motion. */
 
 /* ---------- Structure ---------- */
 
@@ -108,7 +113,13 @@ button:focus-visible {
 	transition:
 		background var(--motion-base),
 		border-color var(--motion-base),
-		color var(--motion-base);
+		color var(--motion-base),
+		transform var(--motion-fast);
+}
+
+/* Press feedback — a quick, decisive give (no bounce). */
+.btn:active {
+	transform: scale(0.97);
 }
 
 /* Amber lives here as a fill with ink text (5.9:1) — never as light-mode text. */
@@ -230,6 +241,60 @@ button:focus-visible {
 	text-wrap: pretty;
 }
 
+/* ---------- Hero load choreography (phase 4) ----------
+   One rehearsed entrance: the name resolves with a left-to-right wipe (the
+   anchor), the supporting lines rise in a tight cascade, and the masthead rules
+   draw in as each row settles. The viz build (WeeklyPulse.astro, ~520ms→) is
+   timed to start on this cascade's tail so the two columns read as one load.
+   Pure CSS load animations: they run without JS and, under reduced-motion, the
+   blanket rule at the foot of this file collapses them to their end state. */
+
+@keyframes name-wipe {
+	from {
+		opacity: 0;
+		clip-path: inset(0 100% 0 0);
+	}
+	to {
+		opacity: 1;
+		clip-path: inset(0 0 0 0);
+	}
+}
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+}
+
+.hero-heading {
+	animation: name-wipe 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-role {
+	animation: rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+	animation-delay: 260ms;
+}
+
+.hero-lede {
+	animation: rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+	animation-delay: 380ms;
+}
+
+.hero-actions {
+	animation: rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+	animation-delay: 500ms;
+}
+
+/* Each row rises with its own bottom rule — the lines appear to draw top-down. */
+.masthead-row {
+	animation: rise 550ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.masthead-row:nth-child(1) { animation-delay: 560ms; }
+.masthead-row:nth-child(2) { animation-delay: 650ms; }
+.masthead-row:nth-child(3) { animation-delay: 740ms; }
+
 /* ---------- Section headings ---------- */
 
 .section-heading {
@@ -341,6 +406,13 @@ button:focus-visible {
 	display: block;
 	width: 100%;
 	height: auto;
+	transition: transform var(--motion-medium);
+}
+
+/* The frame holds; the screenshot breathes. Borders stay the affordance. */
+.featured-media:hover img,
+.row-media:hover img {
+	transform: scale(1.03);
 }
 
 .featured {
@@ -482,6 +554,54 @@ button:focus-visible {
 	margin-top: var(--space-3);
 }
 
+/* ---------- Dark-window threshold (phase 4) ----------
+   Crossing from the light document into the dark projects window is the second
+   staged moment. Not a fade-on-scroll of the whole section (a vetoed AI tell) —
+   one deliberate reveal of the window's contents: the featured screenshot wipes
+   up like a dashboard powering on, its body settles, then the rows stagger in
+   (a legitimate sibling stagger, not a per-section reflex).
+
+   The from-state is scoped to [data-reveal="js"], set on <html> before paint, so
+   the section is fully visible without JS. IntersectionObserver adds .is-revealed
+   once on enter (see index.astro). Under reduced-motion the from-state is undone
+   below, so content is visible regardless of scroll. */
+
+[data-reveal='js'] #projects .featured-media {
+	clip-path: inset(0 0 100% 0);
+	transition: clip-path 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal='js'] #projects .featured-body > *,
+[data-reveal='js'] #projects .project-row {
+	opacity: 0;
+	transform: translateY(20px);
+	transition:
+		opacity var(--motion-page),
+		transform var(--motion-page);
+}
+
+[data-reveal='js'] #projects.is-revealed .featured-media {
+	clip-path: inset(0 0 0 0);
+}
+
+[data-reveal='js'] #projects.is-revealed .featured-body > *,
+[data-reveal='js'] #projects.is-revealed .project-row {
+	opacity: 1;
+	transform: none;
+}
+
+/* Featured body settles right after the screenshot resolves. */
+[data-reveal='js'] #projects.is-revealed .featured-body > *:nth-child(1) { transition-delay: 180ms; }
+[data-reveal='js'] #projects.is-revealed .featured-body > *:nth-child(2) { transition-delay: 250ms; }
+[data-reveal='js'] #projects.is-revealed .featured-body > *:nth-child(3) { transition-delay: 320ms; }
+[data-reveal='js'] #projects.is-revealed .featured-body > *:nth-child(4) { transition-delay: 390ms; }
+[data-reveal='js'] #projects.is-revealed .featured-body > *:nth-child(5) { transition-delay: 460ms; }
+
+/* Rows stagger via --i (set per row in index.astro), after the featured lands. */
+[data-reveal='js'] #projects.is-revealed .project-row {
+	transition-delay: calc(var(--i, 0) * 90ms + 260ms);
+}
+
 /* ---------- Contact ---------- */
 
 .contact-list {
@@ -567,7 +687,27 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	* {
+	/* Collapse every load animation and transition to its end state: with delay
+	   zeroed, backwards-filled hero anims snap to their natural (visible) state
+	   instead of holding the from-state. */
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-delay: 0ms !important;
+		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
+	}
+
+	/* The threshold reveal gates on scroll; undo its from-state outright so the
+	   dark window is visible without depending on the IntersectionObserver. */
+	[data-reveal='js'] #projects .featured-media {
+		clip-path: none !important;
+	}
+
+	[data-reveal='js'] #projects .featured-body > *,
+	[data-reveal='js'] #projects .project-row {
+		opacity: 1 !important;
+		transform: none !important;
 	}
 }
