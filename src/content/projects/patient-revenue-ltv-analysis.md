@@ -13,4 +13,6 @@ liveUrl: "https://erickgarciaoh.github.io/patient-revenue-ltv-analysis/"
 repoUrl: "https://github.com/erickgarciaoh/patient-revenue-ltv-analysis"
 featured: false
 order: 2
+cover: "../../assets/projects/patient-revenue-ltv-analysis.png"
+coverAlt: "Opening screen of the patient-revenue data story with a KPI strip: 1,419 patients, $2.83M revenue, and 29.7% conversion to specialized care."
 ---

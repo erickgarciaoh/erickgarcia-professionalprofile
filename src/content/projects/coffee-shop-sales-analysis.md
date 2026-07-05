@@ -13,4 +13,6 @@ liveUrl: "https://erickgarciaoh.github.io/coffee-shop-sales-analysis/"
 repoUrl: "https://github.com/erickgarciaoh/coffee-shop-sales-analysis"
 featured: true
 order: 1
+cover: "../../assets/projects/coffee-shop-sales-analysis.png"
+coverAlt: "Opening screen of the coffee-chain data story — 'Reading a coffee chain, line by line' set over $698K H1 revenue and 149,116 transactions."
 ---

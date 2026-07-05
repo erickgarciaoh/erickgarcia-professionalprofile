@@ -10,7 +10,7 @@ Contexto de diseño: `PRODUCT.md` (estrategia, register: brand) y `DESIGN.md` (a
 |---|---|---|
 | 0 | **Fundaciones** — scaffold Astro (pnpm), copiar tokens CSS del repo de marca, fuentes self-hosted, layout base, monograma EG como favicon, deploy a GitHub Pages desde el día 1. | **Completada** (2026-07-05) |
 | 1 | **Contenido completo, sin espectáculo** — página entera con contenido real: hero (copy), perfil/skills, índice de 4 proyectos vía content collection, contacto. Responsive, accesible, legible. Idioma: inglés (alcance internacional). | **Completada** (2026-07-05) |
-| 2 | **Sistema visual con carácter** — treatment light base + ventanas dark, tipografía a escala, jerarquía del índice (destacado + lista), imagery real (screenshots de dashboards/proyectos). `/impeccable craft` por sección. | Pendiente |
+| 2 | **Sistema visual con carácter** — treatment light base + ventanas dark, tipografía a escala, jerarquía del índice (destacado + lista), imagery real (screenshots de dashboards/proyectos). `/impeccable craft` por sección. | **Completada** (2026-07-05) |
 | 3 | **Pieza de firma** — dataviz viva e interactiva en el hero (canvas/SVG, datos reales). Se define con `/impeccable shape` antes de codear. Fallback estático + reduced-motion. | Pendiente |
 | 4 | **Motion coreografiado** — orquestación de carga del hero, transición entre mundos light/dark, micro-interacciones. `/impeccable animate`. | Pendiente |
 | 5 | **QA y publicación** — `/impeccable critique` + `audit` + `polish`, screenshots Playwright en breakpoints, contraste AA, performance (LCP), publicación final y enlace desde CV/LinkedIn. | Pendiente |

@@ -14,4 +14,6 @@ liveUrl: "https://erickgarciaoh.github.io/customer-complaints-analysis/"
 repoUrl: "https://github.com/erickgarciaoh/customer-complaints-analysis"
 featured: false
 order: 3
+cover: "../../assets/projects/customer-complaints-analysis.png"
+coverAlt: "Opening screen of the CFPB complaints analysis — 'Where, when and why the bank loses ground with its customers' above 62,516 complaints across 6.3 years."
 ---
