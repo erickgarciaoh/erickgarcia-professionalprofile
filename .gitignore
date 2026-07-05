@@ -1,7 +1,9 @@
 node_modules/
 .claude/settings.local.json
 *.tmp
+dist/
+.astro/
 
-# Si el repo sera publico, descomentar para no exponer rutas y nombres de maquina locales:
-# .claude/settings.json
-# .mcp.json
+# Repo publico: rutas y nombres de maquina locales fuera del control de versiones.
+.claude/settings.json
+.mcp.json

@@ -1,6 +1,13 @@
 # personal-landing-page-2
 
-<!-- Descripción de una línea: qué es y qué demuestra. -->
+Landing personal + índice de portfolio de Erick García (Data Analyst / BI). Astro + design system propio.
 
 ## Cómo verlo / ejecutarlo
-<!-- Pasos mínimos para reproducir o ver el resultado. -->
+
+```
+pnpm install
+pnpm dev      # http://localhost:4321
+pnpm build    # dist/ estático
+```
+
+Deploy automático a GitHub Pages en cada push a `main` (`.github/workflows/deploy.yml`).
