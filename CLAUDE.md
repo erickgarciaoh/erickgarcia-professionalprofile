@@ -1,23 +1,43 @@
 # personal-landing-page-2
 
 ## Objetivo
-<!-- Qué se quiere lograr y para quién. Una o dos líneas. -->
+Landing page personal + índice de portfolio de Erick García (Data Analyst / BI). Carta de presentación que impresione a reclutadores y dé acceso a los proyectos publicados. Ejecuta la fase 4 del repo `D:\Dev\Projects\personal-brand-design` (design system = fuente de verdad visual). Sustituye a los intentos `personal-landing-page` y `TEST2-html-page`, cuyo resultado se sintió plano; sus tics están vetados en `PRODUCT.md`.
+
+Contexto de diseño: `PRODUCT.md` (estrategia, register: brand) y `DESIGN.md` (aplicación del sistema visual). Todo trabajo de UI pasa por el skill `/impeccable`.
 
 ## Plan por fases
-<!-- Acordar con Erick ANTES de codear (regla anti-abandono). Si vienes de /kickoff, vuelca aquí el plan acordado. -->
-
 | Fase | Descripción | Estado |
 |---|---|---|
-| 1 | <!-- --> | Pendiente |
+| 0 | **Fundaciones** — scaffold Astro (pnpm), copiar tokens CSS del repo de marca, fuentes self-hosted, layout base, monograma EG como favicon, deploy a GitHub Pages desde el día 1. | Pendiente |
+| 1 | **Contenido completo, sin espectáculo** — página entera con contenido real: hero (copy), perfil/skills, índice de 3+ proyectos vía content collection, contacto. Responsive, accesible, legible. Decidir idioma del contenido al arrancar esta fase. | Pendiente |
+| 2 | **Sistema visual con carácter** — treatment light base + ventanas dark, tipografía a escala, jerarquía del índice (destacado + lista), imagery real (screenshots de dashboards/proyectos). `/impeccable craft` por sección. | Pendiente |
+| 3 | **Pieza de firma** — dataviz viva e interactiva en el hero (canvas/SVG, datos reales). Se define con `/impeccable shape` antes de codear. Fallback estático + reduced-motion. | Pendiente |
+| 4 | **Motion coreografiado** — orquestación de carga del hero, transición entre mundos light/dark, micro-interacciones. `/impeccable animate`. | Pendiente |
+| 5 | **QA y publicación** — `/impeccable critique` + `audit` + `polish`, screenshots Playwright en breakpoints, contraste AA, performance (LCP), publicación final y enlace desde CV/LinkedIn. | Pendiente |
+
+Regla de proceso: idea nueva a mitad de fase → se clasifica contra este plan (va ahora / backlog / descartada) antes de tocar código. No se reordena ni reinicia sin decisión explícita.
+
+Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_SESIONES.md`.
 
 ## Backlog (explícitamente diferido)
-<!-- Ideas surgidas a mitad de desarrollo que no entran en el plan actual. Nada se descarta sin registrarse aquí. -->
+- Elección del dataset y concepto exacto de la dataviz de firma (se decide en fase 3 con `/impeccable shape`).
+- Sección blog/notas de análisis.
+- Toggle de tema dark completo para toda la página (hoy: dark solo por ventanas).
+- i18n ES/EN si el idioma elegido en fase 1 se queda corto para la audiencia.
+- Analytics de visitas (privacy-friendly).
+- Página de detalle por proyecto (caso de estudio largo) si el índice + enlace externo no basta.
 
 ## Stack
-<!-- Herramientas, librerías y motores del proyecto. -->
+- **Astro** (output estático) + CSS con tokens de marca + TS vanilla para interacción; GSAP o motion solo si la fase 4 lo pide.
+- **pnpm** siempre. Deploy: GitHub Pages (GitHub Actions).
+- QA visual: Playwright (screenshots por breakpoint).
 
 ## Datos
-<!-- Solo si aplica: servidor, base(s), tablas. Datasets fuente van en data/raw/ (versionados, ruta canónica). Diccionarios de datos en context/. Referenciar ambos aquí. -->
+No aplica base de datos. La dataviz de firma consume un dataset estático (JSON versionado en el repo).
 
 ## Convenciones
-<!-- Solo deltas respecto al CLAUDE.md global. No repetir ni contradecir reglas globales. -->
+<!-- Solo deltas respecto al CLAUDE.md global. -->
+- **Tokens**: consumir `var(--token)` desde la copia versionada de `outputs/css/tokens*.css` del repo de marca. Nunca hex crudo, nunca editar la copia; si el sistema cambia, se regenera upstream y se re-copia.
+- Reglas de marca no negociables: ámbar = un foco por vista; bordes (no sombras) sobre dark; Cormorant ≥28px; Barlow ≤600.
+- Vetos de diseño: ver `PRODUCT.md` §Anti-references y `DESIGN.md` §Vetos.
+- Código, identificadores y comentarios en inglés; contenido de la página según decisión de fase 1.
