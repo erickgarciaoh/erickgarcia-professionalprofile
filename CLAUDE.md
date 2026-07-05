@@ -8,7 +8,7 @@ Contexto de diseño: `PRODUCT.md` (estrategia, register: brand) y `DESIGN.md` (a
 ## Plan por fases
 | Fase | Descripción | Estado |
 |---|---|---|
-| 0 | **Fundaciones** — scaffold Astro (pnpm), copiar tokens CSS del repo de marca, fuentes self-hosted, layout base, monograma EG como favicon, deploy a GitHub Pages desde el día 1. | Pendiente |
+| 0 | **Fundaciones** — scaffold Astro (pnpm), copiar tokens CSS del repo de marca, fuentes self-hosted, layout base, monograma EG como favicon, deploy a GitHub Pages desde el día 1. | **Completada** (2026-07-05) |
 | 1 | **Contenido completo, sin espectáculo** — página entera con contenido real: hero (copy), perfil/skills, índice de 3+ proyectos vía content collection, contacto. Responsive, accesible, legible. Decidir idioma del contenido al arrancar esta fase. | Pendiente |
 | 2 | **Sistema visual con carácter** — treatment light base + ventanas dark, tipografía a escala, jerarquía del índice (destacado + lista), imagery real (screenshots de dashboards/proyectos). `/impeccable craft` por sección. | Pendiente |
 | 3 | **Pieza de firma** — dataviz viva e interactiva en el hero (canvas/SVG, datos reales). Se define con `/impeccable shape` antes de codear. Fallback estático + reduced-motion. | Pendiente |
@@ -29,7 +29,9 @@ Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_
 
 ## Stack
 - **Astro** (output estático) + CSS con tokens de marca + TS vanilla para interacción; GSAP o motion solo si la fase 4 lo pide.
-- **pnpm** siempre. Deploy: GitHub Pages (GitHub Actions).
+- **pnpm** siempre. Deploy: GitHub Pages (GitHub Actions), workflow `.github/workflows/deploy.yml` en push a `main`.
+- Repo: `github.com/erickgarciaoh/erickgarcia-professionalprofile` (público). Sitio: `https://erickgarciaoh.github.io/erickgarcia-professionalprofile/`.
+- Fuentes self-hosted vía `@fontsource` (Cormorant Garamond 500/600, Barlow 100/200/400/500/600, JetBrains Mono 400) — `src/styles/fonts.css`.
 - QA visual: Playwright (screenshots por breakpoint).
 
 ## Datos
