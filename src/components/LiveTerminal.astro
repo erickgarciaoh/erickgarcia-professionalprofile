@@ -1,0 +1,77 @@
+---
+interface Props {
+	title: string;
+	lines: string[];
+	emphasizeLast?: boolean;
+}
+
+const { title, lines, emphasizeLast = false } = Astro.props;
+---
+
+<div class="terminal" data-theme="dark">
+	<p class="terminal-title">{title}</p>
+	<div class="terminal-body">
+		{
+			lines.map((line, i) => (
+				<p class:list={['terminal-line', { 'is-emphasized': emphasizeLast && i === lines.length - 1 }]}>
+					{line}
+					{i === lines.length - 1 && <span class="caret" aria-hidden="true" />}
+				</p>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.terminal {
+		background: var(--ink-950);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-lg);
+		padding: var(--space-5);
+	}
+
+	.terminal-title {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--canvas-500);
+		padding-bottom: var(--space-3);
+		margin-bottom: var(--space-3);
+		border-bottom: 1px solid var(--border-default);
+	}
+
+	.terminal-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.terminal-line {
+		font-family: var(--font-mono);
+		font-size: clamp(0.75rem, 1.6vw, 0.8125rem);
+		line-height: 1.5;
+		color: var(--text-secondary);
+		overflow-wrap: anywhere;
+	}
+
+	.terminal-line.is-emphasized {
+		color: var(--accent-on-dark);
+	}
+
+	.caret {
+		display: inline-block;
+		width: 0.55ch;
+		height: 1em;
+		margin-left: 0.15ch;
+		vertical-align: -0.15em;
+		background: currentColor;
+		animation: caret-blink 1s steps(1) infinite;
+	}
+
+	@keyframes caret-blink {
+		50% {
+			opacity: 0;
+		}
+	}
+</style>

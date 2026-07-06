@@ -1,9 +1,76 @@
 ---
+import LiveTerminal from '../LiveTerminal.astro';
 ---
 
-{/* Placeholder — real content, LiveTerminals land in P1-04 (see §2.3). */}
 <section id="what-i-build" aria-labelledby="what-i-build-heading">
 	<div class="wrap">
 		<h2 id="what-i-build-heading" class="section-heading">What I build</h2>
+
+		<div class="build-grid">
+			<div class="build-item">
+				<p class="build-label">Python scripts for automations</p>
+				<LiveTerminal
+					title="run_daily_refresh.py"
+					lines={[
+						'$ python run_daily_refresh.py',
+						'connecting to warehouse ......... ok',
+						'extracting 1.4M rows ........... ok (12.4s)',
+						'validating against source ..... ok',
+						'publishing morning report ...... done',
+						'✓ pipeline green — 0 manual steps',
+					]}
+				/>
+			</div>
+			<div class="build-item">
+				<p class="build-label">SQL stored procedures for data processing</p>
+				<LiveTerminal
+					title="sqlcmd"
+					lines={[
+						'> EXEC core.usp_RefreshSalesFacts;',
+						'(149,116 rows affected)',
+						'> EXEC qa.usp_CheckTotals;',
+						'source = target ✓',
+						'Completion time: 00:00:03.2',
+					]}
+				/>
+			</div>
+			<div class="build-item">
+				<p class="build-label">Reports & visuals in HTML or Power BI</p>
+				<LiveTerminal
+					title="build"
+					lines={[
+						'$ pnpm build:report',
+						'✓ data bound (coffee-pulse.json)',
+						'✓ charts rendered as SVG',
+						'✓ AA contrast verified',
+						'→ deployed: live data-story ↗',
+					]}
+					emphasizeLast
+				/>
+			</div>
+		</div>
 	</div>
 </section>
+
+<style>
+	.build-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-8);
+		margin-top: clamp(var(--space-10), 5vw, var(--space-16));
+	}
+
+	@media (min-width: 60rem) {
+		.build-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	.build-label {
+		margin-bottom: var(--space-4);
+		font-size: 1.0625rem;
+		font-weight: 500;
+		color: var(--text-primary);
+		text-wrap: pretty;
+	}
+</style>
