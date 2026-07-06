@@ -1,9 +1,63 @@
 ---
+import AnimatedCard from '../AnimatedCard.astro';
 ---
 
-{/* Placeholder — real content, AnimatedCards and layout land in P1-03 (see §2.2). */}
 <section id="what-i-do" aria-labelledby="what-i-do-heading">
 	<div class="wrap">
 		<h2 id="what-i-do-heading" class="section-heading">What I do</h2>
+		<p class="what-i-do-intro">
+			I don't just crunch numbers. I design the systems around them — so the numbers arrive
+			clean, on time, and mean something.
+		</p>
+
+		<div class="cards-grid">
+			<AnimatedCard
+				title="Data visualisation"
+				body="Dashboards and data stories people actually read — Power BI, DAX, and hand-built HTML visuals."
+				iconId="viz"
+				size="wide"
+			/>
+			<AnimatedCard
+				title="Automation processes"
+				body="Python and SQL automations that remove the manual steps between raw data and the morning report."
+				iconId="automation"
+				size="std"
+			/>
+			<AnimatedCard
+				title="Data cleaning"
+				body="Messy operational data turned into models you can trust — validated, documented, reproducible."
+				iconId="cleaning"
+				size="std"
+			/>
+		</div>
 	</div>
 </section>
+
+<style>
+	.what-i-do-intro {
+		margin-top: var(--space-5);
+		max-width: 60ch;
+		font-size: 1.0625rem;
+		color: var(--text-secondary);
+		text-wrap: pretty;
+	}
+
+	.cards-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-6);
+		margin-top: clamp(var(--space-10), 5vw, var(--space-16));
+	}
+
+	@media (min-width: 60rem) {
+		.cards-grid {
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: repeat(2, 1fr);
+		}
+
+		.cards-grid :global(.card--wide) {
+			grid-column: span 2;
+			grid-row: span 2;
+		}
+	}
+</style>

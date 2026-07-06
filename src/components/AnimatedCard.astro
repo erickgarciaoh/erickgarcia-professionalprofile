@@ -1,0 +1,145 @@
+---
+interface Props {
+	title: string;
+	body: string;
+	iconId: 'viz' | 'automation' | 'cleaning';
+	size: 'wide' | 'std';
+}
+
+const { title, body, iconId, size } = Astro.props;
+---
+
+<article class={`card card--${size}`}>
+	<div class={`card-icon card-icon--${iconId}`} aria-hidden="true">
+		{
+			iconId === 'viz' && (
+				<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<rect class="bar bar-1" x="5" y="16" width="5" height="11" rx="1" fill="currentColor" />
+					<rect class="bar bar-2" x="13.5" y="10" width="5" height="17" rx="1" fill="currentColor" />
+					<rect class="bar bar-3" x="22" y="4" width="5" height="23" rx="1" fill="currentColor" />
+				</svg>
+			)
+		}
+		{
+			iconId === 'automation' && (
+				<svg class="gear" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M16 3.5v3M16 25.5v3M28.5 16h-3M6.5 16h-3M24.5 7.5l-2.1 2.1M9.6 22.4l-2.1 2.1M24.5 24.5l-2.1-2.1M9.6 9.6L7.5 7.5"
+						stroke="currentColor"
+						stroke-width="1.6"
+						stroke-linecap="round"
+					/>
+					<circle cx="16" cy="16" r="6.5" stroke="currentColor" stroke-width="1.6" />
+				</svg>
+			)
+		}
+		{
+			iconId === 'cleaning' && (
+				<svg class="strokes" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path class="stroke-line stroke-1" d="M5 9h22" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+					<path class="stroke-line stroke-2" d="M5 16h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+					<path class="stroke-line stroke-3" d="M5 23h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+				</svg>
+			)
+		}
+	</div>
+	<h3 class="card-title">{title}</h3>
+	<p class="card-body">{body}</p>
+</article>
+
+<style>
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+		padding: clamp(var(--space-6), 3vw, var(--space-8));
+		background: var(--surface-card);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-2);
+		transition:
+			transform var(--motion-base),
+			border-color var(--motion-base),
+			box-shadow var(--motion-base);
+	}
+
+	.card-icon {
+		width: 2rem;
+		height: 2rem;
+		color: var(--data-1);
+	}
+
+	.card-icon svg {
+		width: 100%;
+		height: 100%;
+	}
+
+	.card-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		color: var(--text-primary);
+	}
+
+	.card-body {
+		font-size: 1rem;
+		color: var(--text-secondary);
+		text-wrap: pretty;
+	}
+
+	/* Hover lift + icon micro-motion: fine-pointer only, transform-only. */
+	@media (hover: hover) and (pointer: fine) {
+		.card:hover {
+			transform: translateY(-4px);
+			border-color: var(--canvas-400);
+			box-shadow: var(--shadow-3);
+		}
+
+		.bar {
+			transform-origin: bottom center;
+			transition: transform var(--motion-medium);
+		}
+
+		.card:hover .bar-1 {
+			transform: scaleY(1.08);
+		}
+
+		.card:hover .bar-2 {
+			transform: scaleY(1.14);
+			transition-delay: 40ms;
+		}
+
+		.card:hover .bar-3 {
+			transform: scaleY(1.2);
+			transition-delay: 80ms;
+		}
+
+		.gear {
+			transform-origin: center;
+			transition: transform var(--motion-medium);
+		}
+
+		.card:hover .gear {
+			transform: rotate(20deg);
+		}
+
+		.stroke-line {
+			transform-origin: left center;
+			transition: transform var(--motion-medium);
+		}
+
+		.card:hover .stroke-1 {
+			transform: scaleX(0.86);
+		}
+
+		.card:hover .stroke-2 {
+			transform: scaleX(0.8);
+			transition-delay: 30ms;
+		}
+
+		.card:hover .stroke-3 {
+			transform: scaleX(0.7);
+			transition-delay: 60ms;
+		}
+	}
+</style>
