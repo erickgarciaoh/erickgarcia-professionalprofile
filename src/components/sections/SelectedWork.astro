@@ -1,0 +1,122 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	featured?: CollectionEntry<'projects'>;
+	rest: CollectionEntry<'projects'>[];
+}
+
+const { featured, rest } = Astro.props;
+---
+
+<section id="projects" data-theme="dark" aria-labelledby="projects-heading">
+	<div class="wrap">
+		<header class="projects-head">
+			<h2 id="projects-heading" class="section-heading">Projects</h2>
+			<p class="projects-intro">
+				Each one ships as a live data-story with its SQL and repo in the open — the
+				work is the argument.
+			</p>
+		</header>
+
+		{
+			featured && (
+				<article class="featured">
+					<a
+						class="featured-media"
+						href={featured.data.liveUrl}
+						aria-label={`Open the live data-story for ${featured.data.title}`}
+						tabindex="-1"
+					>
+						<Image
+							src={featured.data.cover}
+							alt={featured.data.coverAlt}
+							widths={[480, 800, 1200]}
+							sizes="(max-width: 60rem) 100vw, 60vw"
+							loading="eager"
+						/>
+					</a>
+					<div class="featured-body">
+						<p class="project-kicker">Featured</p>
+						<h3 class="featured-title">
+							<a href={featured.data.liveUrl}>{featured.data.title}</a>
+						</h3>
+						<p class="project-summary">{featured.data.summary}</p>
+						<ul class="stack" aria-label="Stack">
+							{featured.data.stack.map((tool) => (
+								<li>{tool}</li>
+							))}
+						</ul>
+						<div class="project-links">
+							<a
+								class="link-live"
+								href={featured.data.liveUrl}
+								aria-label={`Open the live data-story for ${featured.data.title}`}
+							>
+								Live data-story <span aria-hidden="true">↗</span>
+							</a>
+							<a
+								class="link-repo"
+								href={featured.data.repoUrl}
+								aria-label={`View the repository for ${featured.data.title}`}
+							>
+								Repository <span aria-hidden="true">↗</span>
+							</a>
+						</div>
+					</div>
+				</article>
+			)
+		}
+
+		<ol class="project-list">
+			{
+				rest.map((project, index) => (
+					<li class="project-row" style={`--i:${index}`}>
+						<a
+							class="row-media"
+							href={project.data.liveUrl}
+							aria-label={`Open the live data-story for ${project.data.title}`}
+							tabindex="-1"
+						>
+							<Image
+								src={project.data.cover}
+								alt={project.data.coverAlt}
+								widths={[240, 480]}
+								sizes="(max-width: 46rem) 40vw, 22rem"
+								loading="lazy"
+							/>
+						</a>
+						<div class="row-body">
+							<h3 class="row-title">
+								<a href={project.data.liveUrl}>{project.data.title}</a>
+							</h3>
+							<p class="project-summary">{project.data.summary}</p>
+							<ul class="stack" aria-label="Stack">
+								{project.data.stack.map((tool) => (
+									<li>{tool}</li>
+								))}
+							</ul>
+							<div class="project-links">
+								<a
+									class="link-live"
+									href={project.data.liveUrl}
+									aria-label={`Open the live data-story for ${project.data.title}`}
+								>
+									Live data-story <span aria-hidden="true">↗</span>
+								</a>
+								<a
+									class="link-repo"
+									href={project.data.repoUrl}
+									aria-label={`View the repository for ${project.data.title}`}
+								>
+									Repository <span aria-hidden="true">↗</span>
+								</a>
+							</div>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>

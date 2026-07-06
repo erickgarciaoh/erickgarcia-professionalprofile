@@ -1,8 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import WeeklyPulse from '../components/WeeklyPulse.astro';
+import Hero from '../components/sections/Hero.astro';
+import WhatIDo from '../components/sections/WhatIDo.astro';
+import WhatIBuild from '../components/sections/WhatIBuild.astro';
+import Statement from '../components/sections/Statement.astro';
+import SelectedWork from '../components/sections/SelectedWork.astro';
+import Metrics from '../components/sections/Metrics.astro';
+import Toolkit from '../components/sections/Toolkit.astro';
+import Contact from '../components/sections/Contact.astro';
 import '../styles/page.css';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -28,226 +34,14 @@ const rest = projects.filter((project) => !project.data.featured);
 	</header>
 
 	<main id="main">
-		<section id="hero" aria-labelledby="hero-heading">
-			<div class="wrap hero">
-				<div class="hero-lead">
-					<h1 id="hero-heading" class="hero-heading">Erick García</h1>
-					<p class="hero-role">Senior Data Analyst / BI</p>
-					<p class="hero-lede">
-						I turn high-volume, SLA-driven operations data into decisions: SQL Server
-						pipelines, Power BI models, and, increasingly, AI-augmented analytics
-						workflows. The projects below were built the same way: real data, real SQL,
-						checked before it's called a finding.
-					</p>
-					<div class="hero-actions">
-						<a href="#projects" class="btn btn-solid">View the work</a>
-						<a href="#contact" class="btn btn-ghost">Get in touch</a>
-					</div>
-				</div>
-
-				<aside class="hero-viz" aria-label="Live sample of my work: weekly transaction pulse">
-					{featured && <WeeklyPulse analysisUrl={featured.data.liveUrl} />}
-				</aside>
-
-				<dl class="masthead" aria-label="At a glance">
-					<div class="masthead-row">
-						<dt>Focus</dt>
-						<dd>SQL Server · Power BI · DAX</dd>
-					</div>
-					<div class="masthead-row">
-						<dt>Currently</dt>
-						<dd>Python · Claude API · AI-augmented analytics</dd>
-					</div>
-					<div class="masthead-row">
-						<dt>Based</dt>
-						<dd>Colombia · remote / global</dd>
-					</div>
-				</dl>
-			</div>
-		</section>
-
-		<section id="profile" aria-labelledby="profile-heading">
-			<div class="wrap">
-				<h2 id="profile-heading" class="section-heading">Profile</h2>
-				<div class="profile-body">
-					<p class="profile-bio lede-measure">
-						I'm a Senior Data Analyst / BI professional with 6+ years building reporting
-						systems for enterprise financial-services clients (Capital One, Visa,
-						CitiGroup) inside high-volume, SLA-driven contact-center operations. I've led
-						multi-account BI delivery for 3,000+ employees and 1.4M+ monthly interactions,
-						and helped move SLA compliance from 40% to 80% through better data models,
-						cleaner pipelines, and analyst enablement.
-					</p>
-					<p class="profile-bio lede-measure">
-						My domain is T-SQL, Power BI, and DAX, plus Python, git, and Claude Code as
-						working tools, not side projects. I'm actively extending into R and Tableau.
-						Based in Colombia, working remote/global; bilingual English (C2) / Spanish
-						(native).
-					</p>
-
-					<dl class="toolkit">
-						<div class="toolkit-group">
-							<dt>Domain</dt>
-							<dd>
-								<ul>
-									<li>T-SQL / SQL Server</li>
-									<li>Power BI — DAX, data modeling, DirectQuery</li>
-									<li>Contact-center &amp; SLA reporting</li>
-									<li>Python — pandas</li>
-									<li>Git</li>
-									<li>Claude Code / Claude API</li>
-								</ul>
-							</dd>
-						</div>
-						<div class="toolkit-group">
-							<dt>Expanding</dt>
-							<dd>
-								<ul>
-									<li>R</li>
-									<li>Tableau</li>
-								</ul>
-							</dd>
-						</div>
-					</dl>
-				</div>
-			</div>
-		</section>
-
-		<section id="projects" data-theme="dark" aria-labelledby="projects-heading">
-			<div class="wrap">
-				<header class="projects-head">
-					<h2 id="projects-heading" class="section-heading">Projects</h2>
-					<p class="projects-intro">
-						Each one ships as a live data-story with its SQL and repo in the open — the
-						work is the argument.
-					</p>
-				</header>
-
-				{
-					featured && (
-						<article class="featured">
-							<a
-								class="featured-media"
-								href={featured.data.liveUrl}
-								aria-label={`Open the live data-story for ${featured.data.title}`}
-								tabindex="-1"
-							>
-								<Image
-									src={featured.data.cover}
-									alt={featured.data.coverAlt}
-									widths={[480, 800, 1200]}
-									sizes="(max-width: 60rem) 100vw, 60vw"
-									loading="eager"
-								/>
-							</a>
-							<div class="featured-body">
-								<p class="project-kicker">Featured</p>
-								<h3 class="featured-title">
-									<a href={featured.data.liveUrl}>{featured.data.title}</a>
-								</h3>
-								<p class="project-summary">{featured.data.summary}</p>
-								<ul class="stack" aria-label="Stack">
-									{featured.data.stack.map((tool) => (
-										<li>{tool}</li>
-									))}
-								</ul>
-								<div class="project-links">
-									<a
-										class="link-live"
-										href={featured.data.liveUrl}
-										aria-label={`Open the live data-story for ${featured.data.title}`}
-									>
-										Live data-story <span aria-hidden="true">↗</span>
-									</a>
-									<a
-										class="link-repo"
-										href={featured.data.repoUrl}
-										aria-label={`View the repository for ${featured.data.title}`}
-									>
-										Repository <span aria-hidden="true">↗</span>
-									</a>
-								</div>
-							</div>
-						</article>
-					)
-				}
-
-				<ol class="project-list">
-					{
-						rest.map((project, index) => (
-							<li class="project-row" style={`--i:${index}`}>
-								<a
-									class="row-media"
-									href={project.data.liveUrl}
-									aria-label={`Open the live data-story for ${project.data.title}`}
-									tabindex="-1"
-								>
-									<Image
-										src={project.data.cover}
-										alt={project.data.coverAlt}
-										widths={[240, 480]}
-										sizes="(max-width: 46rem) 40vw, 22rem"
-										loading="lazy"
-									/>
-								</a>
-								<div class="row-body">
-									<h3 class="row-title">
-										<a href={project.data.liveUrl}>{project.data.title}</a>
-									</h3>
-									<p class="project-summary">{project.data.summary}</p>
-									<ul class="stack" aria-label="Stack">
-										{project.data.stack.map((tool) => (
-											<li>{tool}</li>
-										))}
-									</ul>
-									<div class="project-links">
-										<a
-											class="link-live"
-											href={project.data.liveUrl}
-											aria-label={`Open the live data-story for ${project.data.title}`}
-										>
-											Live data-story <span aria-hidden="true">↗</span>
-										</a>
-										<a
-											class="link-repo"
-											href={project.data.repoUrl}
-											aria-label={`View the repository for ${project.data.title}`}
-										>
-											Repository <span aria-hidden="true">↗</span>
-										</a>
-									</div>
-								</div>
-							</li>
-						))
-					}
-				</ol>
-			</div>
-		</section>
-
-		<section id="contact" aria-labelledby="contact-heading">
-			<div class="wrap">
-				<h2 id="contact-heading" class="section-heading">Contact</h2>
-				<p class="profile-bio lede-measure">
-					Open to Senior Data Analyst / BI roles, remote or Colombia-based. The fastest
-					way to reach me is email.
-				</p>
-				<a class="contact-primary" href="mailto:erick.garciaohiggins@gmail.com">
-					erick.garciaohiggins@gmail.com
-				</a>
-				<div class="contact-actions">
-					<a class="btn btn-primary" href="mailto:erick.garciaohiggins@gmail.com">
-						Get in touch
-					</a>
-					<a class="btn btn-ghost" href="/erickgarcia-professionalprofile/files/Erick-Garcia-Resume.pdf" download>
-						Download résumé
-					</a>
-				</div>
-				<ul class="contact-list">
-					<li><a href="https://www.linkedin.com/in/erickgarciaoh" rel="me">LinkedIn</a></li>
-					<li><a href="https://github.com/erickgarciaoh" rel="me">GitHub</a></li>
-				</ul>
-			</div>
-		</section>
+		<Hero featured={featured} />
+		<WhatIDo />
+		<WhatIBuild />
+		<Statement />
+		<SelectedWork featured={featured} rest={rest} />
+		<Metrics />
+		<Toolkit />
+		<Contact />
 	</main>
 
 	<footer class="site-footer">
