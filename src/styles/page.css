@@ -563,6 +563,43 @@ summary:focus-visible {
 	margin-top: var(--space-3);
 }
 
+/* ---------- Cursor-follow work preview (v2 P3-04) ----------
+   Desktop-only: the floating figure becomes THE image, so the inline row
+   thumbnail steps aside and rows read as tighter text rows. Reduced-motion
+   is folded into the same query — v1's inline thumbnails stay untouched
+   there, satisfying its "simplest: never init the module" clause without
+   any JS-driven class toggle. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+	.project-list .row-media {
+		display: none;
+	}
+}
+
+.work-preview {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 280px;
+	height: 175px;
+	margin: 0;
+	border: 1px solid var(--border-default);
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+	background: var(--ink-800);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	z-index: 40;
+	will-change: transform;
+}
+
+.work-preview img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
 /* ---------- Dark-window threshold (phase 4) ----------
    Crossing from the light document into the dark projects window is the second
    staged moment. Not a fade-on-scroll of the whole section (a vetoed AI tell) —

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -8,6 +8,11 @@ interface Props {
 }
 
 const { featured, rest } = Astro.props;
+
+// Pre-resolved at build time for the cursor-follow preview (P3-04): the figure
+// swaps a plain <img src> per hovered row, so it needs a real URL, not the
+// <Image> component's responsive srcset.
+const previews = await Promise.all(rest.map((project) => getImage({ src: project.data.cover, width: 560 })));
 ---
 
 <section id="projects" data-theme="dark" aria-labelledby="projects-heading">
@@ -69,10 +74,14 @@ const { featured, rest } = Astro.props;
 			)
 		}
 
+		<figure class="work-preview" aria-hidden="true">
+			<img src="" alt="" />
+		</figure>
+
 		<ol class="project-list">
 			{
 				rest.map((project, index) => (
-					<li class="project-row" style={`--i:${index}`}>
+					<li class="project-row" style={`--i:${index}`} data-preview-src={previews[index].src}>
 						<a
 							class="row-media"
 							href={project.data.liveUrl}
