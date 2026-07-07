@@ -1,0 +1,328 @@
+---
+// PipelineSteps — the signature stepped data-pipeline sequence (cloudstudio grammar).
+//
+// Phase 1 (this file): every panel renders its FINAL composed SVG scene, statically,
+// as if the animation had already finished. No JS, no GSAP, no scrub. The ids and
+// groups below (#raw-table, #particles, #db-cylinder, #dots-cloud, #bars-clean,
+// #line-chart) are the stable hooks the Phase 4 timelines (P4-02) will animate — do
+// not rename them. #dots-cloud lives in <defs> so it is present for the future
+// MorphSVG source path but is never painted here.
+
+const steps = [
+	{ n: '01', key: 'raw', caption: 'Operational systems generate rows — messy, wide, unrefined.' },
+	{ n: '02', key: 'extract', caption: 'Automated pipelines pull what matters into a warehouse.' },
+	{ n: '03', key: 'transform', caption: 'Millions of rows collapse into the handful that matter.' },
+	{ n: '04', key: 'decide', caption: 'A chart draws itself — and becomes a decision.' },
+] as const;
+
+const marks = ['01', '02', '03', '04'];
+
+// --- Step 01: raw table geometry (viewBox 0 0 340 200) ---
+const rawCols = [30, 92, 154, 216, 278];
+const rawHeadY = 24;
+const rawRowsY = [50, 76, 102, 128, 154];
+// Uneven cell widths per (row, column) — reads as messy, unrefined data.
+const rawWidths = [
+	[40, 26, 44, 22, 36],
+	[26, 42, 30, 38, 24],
+	[44, 24, 38, 30, 42],
+	[30, 40, 22, 44, 32],
+	[38, 28, 42, 24, 40],
+];
+
+// --- Step 02: particles resting in/near the warehouse cylinder (final position) ---
+const particles = [
+	[230, 88], [250, 82], [268, 92], [240, 100], [258, 104],
+	[224, 112], [246, 116], [268, 120], [234, 128], [256, 130],
+	[242, 140], [262, 142], [250, 96], [230, 122],
+];
+
+// --- Step 03: scattered pre-morph cloud (defs template only, never painted) + clean bars ---
+const dotsCloud = Array.from({ length: 40 }, (_, i) => [24 + ((i * 57) % 300), 22 + ((i * 89) % 150)]);
+const baseY = 176;
+const barW = 40;
+const barsClean = [
+	{ x: 32, h: 72 },
+	{ x: 92, h: 112 },
+	{ x: 152, h: 150 },
+	{ x: 212, h: 96 },
+	{ x: 272, h: 130 },
+];
+
+// --- Step 04: bars + self-drawing line; the peak bar is this viewport's single amber ---
+const decideBars = [
+	{ x: 32, h: 60 },
+	{ x: 92, h: 92 },
+	{ x: 152, h: 120 },
+	{ x: 212, h: 156 },
+	{ x: 272, h: 100 },
+];
+const peakIndex = 3;
+const linePoints = [
+	[52, 150],
+	[112, 120],
+	[172, 96],
+	[232, 60],
+	[292, 110],
+];
+const linePath = linePoints.map((p) => p.join(',')).join(' ');
+---
+
+<div class="pipeline">
+	{
+		steps.map((step, i) => (
+			<div class="pipeline-step">
+				<span class="step-ghost" aria-hidden="true">
+					{step.n}
+				</span>
+
+				<div class="step-body">
+					<div class="step-caption-col">
+						<ol class="step-progress" aria-hidden="true">
+							{marks.map((m, mi) => (
+								<li class:list={['step-mark', { 'is-active': mi === i }]}>{m}</li>
+							))}
+						</ol>
+						<p class="step-label">
+							{step.n} · {step.key}
+						</p>
+						<p class="step-caption">{step.caption}</p>
+					</div>
+
+					<div class="step-panel" data-theme="dark">
+						{step.key === 'raw' && (
+							<svg
+								class="scene"
+								viewBox="0 0 340 200"
+								role="img"
+								aria-label="A wide, unrefined table of raw operational rows"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<g id="raw-table">
+									<rect x="20" y={rawHeadY} width="300" height="22" rx="2" fill="var(--ink-700)" stroke="var(--ink-600)" />
+									{rawCols.map((cx) => (
+										<rect x={cx - 16} y={rawHeadY + 7} width="32" height="8" rx="2" fill="var(--ink-500)" />
+									))}
+									{rawRowsY.map((ry) => (
+										<rect x="20" y={ry} width="300" height="22" rx="2" fill="var(--ink-800)" stroke="var(--ink-600)" />
+									))}
+									{rawRowsY.map((ry, r) =>
+										rawCols.map((cx, c) => (
+											<rect
+												x={cx - rawWidths[r][c] / 2}
+												y={ry + 7}
+												width={rawWidths[r][c]}
+												height="8"
+												rx="2"
+												fill="var(--ink-500)"
+											/>
+										)),
+									)}
+								</g>
+							</svg>
+						)}
+
+						{step.key === 'extract' && (
+							<svg
+								class="scene"
+								viewBox="0 0 340 200"
+								role="img"
+								aria-label="Rows extracted from a compact table into a database cylinder"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<g class="mini-table">
+									{[40, 64, 88, 112].map((ry) => (
+										<rect x="20" y={ry} width="120" height="18" rx="2" fill="var(--ink-800)" stroke="var(--ink-600)" />
+									))}
+									{[40, 64, 88, 112].map((ry) => (
+										<rect x="28" y={ry + 6} width="60" height="6" rx="2" fill="var(--ink-500)" />
+									))}
+								</g>
+
+								<path d="M140 76 H196" stroke="var(--ink-600)" stroke-width="1.5" stroke-dasharray="4 4" fill="none" />
+
+								<g id="db-cylinder" fill="none" stroke="var(--ink-400)" stroke-width="2" stroke-linejoin="round">
+									<path d="M208 64 L208 150 Q250 166 292 150 L292 64" fill="var(--ink-800)" />
+									<ellipse cx="250" cy="64" rx="42" ry="13" fill="var(--ink-700)" />
+								</g>
+
+								<g id="particles" fill="var(--data-1)">
+									{particles.map(([cx, cy]) => (
+										<circle cx={cx} cy={cy} r="3.2" />
+									))}
+								</g>
+							</svg>
+						)}
+
+						{step.key === 'transform' && (
+							<svg
+								class="scene"
+								viewBox="0 0 340 200"
+								role="img"
+								aria-label="Scattered rows aggregated into five clean bars"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<defs>
+									<g id="dots-cloud" fill="var(--data-1)">
+										{dotsCloud.map(([cx, cy]) => (
+											<circle cx={cx} cy={cy} r="3.5" />
+										))}
+									</g>
+								</defs>
+								<line x1="20" y1={baseY} x2="320" y2={baseY} stroke="var(--ink-600)" stroke-width="1.5" />
+								<g id="bars-clean" fill="var(--data-1)">
+									{barsClean.map((b) => (
+										<rect x={b.x} y={baseY - b.h} width={barW} height={b.h} rx="3" />
+									))}
+								</g>
+							</svg>
+						)}
+
+						{step.key === 'decide' && (
+							<svg
+								class="scene"
+								viewBox="0 0 340 200"
+								role="img"
+								aria-label="A line chart over five bars with the peak highlighted, resolving into a decision"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<line x1="20" y1={baseY} x2="320" y2={baseY} stroke="var(--ink-600)" stroke-width="1.5" />
+								<g class="decide-bars">
+									{decideBars.map((b, bi) => (
+										<rect
+											x={b.x}
+											y={baseY - b.h}
+											width={barW}
+											height={b.h}
+											rx="3"
+											fill={bi === peakIndex ? 'var(--accent-on-dark)' : 'var(--ink-500)'}
+										/>
+									))}
+								</g>
+								<g id="line-chart" fill="none">
+									<polyline
+										points={linePath}
+										stroke="var(--data-2)"
+										stroke-width="2.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+									{linePoints.map(([cx, cy]) => (
+										<circle cx={cx} cy={cy} r="3.5" fill="var(--data-2)" />
+									))}
+								</g>
+							</svg>
+						)}
+					</div>
+				</div>
+			</div>
+		))
+	}
+</div>
+
+<style>
+	.pipeline {
+		display: flex;
+		flex-direction: column;
+		gap: clamp(var(--space-16), 10vw, var(--space-24));
+		margin-top: clamp(var(--space-16), 9vw, var(--space-24));
+	}
+
+	.pipeline-step {
+		position: relative;
+		/* Clip the oversized ghost numeral so it never triggers horizontal scroll. */
+		overflow: hidden;
+	}
+
+	/* Oversized decorative numeral behind the step — outline only, low contrast. */
+	.step-ghost {
+		position: absolute;
+		top: -0.32em;
+		left: -0.03em;
+		z-index: 0;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: clamp(6rem, 20vw, 15rem);
+		line-height: 1;
+		color: transparent;
+		-webkit-text-stroke: 2px var(--canvas-300);
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.step-body {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-8);
+	}
+
+	@media (min-width: 60rem) {
+		.step-body {
+			grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+			align-items: center;
+			gap: clamp(var(--space-10), 5vw, var(--space-16));
+		}
+	}
+
+	/* Progress marker: 01 — 02 — 03 — 04, this step's own index active. No amber. */
+	.step-progress {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.14em;
+	}
+
+	.step-mark {
+		color: var(--canvas-400);
+		transition: color var(--motion-base);
+	}
+
+	.step-mark.is-active {
+		color: var(--text-primary);
+		font-weight: 600;
+	}
+
+	.step-mark:not(:last-child)::after {
+		content: '—';
+		margin-left: var(--space-2);
+		color: var(--canvas-300);
+	}
+
+	.step-label {
+		margin-top: var(--space-5);
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-500);
+	}
+
+	.step-caption {
+		margin-top: var(--space-3);
+		max-width: 34ch;
+		font-size: clamp(1rem, 1.6vw, 1.1875rem);
+		color: var(--canvas-700); /* AA at body size on the light canvas */
+		text-wrap: pretty;
+	}
+
+	/* Dark window panel: ink-950 ground, border not shadow (brand dark rule). */
+	.step-panel {
+		background: var(--ink-950);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-lg);
+		padding: clamp(var(--space-5), 3vw, var(--space-8));
+	}
+
+	.scene {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+</style>
