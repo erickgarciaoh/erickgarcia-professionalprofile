@@ -97,10 +97,14 @@ const { items } = Astro.props;
 		}
 
 		.marquee-track {
-			flex-wrap: wrap;
 			width: auto;
 			animation: none;
 			transform: none;
+		}
+
+		.marquee-group {
+			flex-wrap: wrap;
+			flex-shrink: 1;
 		}
 
 		.marquee-group[aria-hidden='true'] {
