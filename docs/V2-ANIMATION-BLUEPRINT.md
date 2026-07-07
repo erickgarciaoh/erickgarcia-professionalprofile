@@ -459,13 +459,35 @@ Counter, LiveTerminal, mouse-preview, magnetic, marquee-pause, SectionNav).
 
 ### Phase 5 — Polish & QA
 
+P5-01 a P5-05 verificados con Playwright en navegador real (dev server + `pnpm
+preview` de producción) contra el build desplegado. Tres defectos reales
+encontrados y corregidos en el camino (clasificados como "va ahora" con
+Erick antes de tocar código, uno por uno):
+
+1. Espacio faltante entre "into" y "understandable visuals" en la sentencia
+   de Statement — Astro colapsaba el whitespace a cero entre un salto de
+   línea y un `<span>`, pegando las palabras para usuarios sin JS / con
+   reduced-motion.
+2. Overflow horizontal del marquee de Toolkit a 320/768px bajo
+   reduced-motion — `flex-wrap` estaba en el elemento equivocado
+   (`.marquee-track` en vez de `.marquee-group`).
+3. Contenido de Contact (mailto, botones, LinkedIn/GitHub) inalcanzable por
+   teclado — `reveal.ts` usaba `autoAlpha` (que aplica `visibility:hidden`)
+   como from-state, sacando el grupo entero del tab order hasta que su
+   `ScrollTrigger` disparaba; cambiado a `opacity`-only.
+
+Más dos fixes de accesibilidad (aria-label inválido de SplitText en
+Statement; contraste AA insuficiente en el intro de What I do y en las
+marcas inactivas del progress marker del pipeline). axe-core (wcag2a/wcag2aa)
+quedó en 0 violaciones reales tras los fixes.
+
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P5-01 | Reduced-motion full pass: toggle `prefers-reduced-motion` and walk every section | — | Zero motion anywhere; all content visible; Lenis not initialized |
-| P5-02 | No-JS pass: disable JS, walk every section | — | Every §2 "with JS off" clause verified |
-| P5-03 | Playwright screenshots at 320/768/1280/1920 + hover/terminal states; store under `qa/` | `qa/` | Screenshots reviewed; no overflow, no truncation, no obscured focus |
-| P5-04 | Performance: Lighthouse LCP ≤ 2.5s on the deployed page, JS bundle audited (GSAP plugins tree-shaken — import only used plugins), 60fps check on pipeline scrub (devtools performance recording) | — | Metrics recorded in `qa/PERF.md`; no long task > 200ms during scrub |
-| P5-05 | A11y: AA contrast re-verified on all new surfaces (esp. terminal text on ink-950, KPI labels), keyboard walk-through, `aria-hidden` audit (marquee duplicate, preview figure, rotating layer) | — | No AA failures; tab order sane; SR announces each content item exactly once |
+| P5-01 ✅ | Reduced-motion full pass: toggle `prefers-reduced-motion` and walk every section | — | Zero motion anywhere; all content visible; Lenis not initialized |
+| P5-02 ✅ | No-JS pass: disable JS, walk every section | — | Every §2 "with JS off" clause verified |
+| P5-03 ✅ | Playwright screenshots at 320/768/1280/1920 + hover/terminal states; store under `qa/` | `qa/` | Screenshots reviewed; no overflow, no truncation, no obscured focus |
+| P5-04 ✅ | Performance: Lighthouse LCP ≤ 2.5s on the deployed page, JS bundle audited (GSAP plugins tree-shaken — import only used plugins), 60fps check on pipeline scrub (devtools performance recording) | — | Metrics recorded in `qa/PERF.md`; no long task > 200ms during scrub |
+| P5-05 ✅ | A11y: AA contrast re-verified on all new surfaces (esp. terminal text on ink-950, KPI labels), keyboard walk-through, `aria-hidden` audit (marquee duplicate, preview figure, rotating layer) | — | No AA failures; tab order sane; SR announces each content item exactly once |
 | P5-06 | Update `CLAUDE.md` phase table + `README`/OG copy for v2; **requires Erick's explicit sign-off on the new phase plan** (anti-abandono rule) | `CLAUDE.md` | Table reflects v2 phases and their status; Erick approved in-session |
 
 ---
