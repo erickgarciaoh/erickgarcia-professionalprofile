@@ -360,7 +360,7 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 
 | ID | Task | Files | AC (done when…) |
 |---|---|---|---|
-| P0-01 | Fix dot alignment (label out of flow) + subtle restyle per §2.0; deploy | `components/SectionNav.astro` | §2.0 done-when holds; pushed to `main` and verified on the live site |
+| P0-01 ✅ | Fix dot alignment (label out of flow) + subtle restyle per §2.0; deploy | `components/SectionNav.astro` | §2.0 done-when holds; pushed to `main` and verified on the live site |
 
 ### Phase 1 — Fluid full-width layout
 
