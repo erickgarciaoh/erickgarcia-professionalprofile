@@ -26,7 +26,9 @@ Plan detallado, specs por sección y guardarraíles: `docs/V2-ANIMATION-BLUEPRIN
 | 2 | **Global motion infrastructure** — gsap + lenis, `core.ts`, `smooth-scroll.ts`, `reveal.ts`. | **Completada** |
 | 3 | **Easy wins** — RotatingWord, Counter, LiveTerminal, mouse-preview, magnetic button, marquee pause, SectionNav. | **Completada** (2026-07-07) |
 | 4 | **The star moment** — Statement: kinetic typography scrub-read + PipelineSteps (4 escenas one-shot: raw → extract → transform → decide). El único momento pinneado/heavyweight de la página. | **Completada** (2026-07-07) |
-| 5 | **Polish & QA** — reduced-motion + no-JS pass completos, screenshots Playwright (320/768/1280/1920 + hover/terminal), performance (Lighthouse LCP, bundle GSAP, 60fps scrub), A11y (axe-core, contraste AA, teclado, aria-hidden). Tres defectos reales encontrados y corregidos en el camino (ver `docs/V2-ANIMATION-BLUEPRINT.md` §Phase 5 para el detalle). | **Completada** (2026-07-06) — pendiente que Erick enlace el sitio desde su CV y LinkedIn (acción fuera del repo) |
+| 5 | **Polish & QA** — reduced-motion + no-JS pass completos, screenshots Playwright (320/768/1280/1920 + hover/terminal), performance (Lighthouse LCP, bundle GSAP, 60fps scrub), A11y (axe-core, contraste AA, teclado, aria-hidden). Tres defectos reales encontrados y corregidos en el camino (ver `docs/V2-ANIMATION-BLUEPRINT.md` §Phase 5 para el detalle). | **Completada** (2026-07-06) |
+
+v2 cerrada por completo: sitio enlazado desde CV y LinkedIn (2026-07-07).
 
 Regla de proceso: idea nueva a mitad de fase → se clasifica contra este plan (va ahora / backlog / descartada) antes de tocar código. No se reordena ni reinicia sin decisión explícita.
 
