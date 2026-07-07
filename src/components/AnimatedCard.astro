@@ -9,7 +9,7 @@ interface Props {
 const { title, body, iconId, size } = Astro.props;
 ---
 
-<article class={`card card--${size}`}>
+<article class={`card card--${size}`} data-reveal-item>
 	<div class={`card-icon card-icon--${iconId}`} aria-hidden="true">
 		{
 			iconId === 'viz' && (

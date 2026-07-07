@@ -23,10 +23,10 @@ const kpis = [
 			   using their logos. */
 		}
 
-		<dl class="kpi-list">
+		<dl class="kpi-list" data-reveal-group>
 			{
 				kpis.map((kpi) => (
-					<div class="kpi-row">
+					<div class="kpi-row" data-reveal-item>
 						<dt class="kpi-label">{kpi.label}</dt>
 						<dd class="kpi-figure">
 							<Counter to={kpi.to} display={kpi.display} format={kpi.format} suffix={kpi.suffix} />
