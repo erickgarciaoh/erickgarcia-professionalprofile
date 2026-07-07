@@ -1,0 +1,110 @@
+---
+interface Props {
+	items: string[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="marquee">
+	<div class="marquee-track">
+		<div class="marquee-group">
+			{
+				items.map((item) => (
+					<>
+						<span class="marquee-item">{item}</span>
+						<span class="marquee-sep" aria-hidden="true">
+							·
+						</span>
+					</>
+				))
+			}
+		</div>
+		<div class="marquee-group" aria-hidden="true">
+			{
+				items.map((item) => (
+					<>
+						<span class="marquee-item">{item}</span>
+						<span class="marquee-sep" aria-hidden="true">
+							·
+						</span>
+					</>
+				))
+			}
+		</div>
+	</div>
+</div>
+
+<style>
+	/* Cheapest component on the page by design: pure CSS, no JS (P1-07). The
+	   track duplicates its content once so translateX(-50%) loops seamlessly —
+	   both groups render identical content+gap, so they're identical width. */
+	.marquee {
+		overflow: hidden;
+	}
+
+	.marquee-track {
+		display: flex;
+		width: max-content;
+		animation: marquee-scroll 35s linear infinite;
+	}
+
+	.marquee:hover .marquee-track,
+	.marquee:focus-within .marquee-track {
+		animation-play-state: paused;
+	}
+
+	.marquee-group {
+		display: flex;
+		align-items: baseline;
+		flex-shrink: 0;
+		gap: var(--space-6);
+	}
+
+	.marquee-item {
+		font-family: var(--font-mono);
+		font-size: 0.9375rem;
+		letter-spacing: 0.02em;
+		color: var(--canvas-500);
+		white-space: nowrap;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.marquee-item {
+			transition: color var(--motion-base);
+		}
+
+		.marquee-item:hover {
+			color: var(--text-primary);
+		}
+	}
+
+	.marquee-sep {
+		color: var(--canvas-600);
+		font-size: 0.9375rem;
+	}
+
+	@keyframes marquee-scroll {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		/* Static wrapped grid of the 8 labels — no duplicate track, no loop. */
+		.marquee {
+			overflow: visible;
+		}
+
+		.marquee-track {
+			flex-wrap: wrap;
+			width: auto;
+			animation: none;
+			transform: none;
+		}
+
+		.marquee-group[aria-hidden='true'] {
+			display: none;
+		}
+	}
+</style>

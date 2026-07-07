@@ -1,35 +1,36 @@
 ---
+import Marquee from '../Marquee.astro';
+
+const items = ['SQL', 'Power BI', 'DAX', 'Python', 'HTML', 'Claude AI', 'MCP Servers', 'AI Agents'];
 ---
 
-{/* Placeholder — carries the v1 profile toolkit <dl> forward unstyled. The
-   Marquee treatment and final item set per §2.7 land in P1-07; this only
-   satisfies P1-01's "no content lost, 8 sections" constraint in the interim. */}
-<section id="toolkit" aria-labelledby="toolkit-heading">
+<section id="toolkit" data-theme="dark" aria-labelledby="toolkit-heading">
 	<div class="wrap">
 		<h2 id="toolkit-heading" class="section-heading">Toolkit</h2>
-		<dl class="toolkit">
-			<div class="toolkit-group">
-				<dt>Domain</dt>
-				<dd>
-					<ul>
-						<li>T-SQL / SQL Server</li>
-						<li>Power BI — DAX, data modeling, DirectQuery</li>
-						<li>Contact-center &amp; SLA reporting</li>
-						<li>Python — pandas</li>
-						<li>Git</li>
-						<li>Claude Code / Claude API</li>
-					</ul>
-				</dd>
-			</div>
-			<div class="toolkit-group">
-				<dt>Expanding</dt>
-				<dd>
-					<ul>
-						<li>R</li>
-						<li>Tableau</li>
-					</ul>
-				</dd>
-			</div>
-		</dl>
+		<div class="toolkit-marquee">
+			<Marquee items={items} />
+		</div>
+		<p class="toolkit-note">Currently extending into R and Tableau.</p>
 	</div>
 </section>
+
+<style>
+	/* No top padding / border: this band is the tail of the Metrics dark
+	   window (§2.7), not a second adjacent one — one dark world, not two. */
+	section#toolkit {
+		background: var(--ink-950);
+		color: var(--text-primary);
+		padding-top: 0;
+	}
+
+	.toolkit-marquee {
+		margin-top: clamp(var(--space-6), 3vw, var(--space-8));
+	}
+
+	.toolkit-note {
+		margin-top: var(--space-6);
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		color: var(--canvas-500);
+	}
+</style>
