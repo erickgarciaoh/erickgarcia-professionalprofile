@@ -6,6 +6,8 @@ Landing page personal + índice de portfolio de Erick García (Data Analyst / BI
 Contexto de diseño: `PRODUCT.md` (estrategia, register: brand) y `DESIGN.md` (aplicación del sistema visual). Todo trabajo de UI pasa por el skill `/impeccable`.
 
 ## Plan por fases
+
+### v1 — página completa (completado 2026-07-06)
 | Fase | Descripción | Estado |
 |---|---|---|
 | 0 | **Fundaciones** — scaffold Astro (pnpm), copiar tokens CSS del repo de marca, fuentes self-hosted, layout base, monograma EG como favicon, deploy a GitHub Pages desde el día 1. | **Completada** (2026-07-05) |
@@ -13,7 +15,18 @@ Contexto de diseño: `PRODUCT.md` (estrategia, register: brand) y `DESIGN.md` (a
 | 2 | **Sistema visual con carácter** — treatment light base + ventanas dark, tipografía a escala, jerarquía del índice (destacado + lista), imagery real (screenshots de dashboards/proyectos). `/impeccable craft` por sección. | **Completada** (2026-07-05) |
 | 3 | **Pieza de firma** — dataviz viva e interactiva en el hero (canvas/SVG, datos reales). Se define con `/impeccable shape` antes de codear. Fallback estático + reduced-motion. | **Completada** (2026-07-05) |
 | 4 | **Motion coreografiado** — orquestación de carga del hero, transición entre mundos light/dark, micro-interacciones. `/impeccable animate`. | **Completada** (2026-07-05) |
-| 5 | **QA y publicación** — `/impeccable critique` + `audit` + `polish`, screenshots Playwright en breakpoints, contraste AA, performance (LCP), publicación final y enlace desde CV/LinkedIn. | **Completada** (2026-07-06) — pendiente que Erick enlace el sitio desde su CV y LinkedIn (acción fuera del repo) |
+| 5 | **QA y publicación** — `/impeccable critique` + `audit` + `polish`, screenshots Playwright en breakpoints, contraste AA, performance (LCP), publicación final. | **Completada** (2026-07-06) |
+
+### v2 — motion coreografiado con GSAP/Lenis (completado 2026-07-06)
+Plan detallado, specs por sección y guardarraíles: `docs/V2-ANIMATION-BLUEPRINT.md` (fuente de verdad, no duplicar aquí).
+
+| Fase | Descripción | Estado |
+|---|---|---|
+| 1 | **Static & complete** — 8 secciones nuevas (Hero extendido, What I do, What I build, Statement, Selected work, Metrics, Toolkit, Contact) con contenido final, sin animación aún. | **Completada** |
+| 2 | **Global motion infrastructure** — gsap + lenis, `core.ts`, `smooth-scroll.ts`, `reveal.ts`. | **Completada** |
+| 3 | **Easy wins** — RotatingWord, Counter, LiveTerminal, mouse-preview, magnetic button, marquee pause, SectionNav. | **Completada** (2026-07-07) |
+| 4 | **The star moment** — Statement: kinetic typography scrub-read + PipelineSteps (4 escenas one-shot: raw → extract → transform → decide). El único momento pinneado/heavyweight de la página. | **Completada** (2026-07-07) |
+| 5 | **Polish & QA** — reduced-motion + no-JS pass completos, screenshots Playwright (320/768/1280/1920 + hover/terminal), performance (Lighthouse LCP, bundle GSAP, 60fps scrub), A11y (axe-core, contraste AA, teclado, aria-hidden). Tres defectos reales encontrados y corregidos en el camino (ver `docs/V2-ANIMATION-BLUEPRINT.md` §Phase 5 para el detalle). | **Completada** (2026-07-06) — pendiente que Erick enlace el sitio desde su CV y LinkedIn (acción fuera del repo) |
 
 Regla de proceso: idea nueva a mitad de fase → se clasifica contra este plan (va ahora / backlog / descartada) antes de tocar código. No se reordena ni reinicia sin decisión explícita.
 
@@ -27,7 +40,7 @@ Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_
 - Página de detalle por proyecto (caso de estudio largo) si el índice + enlace externo no basta.
 
 ## Stack
-- **Astro** (output estático) + CSS con tokens de marca + TS vanilla para interacción; GSAP o motion solo si la fase 4 lo pide.
+- **Astro** (output estático) + CSS con tokens de marca + TS vanilla para interacción; **GSAP + Lenis** para motion coreografiado (v2, ver `docs/V2-ANIMATION-BLUEPRINT.md`).
 - **pnpm** siempre. Deploy: GitHub Pages (GitHub Actions), workflow `.github/workflows/deploy.yml` en push a `main`.
 - Repo: `github.com/erickgarciaoh/erickgarcia-professionalprofile` (público). Sitio: `https://erickgarciaoh.github.io/erickgarcia-professionalprofile/`.
 - Fuentes self-hosted vía `@fontsource` (Cormorant Garamond 500/600, Barlow 100/200/400/500/600, JetBrains Mono 400) — `src/styles/fonts.css`.
