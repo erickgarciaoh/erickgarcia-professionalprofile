@@ -7,6 +7,7 @@ import initTerminals from './terminal';
 import initMousePreview from './mouse-preview';
 import initMagnetic from './magnetic';
 import initSectionNav from './section-nav';
+import initPipeline from './pipeline';
 
 initSmoothScroll();
 initReveal();
@@ -16,3 +17,4 @@ initTerminals();
 initMousePreview();
 initMagnetic();
 initSectionNav();
+initPipeline();
