@@ -195,9 +195,8 @@ Shared vocabulary: "enter trigger" = ScrollTrigger `start: 'top 78%'`, `once: tr
     Max measure 52ch.
   - CTAs unchanged: `View the work` → `#projects`, `Get in touch` → `#contact`.
   - Masthead `<dl>` (Focus / Currently / Based) survives, repositioned to the hero's lower edge.
-- **Signature asset — concept is NOT decided here.** P2-01 is a mandatory `/impeccable shape`
-  session with Erick that locks the concept and appends it to this file as §2.2.1 (design
-  contract). Binding constraints the concept must satisfy, whatever it is:
+- **Signature asset — concept locked in §2.2.1** (P2-01 `/impeccable shape` session with Erick,
+  2026-07-07). The binding constraints the concept had to satisfy (still binding for P2-03):
   1. Interactive with pointer movement (`(pointer: fine)` only), data-themed, distinctive — NOT a
      copy of cloudstudio's particle sphere.
   2. Canvas 2D or SVG with **zero new dependencies** by default. Three.js/WebGL only if the shape
@@ -217,6 +216,40 @@ Shared vocabulary: "enter trigger" = ScrollTrigger `start: 'top 78%'`, `once: tr
   the `h1` at ≤ 2.5s on the deployed page; the pointer interaction runs at 60fps; the crunch-numbers
   phrase appears nowhere on the page; WeeklyPulse and RotatingWord files no longer exist in the
   repo and the build is green.
+
+### 2.2.1 Signature asset — design contract (locked in P2-01, 2026-07-07)
+
+Erick-approved in the P2-01 `/impeccable shape` session. This is the source of truth P2-03
+implements; the five §2.2 constraints remain binding on top of it.
+
+- **Concept: "Signal in the noise."** A full-bleed field of ~300 drifting data points behind the
+  hero content. The pointer is the analyst's attention: points within its radius (~200px) ease
+  toward a locally fitted least-squares trend line, and a hairline signal line draws through the
+  neighborhood; on leave, points relax back into slow ambient drift. The asset is ambient
+  background, not a second star — it demonstrates the thesis (find the signal) without competing
+  with the name-monument.
+- **Technique:** Canvas 2D, **zero new dependencies**. Module `src/scripts/motion/hero-field.ts`
+  (§1.1). One transparent `<canvas>` absolutely positioned over the hero section,
+  `aria-hidden="true"`, `pointer-events: none` (pointer tracked on the section, not the canvas).
+  Point positions come from a **deterministic seeded PRNG** (no data file — coffee-pulse.json
+  stays retired) so canvas and static fallback render the identical field.
+- **Palette (no amber):** points `--ink-300`/`--canvas-400` at low alpha (≈0.10–0.35, sized
+  1.5–2.5px); the fitted signal line `--data-1` slate (lead-categorical semantics: the signal,
+  marked without spending the accent). A soft fade/exclusion mask keeps point density away from
+  the text block so h1/sentence contrast is untouched. **Amber decision: the hero's single amber
+  is the `View the work` solid CTA. The asset contains zero amber.**
+- **Interaction gate:** boots only under `(pointer: fine)` AND ≥60rem AND `MOTION_OK`. Otherwise
+  (touch, mobile, reduced-motion, no-JS) the hero shows the **static fallback**: an inline SVG of
+  the same seeded field with one signal line already fitted — the "signal found" end state,
+  identical visual identity.
+- **Performance plan (vs. the §2.2 budget):** one rAF loop, O(N) per frame over ~300 points +
+  O(k) local fit — well under 4ms on a mid-range laptop; DPR capped at
+  `min(devicePixelRatio, 2)`; loop pauses via `IntersectionObserver` when the hero leaves the
+  viewport and on `visibilitychange`. Canvas initializes after `window` `load` and fades in last
+  in the load cascade (`autoAlpha`), so it never paints before the h1 — **LCP remains the h1**.
+- **Distinctiveness check:** not cloudstudio's particle sphere (no 3D, no sphere, no
+  cursor-orbit); distinct from the §2.3 Data-cleaning card scene (that one snaps dots to a rigid
+  grid once; this is continuous regression fitting, never a grid).
 
 ### 2.3 What I do (Phase 3) — animated service cards
 
@@ -373,7 +406,7 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P2-01 | `/impeccable shape` session WITH Erick: lock the signature asset concept against the 5 constraints in §2.2; append the design contract to this file as §2.2.1 | `docs/V3-REDESIGN-BLUEPRINT.md` | §2.2.1 exists, names technique/fallback/perf plan/amber choice; Erick approved in-session |
+| P2-01 ✅ | `/impeccable shape` session WITH Erick: lock the signature asset concept against the 5 constraints in §2.2; append the design contract to this file as §2.2.1 | `docs/V3-REDESIGN-BLUEPRINT.md` | §2.2.1 exists, names technique/fallback/perf plan/amber choice; Erick approved in-session |
 | P2-02 | Hero static rebuild per §2.2: new copy + type scale + masthead reposition; **delete** WeeklyPulse.astro, coffee-pulse.json, RotatingWord.astro, rotating-word.ts; update CLAUDE.md §Datos | `sections/Hero.astro`, `page.css`, `index.astro`, deletions, `CLAUDE.md` | Hero complete without JS at all 5 widths; build green with zero references to deleted files; crunch-numbers phrase gone site-wide |
 | P2-03 | Implement the asset per §2.2.1: `hero-field.ts` (or the name the contract picks), pointer interaction, static fallback, pauses, load choreography hook | `scripts/motion/hero-field.ts`, `sections/Hero.astro`, `scripts/motion/index.ts` | §2.2 done-when holds (LCP = h1, 60fps, fallbacks, single amber) |
 
@@ -432,7 +465,8 @@ conventions, pnpm-only). v3 additions and amendments:
 7. **No new dependencies, period**, unless P2-01's contract names one and Erick approved it
    in-session.
 8. **Amber map of the final page** (one per viewport, adding a second is a defect):
-   Hero → asset OR primary CTA (P2-01 decides) · What I do → none · What I build → step-04 peak
+   Hero → the `View the work` solid CTA (decided in P2-01; the asset has zero amber, §2.2.1) ·
+   What I do → none · What I build → step-04 peak
    bar · Promise → `optimized end to end` · Selected work → panel's Live link · Metrics/Toolkit →
    none · Contact → Get in touch button.
 
