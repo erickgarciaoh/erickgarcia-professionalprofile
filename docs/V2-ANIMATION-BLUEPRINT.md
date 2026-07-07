@@ -427,9 +427,9 @@ repo history convention; code/comments in English.
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P2-01 | **Ask Erick, then** `pnpm add gsap lenis`; create `core.ts` (registerPlugin for ScrollTrigger/SplitText/MotionPath/DrawSVG/MorphSVG, `mm`, `MOTION_OK`) and empty `index.ts` entry imported from `index.astro` | `package.json`, `scripts/motion/core.ts`, `scripts/motion/index.ts`, `src/pages/index.astro` | Build passes; bundle loads without console errors; no visual change yet |
-| P2-02 | `smooth-scroll.ts` per §1.3 contract (Lenis + ScrollTrigger sync + anchor routing + reduced-motion bypass + skip-link exemption) | `scripts/motion/smooth-scroll.ts` | Wheel/touch scroll is smoothed; nav anchors glide with header offset; keyboard scroll works; reduced-motion = native scroll; skip link jumps natively |
-| P2-03 | `reveal.ts` global utility per §1.4 contract; apply markup attrs to WhatIDo, Metrics rows, Contact (NOT hero, NOT projects — their v1 choreography stays) | `scripts/motion/reveal.ts`, the 3 section files | Each tagged group reveals once on enter with stagger; JS-off shows everything; reduced-motion shows everything instantly; total stagger per group ≤ 0.5s |
+| P2-01 ✅ | **Ask Erick, then** `pnpm add gsap lenis`; create `core.ts` (registerPlugin for ScrollTrigger/SplitText/MotionPath/DrawSVG/MorphSVG, `mm`, `MOTION_OK`) and empty `index.ts` entry imported from `index.astro` | `package.json`, `scripts/motion/core.ts`, `scripts/motion/index.ts`, `src/pages/index.astro` | Build passes; bundle loads without console errors; no visual change yet |
+| P2-02 ✅ | `smooth-scroll.ts` per §1.3 contract (Lenis + ScrollTrigger sync + anchor routing + reduced-motion bypass + skip-link exemption) | `scripts/motion/smooth-scroll.ts` | Wheel/touch scroll is smoothed; nav anchors glide with header offset; keyboard scroll works; reduced-motion = native scroll; skip link jumps natively |
+| P2-03 ✅ | `reveal.ts` global utility per §1.4 contract; apply markup attrs to WhatIDo, Metrics rows, Contact (NOT hero, NOT projects — their v1 choreography stays) | `scripts/motion/reveal.ts`, the 3 section files | Each tagged group reveals once on enter with stagger; JS-off shows everything; reduced-motion shows everything instantly; total stagger per group ≤ 0.5s |
 
 ### Phase 3 — Easy wins
 
