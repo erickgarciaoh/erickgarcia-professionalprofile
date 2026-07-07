@@ -158,6 +158,33 @@ sustituyendo el nombre del blueprint por `docs/V3-REDESIGN-BLUEPRINT.md`. Añadi
 - F2-A (shape) y F6-C (critique) requieren a Erick presente en la sesión: hay decisiones que el
   agente no puede tomar solo (concepto del asset, ámbar del hero, sign-off final).
 
+### Prompt inicial (sesión F0 — copiar tal cual en sesión nueva con Sonnet)
+
+```text
+Sesión F0 de la v3 del landing. Implementa EXACTAMENTE esta tarea del backlog de
+docs/V3-REDESIGN-BLUEPRINT.md: P0-01. Nada más.
+
+Antes de tocar código: lee el §4 del blueprint v3 (guardarraíles, vinculantes — heredan los del
+blueprint v2) y la spec §2.0. La causa raíz ya está diagnosticada ahí: las labels del SectionNav
+ocultas con opacity:0 siguen ocupando layout y sus anchos variables desalinean los puntos. No
+re-diagnostiques; aplica el fix de la spec (label en position:absolute fuera del flujo) + el
+restyle sutil (punto 6px, label sin píldora: sin background, sin border, texto mono plano).
+
+Reglas de la sesión:
+- Solo se toca src/components/SectionNav.astro. La lógica de scroll-spy
+  (scripts/motion/section-nav.ts) NO cambia.
+- Verifica el AC con Playwright: los centros horizontales de los 8 puntos deben ser idénticos
+  (getBoundingClientRect, tolerancia 0px); hover sobre cualquier punto no mueve ningún otro;
+  focus de teclado visible con su label.
+- pnpm siempre; en esta sesión NO se instala ninguna dependencia.
+- No adelantes trabajo de fases posteriores aunque "quede cerca": nada de layout fluido ni gutters.
+- pnpm build en verde → commit (mensaje en español, código/comentarios en inglés), marca P0-01
+  con ✅ en la tabla §3 del blueprint, y push a main (esta fase se publica sola e inmediata:
+  el sitio está enlazado desde CV/LinkedIn).
+- Al cerrar: verifica el fix en el sitio desplegado y confirma que la siguiente sesión es F1-A
+  (P1-01, Sonnet).
+```
+
 ---
 
 ## Archivo: tabla v1 (histórica)
