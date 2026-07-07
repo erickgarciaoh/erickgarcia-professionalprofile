@@ -431,17 +431,17 @@ repo history convention; code/comments in English.
 | P2-02 ✅ | `smooth-scroll.ts` per §1.3 contract (Lenis + ScrollTrigger sync + anchor routing + reduced-motion bypass + skip-link exemption) | `scripts/motion/smooth-scroll.ts` | Wheel/touch scroll is smoothed; nav anchors glide with header offset; keyboard scroll works; reduced-motion = native scroll; skip link jumps natively |
 | P2-03 ✅ | `reveal.ts` global utility per §1.4 contract; apply markup attrs to WhatIDo, Metrics rows, Contact (NOT hero, NOT projects — their v1 choreography stays) | `scripts/motion/reveal.ts`, the 3 section files | Each tagged group reveals once on enter with stagger; JS-off shows everything; reduced-motion shows everything instantly; total stagger per group ≤ 0.5s |
 
-### Phase 3 — Easy wins
+### Phase 3 — Easy wins ✅ (completa 2026-07-07)
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P3-01 | RotatingWord behavior (§2.1) | `components/RotatingWord.astro`, `scripts/motion/rotating-word.ts`, `sections/Hero.astro` | §2.1 done-when holds |
-| P3-02 | Counter behavior (§2.6) | `scripts/motion/counter.ts` | §2.6 done-when holds |
-| P3-03 | LiveTerminal sequencing incl. shared `sequence()` helper (§2.3) | `scripts/motion/terminal.ts` | §2.3 done-when holds; `sequence()` exported and unit-testable in isolation |
-| P3-04 | Mouse-follow work preview (§2.5) incl. hiding inline thumbnails on fine-pointer desktop | `scripts/motion/mouse-preview.ts`, `sections/SelectedWork.astro`, `page.css` | §2.5 done-when holds |
-| P3-05 | Magnetic button (§2.8) | `scripts/motion/magnetic.ts` | §2.8 done-when holds |
-| P3-06 | Marquee off-screen pause (tiny IO toggling `animation-play-state`) | `scripts/motion/index.ts` or inline in `Toolkit.astro` script | Marquee animation paused while section off-screen (verify via devtools) |
-| P3-07 | SectionNav labeled dot progress nav per §1.4 contract: fixed right edge, one dot per section, scroll-spy `aria-current` + visible label on the active dot, anchors routed through Lenis, hidden <60rem | `components/SectionNav.astro`, `scripts/motion/section-nav.ts`, section components (add `data-section-label`) | Active dot + label always match the section in view while scrolling; clicking a dot navigates with header offset; dots are keyboard-focusable with visible focus; with JS off the anchors still jump; not rendered <60rem |
+| P3-01 ✅ | RotatingWord behavior (§2.1) | `components/RotatingWord.astro`, `scripts/motion/rotating-word.ts`, `sections/Hero.astro` | §2.1 done-when holds |
+| P3-02 ✅ | Counter behavior (§2.6) | `scripts/motion/counter.ts` | §2.6 done-when holds |
+| P3-03 ✅ | LiveTerminal sequencing incl. shared `sequence()` helper (§2.3) | `scripts/motion/terminal.ts` | §2.3 done-when holds; `sequence()` exported and unit-testable in isolation |
+| P3-04 ✅ | Mouse-follow work preview (§2.5) incl. hiding inline thumbnails on fine-pointer desktop | `scripts/motion/mouse-preview.ts`, `sections/SelectedWork.astro`, `page.css` | §2.5 done-when holds |
+| P3-05 ✅ | Magnetic button (§2.8) | `scripts/motion/magnetic.ts` | §2.8 done-when holds |
+| P3-06 ✅ | Marquee off-screen pause (tiny IO toggling `animation-play-state`) | `scripts/motion/index.ts` or inline in `Toolkit.astro` script | Marquee animation paused while section off-screen (verify via devtools) |
+| P3-07 ✅ | SectionNav labeled dot progress nav per §1.4 contract: fixed right edge, one dot per section, scroll-spy `aria-current` + visible label on the active dot, anchors routed through Lenis, hidden <60rem | `components/SectionNav.astro`, `scripts/motion/section-nav.ts`, section components (add `data-section-label`) | Active dot + label always match the section in view while scrolling; clicking a dot navigates with header offset; dots are keyboard-focusable with visible focus; with JS off the anchors still jump; not rendered <60rem |
 
 ### Phase 4 — The star moment (one, only one)
 
