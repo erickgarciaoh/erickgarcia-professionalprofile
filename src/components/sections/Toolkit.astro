@@ -34,3 +34,20 @@ const items = ['SQL', 'Power BI', 'DAX', 'Python', 'HTML', 'Claude AI', 'MCP Ser
 		color: var(--canvas-500);
 	}
 </style>
+
+<script>
+	// Off-screen pause (P3-06): don't burn compositor time animating a loop
+	// nobody sees. Clearing the inline override (rather than forcing 'running')
+	// lets the existing hover/focus-within pause rule keep working normally.
+	const track = document.querySelector<HTMLElement>('.marquee-track');
+
+	if (track && 'IntersectionObserver' in window) {
+		const io = new IntersectionObserver(
+			([entry]) => {
+				track.style.animationPlayState = entry.isIntersecting ? '' : 'paused';
+			},
+			{ threshold: 0 },
+		);
+		io.observe(track);
+	}
+</script>
