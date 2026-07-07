@@ -366,8 +366,8 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P1-01 | Layout mechanics per §1.2: `--gutter`/`--page-max`, `.wrap` rewrite, header/footer; max-width audit (measure caps stay, corsets die) | `src/styles/page.css`, section components with local `max-width` | No dead columns beyond gutters at 1920/2560; no h-scroll at 320; text ≤ 75ch everywhere |
-| P1-02 | Per-section wide composition pass per §2.1 Task B; Playwright screenshots at 320/768/1280/1920/2560 → `qa/v3/phase1/` | section components, `page.css`, `qa/v3/phase1/` | §2.1 done-when holds; screenshots reviewed |
+| P1-01 ✅ | Layout mechanics per §1.2: `--gutter`/`--page-max`, `.wrap` rewrite, header/footer; max-width audit (measure caps stay, corsets die) | `src/styles/page.css`, section components with local `max-width` | No dead columns beyond gutters at 1920/2560; no h-scroll at 320; text ≤ 75ch everywhere |
+| P1-02 ✅ | Per-section wide composition pass per §2.1 Task B; Playwright screenshots at 320/768/1280/1920/2560 → `qa/v3/phase1/` | section components, `page.css`, `qa/v3/phase1/` | §2.1 done-when holds; screenshots reviewed |
 
 ### Phase 2 — Hero
 

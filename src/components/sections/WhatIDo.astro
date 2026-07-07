@@ -47,7 +47,10 @@ import AnimatedCard from '../AnimatedCard.astro';
 	.cards-grid {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: var(--space-6);
+		/* Gap breathes with the layout (P1-02 §2.1 Task B): fixed 24px looked lost
+		   between cards spanning a 1920/2560 row. Capped well below --gutter so the
+		   cards stay a group, not islands. */
+		gap: clamp(var(--space-6), 1.6vw, var(--space-10));
 		margin-top: clamp(var(--space-10), 5vw, var(--space-16));
 	}
 

@@ -38,8 +38,9 @@ import PipelineSteps from '../PipelineSteps.astro';
 		max-width: 18ch;
 		font-family: var(--font-display);
 		font-weight: 600;
-		/* Cormorant display, ≥28px floor, ≤6rem ceiling (brand + §2.4). */
-		font-size: clamp(1.9rem, 6vw, 5rem);
+		/* Cormorant display, ≥28px floor, ≤6.5rem ceiling — raised in P1-02 so the
+		   sentence owns the width at 1920/2560 (brand + §2.1 Task B). */
+		font-size: clamp(1.9rem, 6vw, 6.5rem);
 		line-height: 1.08;
 		letter-spacing: -0.015em;
 		color: var(--text-primary);
