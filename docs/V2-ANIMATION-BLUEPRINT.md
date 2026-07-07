@@ -443,13 +443,19 @@ repo history convention; code/comments in English.
 | P3-06 ✅ | Marquee off-screen pause (tiny IO toggling `animation-play-state`) | `scripts/motion/index.ts` or inline in `Toolkit.astro` script | Marquee animation paused while section off-screen (verify via devtools) |
 | P3-07 ✅ | SectionNav labeled dot progress nav per §1.4 contract: fixed right edge, one dot per section, scroll-spy `aria-current` + visible label on the active dot, anchors routed through Lenis, hidden <60rem | `components/SectionNav.astro`, `scripts/motion/section-nav.ts`, section components (add `data-section-label`) | Active dot + label always match the section in view while scrolling; clicking a dot navigates with header offset; dots are keyboard-focusable with visible focus; with JS off the anchors still jump; not rendered <60rem |
 
-### Phase 4 — The star moment (one, only one)
+### Phase 4 — The star moment (one, only one) ✅ (completa 2026-07-07)
+
+El único star moment de la página ya tiene su motion real. Verificado con Playwright
+en navegador real (320/768/1280): consola limpia, scrub-read adelante/atrás, cuatro
+escenas one-shot en orden exacto, 60fps sin long tasks, reduced-motion y no-JS con
+cero timelines y escenas finales estáticas, y Fases 1-3 intactas (RotatingWord,
+Counter, LiveTerminal, mouse-preview, magnetic, marquee-pause, SectionNav).
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P4-01 | Statement kinetic typography: SplitText words + scrub per §2.4 beat 1, amber on `understandable visuals` | `scripts/motion/pipeline.ts` (same module, part 1), `sections/Statement.astro` | Scrub-read works forward/backward; reduced-motion & no-JS show full sentence; amber only there |
-| P4-02 | PipelineSteps timelines: four one-shot scene timelines per §2.4 beat 2 (rows stagger → MotionPath particles + DrawSVG cylinder → MorphSVG aggregation → DrawSVG charts), each on its own enter trigger, built with `sequence()`; progress-marker class swap wired to the triggers | `scripts/motion/pipeline.ts` | Each scene plays exactly once, in order, on desktop and mobile; progress marker tracks the active step; 60fps on a mid-range laptop |
-| P4-03 | Reduced-motion + no-JS branches for the whole Statement section: gate every timeline via `mm.add(MOTION_OK, ...)` (no runtime ifs); verify final scenes render with JS disabled and with reduced-motion at 320/768/1280 | `scripts/motion/pipeline.ts`, `components/PipelineSteps.astro` | §2.4 reduced-motion and no-JS done-when clauses hold; zero timelines created under reduced motion (verify via devtools) |
+| P4-01 ✅ | Statement kinetic typography: SplitText words + scrub per §2.4 beat 1, amber on `understandable visuals` | `scripts/motion/pipeline.ts` (same module, part 1), `sections/Statement.astro` | Scrub-read works forward/backward; reduced-motion & no-JS show full sentence; amber only there |
+| P4-02 ✅ | PipelineSteps timelines: four one-shot scene timelines per §2.4 beat 2 (rows stagger → MotionPath particles + DrawSVG cylinder → MorphSVG aggregation → DrawSVG charts), each on its own enter trigger, built with `sequence()`; progress marker already tracks the active step statically (per-step `.is-active` resuelto en build time — sin JS extra) | `scripts/motion/pipeline.ts` | Each scene plays exactly once, in order, on desktop and mobile; progress marker tracks the active step; 60fps on a mid-range laptop |
+| P4-03 ✅ | Reduced-motion + no-JS branches for the whole Statement section: gate every timeline via `mm.add(MOTION_OK, ...)` (no runtime ifs); verify final scenes render with JS disabled and with reduced-motion at 320/768/1280 | `scripts/motion/pipeline.ts`, `components/PipelineSteps.astro` | §2.4 reduced-motion and no-JS done-when clauses hold; zero timelines created under reduced motion (verify via devtools) |
 
 ### Phase 5 — Polish & QA
 
