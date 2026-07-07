@@ -1,0 +1,41 @@
+---
+interface Props {
+	words: string[];
+}
+
+const { words } = Astro.props;
+const [first] = words;
+const longest = words.reduce((a, b) => (b.length > a.length ? b : a), '');
+---
+
+<span class="rotating-word" data-rotating-word data-words={JSON.stringify(words)} style={`--rotating-word-ch: ${longest.length}`}>
+	<span class="rotating-word-visual" aria-hidden="true">{first}</span>
+	<span class="visually-hidden">{first}</span>
+</span>
+
+<style>
+	.rotating-word {
+		display: inline-block;
+		position: relative;
+		min-width: calc(var(--rotating-word-ch) * 1ch);
+		vertical-align: baseline;
+	}
+
+	.rotating-word-visual {
+		display: inline-block;
+	}
+
+	/* Kept out of the visual flow but present for assistive tech: the sentence
+	   must always read "...into decisions." regardless of the animated layer. */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+</style>

@@ -1,5 +1,6 @@
 ---
 import WeeklyPulse from '../WeeklyPulse.astro';
+import RotatingWord from '../RotatingWord.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -14,7 +15,9 @@ const { featured } = Astro.props;
 		<div class="hero-lead">
 			<h1 id="hero-heading" class="hero-heading">Erick García</h1>
 			<p class="hero-role">Senior Data Analyst / BI</p>
-			<p class="hero-statement">I don't just crunch numbers — I turn them into decisions.</p>
+			<p class="hero-statement">
+				I don't just crunch numbers — I turn them into <RotatingWord words={['decisions', 'dashboards', 'clarity']} />.
+			</p>
 			<p class="hero-lede">
 				I turn high-volume, SLA-driven operations data into decisions: SQL Server
 				pipelines, Power BI models, and, increasingly, AI-augmented analytics
