@@ -13,7 +13,7 @@ export default function initSmoothScroll(): void {
 
 		const header = document.querySelector<HTMLElement>('.site-header');
 		const anchors = document.querySelectorAll<HTMLAnchorElement>(
-			'.primary-nav a[href^="#"], .hero-actions a[href^="#"]',
+			'.primary-nav a[href^="#"], .hero-actions a[href^="#"], .section-nav a[href^="#"]',
 		);
 
 		const onClick = (event: MouseEvent) => {

@@ -1,0 +1,105 @@
+---
+interface Section {
+	id: string;
+	label: string;
+}
+
+interface Props {
+	sections: Section[];
+}
+
+const { sections } = Astro.props;
+---
+
+<nav class="section-nav" aria-label="Section progress">
+	<ol>
+		{
+			sections.map((section) => (
+				<li>
+					<a href={`#${section.id}`} data-section-dot data-target={section.id}>
+						<span class="dot" aria-hidden="true" />
+						<span class="dot-label">{section.label}</span>
+					</a>
+				</li>
+			))
+		}
+	</ol>
+</nav>
+
+<style>
+	.section-nav {
+		position: fixed;
+		top: 50%;
+		right: var(--space-6);
+		transform: translateY(-50%);
+		z-index: 50;
+	}
+
+	.section-nav ol {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: var(--space-3);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.section-nav a {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
+		padding: 0.3rem 0;
+		text-decoration: none;
+	}
+
+	.dot {
+		flex-shrink: 0;
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 50%;
+		background: var(--canvas-400);
+		transition:
+			background-color var(--motion-base),
+			transform var(--motion-base);
+	}
+
+	.dot-label {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: var(--text-primary);
+		background: var(--surface-card);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-lg);
+		padding: 0.3rem 0.7rem;
+		opacity: 0;
+		transform: translateX(4px);
+		transition:
+			opacity var(--motion-base),
+			transform var(--motion-base);
+	}
+
+	.section-nav a:hover .dot-label,
+	.section-nav a:focus-visible .dot-label,
+	.section-nav a[aria-current='true'] .dot-label {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.section-nav a[aria-current='true'] .dot {
+		background: var(--text-primary);
+		transform: scale(1.3);
+	}
+
+	/* Fixed chrome that overlays every section, light and dark alike — hard-coded
+	   to the light-world surface tokens rather than following [data-theme='dark']
+	   so it reads consistently regardless of what's scrolling underneath it. */
+	@media (max-width: 60rem) {
+		.section-nav {
+			display: none;
+		}
+	}
+</style>

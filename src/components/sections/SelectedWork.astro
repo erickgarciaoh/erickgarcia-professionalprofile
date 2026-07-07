@@ -15,7 +15,7 @@ const { featured, rest } = Astro.props;
 const previews = await Promise.all(rest.map((project) => getImage({ src: project.data.cover, width: 560 })));
 ---
 
-<section id="projects" data-theme="dark" aria-labelledby="projects-heading">
+<section id="projects" data-theme="dark" data-section-label="Work" aria-labelledby="projects-heading">
 	<div class="wrap">
 		<header class="projects-head">
 			<h2 id="projects-heading" class="section-heading">Projects</h2>

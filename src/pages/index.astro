@@ -9,11 +9,23 @@ import SelectedWork from '../components/sections/SelectedWork.astro';
 import Metrics from '../components/sections/Metrics.astro';
 import Toolkit from '../components/sections/Toolkit.astro';
 import Contact from '../components/sections/Contact.astro';
+import SectionNav from '../components/SectionNav.astro';
 import '../styles/page.css';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = projects.find((project) => project.data.featured);
 const rest = projects.filter((project) => !project.data.featured);
+
+const sectionNavItems = [
+	{ id: 'hero', label: 'Home' },
+	{ id: 'what-i-do', label: 'What I do' },
+	{ id: 'what-i-build', label: 'What I build' },
+	{ id: 'statement', label: 'Statement' },
+	{ id: 'projects', label: 'Work' },
+	{ id: 'metrics', label: 'Metrics' },
+	{ id: 'toolkit', label: 'Toolkit' },
+	{ id: 'contact', label: 'Contact' },
+];
 ---
 
 <Layout
@@ -43,6 +55,8 @@ const rest = projects.filter((project) => !project.data.featured);
 		<Toolkit />
 		<Contact />
 	</main>
+
+	<SectionNav sections={sectionNavItems} />
 
 	<footer class="site-footer">
 		<div class="wrap">
