@@ -62,7 +62,7 @@ Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_
 - QA visual: Playwright (screenshots por breakpoint).
 
 ## Datos
-No aplica base de datos en runtime. La dataviz "Weekly Pulse" (v1 fase 3) y su `src/data/coffee-pulse.json` **se retiran en v3 fase 2** — el análisis vive en el repo del proyecto coffee-shop, esta landing ya no lo embebe. Hasta que esa fase ejecute, el JSON sigue en el repo (agregado día×hora de las 149,116 transacciones, generado one-off desde `XTREMUS\DB001/coffee_shop_sales`). Dato reutilizado en v3: el tamaño del dataset (149,116 rows) se muestra como meta en Selected work.
+No aplica base de datos en runtime. La dataviz "Weekly Pulse" y `src/data/coffee-pulse.json` **se retiraron en v3 fase 2 (P2-02, 2026-07-07)** — el análisis vive en el repo del proyecto coffee-shop, esta landing ya no lo embebe. Dato reutilizado en v3: el tamaño del dataset (149,116 rows) se mostrará como meta en Selected work (pendiente, P4-01).
 
 ## Convenciones
 <!-- Solo deltas respecto al CLAUDE.md global. -->

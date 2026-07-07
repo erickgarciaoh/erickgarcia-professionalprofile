@@ -3,10 +3,10 @@
    real imagery, index hierarchy.
 
    Phase 4 — motion choreography (section "Motion" below): an orchestrated
-   hero load (name wipe → editorial cascade → viz payoff, coordinated with
-   WeeklyPulse.astro's grid build) and a once-only threshold reveal entering
-   the dark projects window. No library; CSS + one IntersectionObserver.
-   Every layer degrades to its natural, visible state under reduced-motion. */
+   hero load (name wipe → editorial cascade → signature-asset fade-in) and a
+   once-only threshold reveal entering the dark projects window. No library;
+   CSS + one IntersectionObserver. Every layer degrades to its natural,
+   visible state under reduced-motion. */
 
 /* ---------- Structure ---------- */
 
@@ -171,18 +171,18 @@ summary:focus-visible {
 	background: var(--accent-hover);
 }
 
-/* Hero CTA: solid ink, not amber — the hero's single amber focal point is the
-   heatmap's peak cell (one-focus-per-view brand rule). */
+/* Hero CTA: with WeeklyPulse retired (v3), this button carries the hero's one
+   amber focal point (P2-01 decision — the signature asset spends zero amber). */
 .btn-solid,
 .btn-solid:visited {
-	background: var(--ink-900);
-	color: var(--canvas-50);
-	border-color: var(--ink-900);
+	background: var(--accent);
+	color: var(--ink-950);
+	border-color: var(--accent);
 }
 
 .btn-solid:hover {
-	background: var(--ink-700);
-	border-color: var(--ink-700);
+	background: var(--accent-hover);
+	border-color: var(--accent-hover);
 }
 
 .btn-ghost,
@@ -198,56 +198,50 @@ summary:focus-visible {
 
 /* ---------- Hero ---------- */
 
+/* position: relative here so P2-03's full-bleed canvas/SVG asset can be an
+   absolutely positioned sibling of .hero, painted behind it (z-index: 0)
+   without touching this layout. */
 #hero {
-	padding-block: clamp(var(--space-8), 5vw, var(--space-12)) clamp(var(--space-16), 9vw, var(--space-24));
+	position: relative;
+	min-height: clamp(34rem, 92vh, 58rem);
+	display: flex;
+	padding-block: clamp(var(--space-12), 8vw, var(--space-20)) clamp(var(--space-10), 6vw, var(--space-16));
 }
 
 .hero {
-	display: grid;
-	grid-template-areas:
-		'lead viz'
-		'masthead viz';
-	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-	grid-template-rows: auto 1fr;
-	gap: clamp(var(--space-8), 5vw, var(--space-12)) clamp(var(--space-8), 5vw, var(--space-16));
-	align-items: start;
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: clamp(var(--space-12), 10vw, var(--space-20));
+	width: 100%;
 }
 
-.hero-lead {
-	grid-area: lead;
-}
-
-.hero-viz {
-	grid-area: viz;
+.hero-content {
+	max-width: 64rem;
 }
 
 .hero-heading {
-	font-size: clamp(3rem, 8vw, 5.5rem);
-	line-height: 1.02;
+	font-size: clamp(3.25rem, 10vw, 9.5rem);
+	line-height: 0.95;
 	letter-spacing: -0.02em;
+	text-transform: uppercase;
 	text-wrap: balance;
 }
 
 .hero-role {
-	margin-top: var(--space-4);
-	font-size: clamp(1.5rem, 2.2vw, 1.6rem);
+	margin-top: var(--space-5);
+	font-size: clamp(1.75rem, 2.6vw, 2.25rem);
 	font-weight: 400;
 	color: var(--text-secondary);
 }
 
-.hero-statement {
-	margin-top: var(--space-5);
-	max-width: 42ch;
-	font-size: clamp(1.25rem, 2vw, 1.5rem);
+.hero-sentence {
+	margin-top: var(--space-6);
+	max-width: 52ch;
+	font-size: clamp(1.1875rem, 1.7vw, 1.5rem);
 	font-weight: 500;
-	color: var(--text-primary);
-	text-wrap: pretty;
-}
-
-.hero-lede {
-	margin-top: var(--space-8);
-	max-width: 46ch;
-	font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
 	color: var(--text-primary);
 	text-wrap: pretty;
 }
@@ -260,8 +254,6 @@ summary:focus-visible {
 }
 
 .masthead {
-	grid-area: masthead;
-	align-self: end;
 	margin: 0;
 	max-width: 34rem;
 	border-top: 1px solid var(--border-default);
@@ -291,11 +283,11 @@ summary:focus-visible {
 	text-wrap: pretty;
 }
 
-/* ---------- Hero load choreography (phase 4) ----------
+/* ---------- Hero load choreography ----------
    One rehearsed entrance: the name resolves with a left-to-right wipe (the
    anchor), the supporting lines rise in a tight cascade, and the masthead rules
-   draw in as each row settles. The viz build (WeeklyPulse.astro, ~520ms→) is
-   timed to start on this cascade's tail so the two columns read as one load.
+   draw in as each row settles. The signature asset (P2-03, hero-field.ts) fades
+   in last via autoAlpha after `load`, on this cascade's tail.
    Pure CSS load animations: they run without JS and, under reduced-motion, the
    blanket rule at the foot of this file collapses them to their end state. */
 
@@ -326,19 +318,14 @@ summary:focus-visible {
 	animation-delay: 260ms;
 }
 
-.hero-statement {
+.hero-sentence {
 	animation: rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
 	animation-delay: 350ms;
 }
 
-.hero-lede {
-	animation: rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
-	animation-delay: 470ms;
-}
-
 .hero-actions {
 	animation: rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
-	animation-delay: 590ms;
+	animation-delay: 470ms;
 }
 
 /* Each row rises with its own bottom rule — the lines appear to draw top-down. */
@@ -346,9 +333,9 @@ summary:focus-visible {
 	animation: rise 550ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.masthead-row:nth-child(1) { animation-delay: 650ms; }
-.masthead-row:nth-child(2) { animation-delay: 740ms; }
-.masthead-row:nth-child(3) { animation-delay: 830ms; }
+.masthead-row:nth-child(1) { animation-delay: 560ms; }
+.masthead-row:nth-child(2) { animation-delay: 650ms; }
+.masthead-row:nth-child(3) { animation-delay: 740ms; }
 
 /* ---------- Section headings ---------- */
 
@@ -730,17 +717,7 @@ summary:focus-visible {
 
 @media (max-width: 60rem) {
 	.hero {
-		grid-template-areas:
-			'lead'
-			'viz'
-			'masthead';
-		grid-template-columns: minmax(0, 1fr);
-		grid-template-rows: none;
 		gap: var(--space-10);
-	}
-
-	.hero-viz {
-		max-width: 34rem;
 	}
 
 	.featured {

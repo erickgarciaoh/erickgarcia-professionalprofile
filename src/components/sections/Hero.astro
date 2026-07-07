@@ -1,38 +1,18 @@
----
-import WeeklyPulse from '../WeeklyPulse.astro';
-import RotatingWord from '../RotatingWord.astro';
-import type { CollectionEntry } from 'astro:content';
-
-interface Props {
-	featured?: CollectionEntry<'projects'>;
-}
-
-const { featured } = Astro.props;
----
-
 <section id="hero" data-section-label="Home" aria-labelledby="hero-heading">
 	<div class="wrap hero">
-		<div class="hero-lead">
+		<div class="hero-content">
 			<h1 id="hero-heading" class="hero-heading">Erick García</h1>
 			<p class="hero-role">Senior Data Analyst / BI</p>
-			<p class="hero-statement">
-				I don't just crunch numbers — I turn them into <RotatingWord words={['decisions', 'dashboards', 'clarity']} />.
-			</p>
-			<p class="hero-lede">
-				I turn high-volume, SLA-driven operations data into decisions: SQL Server
-				pipelines, Power BI models, and, increasingly, AI-augmented analytics
-				workflows. The projects below were built the same way: real data, real SQL,
-				checked before it's called a finding.
+			<p class="hero-sentence">
+				Data analysis, report building and process automation for your specific needs —
+				adaptable to different systems and structures, delivering reliable results in the
+				shortest possible time.
 			</p>
 			<div class="hero-actions">
 				<a href="#projects" class="btn btn-solid">View the work</a>
 				<a href="#contact" class="btn btn-ghost">Get in touch</a>
 			</div>
 		</div>
-
-		<aside class="hero-viz" aria-label="Live sample of my work: weekly transaction pulse">
-			{featured && <WeeklyPulse analysisUrl={featured.data.liveUrl} />}
-		</aside>
 
 		<dl class="masthead" aria-label="At a glance">
 			<div class="masthead-row">
