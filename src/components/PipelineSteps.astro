@@ -1,12 +1,19 @@
 ---
 // PipelineSteps — the signature stepped data-pipeline sequence (cloudstudio grammar).
 //
-// Phase 1 (this file): every panel renders its FINAL composed SVG scene, statically,
-// as if the animation had already finished. No JS, no GSAP, no scrub. The ids and
-// groups below (#raw-table, #particles, #db-cylinder, #dots-cloud, #bars-clean,
-// #line-chart) are the stable hooks the Phase 4 timelines (P4-02) will animate — do
-// not rename them. #dots-cloud lives in <defs> so it is present for the future
-// MorphSVG source path but is never painted here.
+// Every panel renders its FINAL composed SVG scene, statically, as if the animation
+// had already finished. The ids and groups below (#raw-table, #particles,
+// #db-cylinder, #dots-cloud, #bars-clean, #line-chart) are the stable hooks the
+// Phase 4 timelines animate (scripts/motion/pipeline.ts) — do not rename them.
+// #dots-cloud lives in <defs> so it is the MorphSVG source template but is never
+// painted here.
+//
+// P4-03 contract (reduced-motion + no-JS): this authored markup IS the fallback.
+// pipeline.ts builds every from-state and timeline only inside mm.add(MOTION_OK, …),
+// so with reduced-motion or JS off nothing runs and this static scene stands on its
+// own — the sentence and all four scenes must remain fully visible and legible here.
+// Keep #dots-cloud in <defs> (never rendered without JS) and #bars-clean as visible
+// <rect>s so the transform panel shows its five final bars with no scripting.
 
 const steps = [
 	{ n: '01', key: 'raw', caption: 'Operational systems generate rows — messy, wide, unrefined.' },
