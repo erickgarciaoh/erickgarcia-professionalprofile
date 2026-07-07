@@ -1,0 +1,21 @@
+---
+interface Props {
+	to: number;
+	display: string;
+	format?: 'compact' | 'none';
+	suffix?: string;
+}
+
+const { to, display, format = 'none', suffix = '' } = Astro.props;
+---
+
+<span class="counter" data-counter data-counter-to={to} data-counter-format={format} data-counter-suffix={suffix}
+	>{display}</span
+>
+
+<style>
+	/* tabular-nums now so the figure never jitters width once counter.ts (P3-02) counts up. */
+	.counter {
+		font-variant-numeric: tabular-nums;
+	}
+</style>
