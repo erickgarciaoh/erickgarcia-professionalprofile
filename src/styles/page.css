@@ -25,7 +25,6 @@ section {
 	padding-block: clamp(var(--space-16), 9vw, var(--space-24));
 }
 
-#profile,
 #contact {
 	border-top: 1px solid var(--border-default);
 }
@@ -354,11 +353,7 @@ summary:focus-visible {
 	text-wrap: balance;
 }
 
-/* ---------- Profile ---------- */
-
-.profile-body {
-	margin-top: var(--space-8);
-}
+/* ---------- Profile (dissolved into Metrics/Toolkit, P1-08) ---------- */
 
 .lede-measure {
 	max-width: 65ch;
@@ -368,53 +363,6 @@ summary:focus-visible {
 	font-size: 1.0625rem;
 	color: var(--text-primary);
 	text-wrap: pretty;
-}
-
-.profile-bio + .profile-bio {
-	margin-top: var(--space-5);
-}
-
-.toolkit {
-	margin: clamp(var(--space-10), 5vw, var(--space-16)) 0 0;
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--space-8);
-}
-
-.toolkit-group {
-	display: grid;
-	grid-template-columns: 8rem 1fr;
-	gap: var(--space-6);
-	padding-top: var(--space-6);
-	border-top: 1px solid var(--border-default);
-}
-
-.toolkit-group dt {
-	font-family: var(--font-mono);
-	font-size: 0.75rem;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	color: var(--ink-500);
-	padding-top: 0.3em;
-}
-
-.toolkit-group dd {
-	margin: 0;
-}
-
-.toolkit-group ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-2);
-	font-size: 1.0625rem;
-	color: var(--text-primary);
-}
-
-.toolkit-group:nth-child(2) ul {
-	color: var(--canvas-700); /* de-emphasized but AA at body size */
 }
 
 /* ---------- Projects: the dark window ---------- */
@@ -765,11 +713,6 @@ summary:focus-visible {
 
 	.stack li {
 		white-space: normal; /* nowrap overflows the viewport at ≤320px */
-	}
-
-	.toolkit-group {
-		grid-template-columns: 1fr;
-		gap: var(--space-3);
 	}
 }
 
