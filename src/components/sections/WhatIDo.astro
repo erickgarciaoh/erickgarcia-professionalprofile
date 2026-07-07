@@ -38,7 +38,9 @@ import AnimatedCard from '../AnimatedCard.astro';
 		margin-top: var(--space-5);
 		max-width: 60ch;
 		font-size: 1.0625rem;
-		color: var(--text-secondary);
+		/* --text-secondary (canvas-600) is 4.28:1 on this surface — just under
+		   the 4.5:1 AA floor for normal-size text. canvas-700 clears it. */
+		color: var(--canvas-700);
 		text-wrap: pretty;
 	}
 

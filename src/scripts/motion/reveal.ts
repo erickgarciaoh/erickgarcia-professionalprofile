@@ -16,7 +16,13 @@ export default function initReveal(): void {
 
 			if (items.length === 0) return;
 
-			gsap.set(items, { y: 24, autoAlpha: 0 });
+			// opacity only (not autoAlpha's visibility:hidden): Contact's reveal
+			// group holds real interactive content, and visibility:hidden pulls
+			// elements out of the tab order — unreachable by keyboard until the
+			// ScrollTrigger fires, which itself needs a scroll that focus can't
+			// produce on an unfocusable element. Transparent-but-present lets a
+			// keyboard user tab onto it, which scrolls it into view and reveals it.
+			gsap.set(items, { y: 24, opacity: 0 });
 
 			const stagger = items.length > 1 ? Math.min(STAGGER_STEP, STAGGER_CAP / (items.length - 1)) : 0;
 

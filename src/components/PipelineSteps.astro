@@ -287,7 +287,10 @@ const linePath = linePoints.map((p) => p.join(',')).join(' ');
 	}
 
 	.step-mark {
-		color: var(--canvas-400);
+		/* canvas-400 measured 1.69:1 on this surface — far under the 4.5:1 AA
+		   floor. canvas-700 clears it while still reading as the dimmer,
+		   not-yet-reached mark next to .is-active. */
+		color: var(--canvas-700);
 		transition: color var(--motion-base);
 	}
 

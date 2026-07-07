@@ -21,7 +21,10 @@ function initStatementType(): (() => void) | void {
 	const sentence = document.querySelector<HTMLElement>('.statement-sentence');
 	if (!sentence) return;
 
-	const split = new SplitText(sentence, { type: 'words', wordsClass: 'stmt-word' });
+	// aria: 'none' — the sentence is already aria-hidden (a permanent .sr-only
+	// twin carries the accessible text), so SplitText must not also inject its
+	// own aria-label onto the <p> (invalid without an explicit ARIA role).
+	const split = new SplitText(sentence, { type: 'words', wordsClass: 'stmt-word', aria: 'none' });
 	const words = split.words as HTMLElement[];
 	if (words.length === 0) {
 		split.revert();
