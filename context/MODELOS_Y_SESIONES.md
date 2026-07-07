@@ -116,6 +116,50 @@ Reglas de la sesión:
 
 ---
 
+## v3 — Rediseño post-feedback (blueprint: `docs/V3-REDESIGN-BLUEPRINT.md`)
+
+A diferencia de la v2, aquí hay MÁS diseño nuevo (asset del hero, escenas de tarjetas, modelo
+lista+panel) → el centro de gravedad sube de Sonnet a Opus. Fable solo en dos puntos: el concepto
+del asset de firma (P2-01, la decisión de mayor retorno de la v3) y el rescate si algo sale plano.
+
+### Modelo y sesiones por fase
+
+Una fila = una sesión de Claude Code. `/clear` al terminar cada fila, sin excepción.
+
+| Sesión | Tareas | Modelo | Notas |
+|---|---|---|---|
+| F0 | P0-01 | **Sonnet** | Fix de layout con causa raíz ya diagnosticada en el blueprint (§2.0) + restyle con spec cerrada. Verificar alineación con Playwright y desplegar. |
+| F1-A | P1-01 | **Sonnet** | Mecánica del layout fluido: contrato exacto en §1.2. Auditoría de max-width es checklist, no juicio. |
+| F1-B | P1-02 | **Opus** | Composición wide por sección: cómo llena cada sección 1920/2560 SÍ es juicio visual. `/fast` para el loop screenshot→ajuste. |
+| F2-A | P2-01 | **Fable** | `/impeccable shape` del asset de firma + decisión del ámbar del hero. LA sesión cara de la v3; termina con §2.2.1 escrito en el blueprint y tu OK. |
+| F2-B | P2-02 | **Sonnet** | Hero estático + retiros (WeeklyPulse, RotatingWord, JSON). Copy ya cerrado en §2.2; es ejecución + higiene de borrado. |
+| F2-C | P2-03 | **Opus** | Implementar el asset contra §2.2.1. Loop visual con `/fast`. Subir a Fable solo si tras 2–3 iteraciones no tiene carácter. |
+| F3-A | P3-01 | **Opus** | Las tres escenas de What I do son diseño de motion nuevo (la sección "triste" — no puede salir plana otra vez). |
+| F3-B | P3-02, P3-03 | **Sonnet** | Mover PipelineSteps (relocación + regresión) y Promise (mecánica de scrub ya existente, copy cerrado). |
+| F4-A | P4-01, P4-02 | **Sonnet** | Schema + layout estático lista/panel. P4-01 te pedirá los dataset sizes de 3 proyectos: tenlos a mano. |
+| F4-B | P4-03 | **Opus** | El feel del switching (crossfade, dimming, timing) se juzga con los ojos. `/fast`. |
+| F5 | P5-01 | **Sonnet** | Banda de métricas: CSS-only contra spec. |
+| F6-A | P6-01, P6-02 | **Sonnet** | Pases reduced-motion/no-JS + screenshots 5 anchos: checklist. |
+| F6-B | P6-03, P6-04 | **Sonnet** | Perf + a11y: mediciones contra umbral. |
+| F6-C | `/impeccable critique` + P6-05 | **Opus** | Juicio final sobre la página completa (con especial atención a 1920/2560, lo que falló en v2) + cierre de CLAUDE.md con tu sign-off. |
+
+Presupuesto de sesiones caras: 1 de Fable (F2-A) + 4 de Opus (F1-B, F2-C, F3-A, F4-B) + 1 de
+cierre Opus (F6-C). El resto es Sonnet.
+
+### Pausas, higiene y prompt plantilla
+
+Las tres secciones de la v2 (pausas obligatorias entre sesiones, pausas de fase con recorrido
+completo en `pnpm dev`, higiene de sesión, prompt plantilla) siguen vigentes tal cual —
+sustituyendo el nombre del blueprint por `docs/V3-REDESIGN-BLUEPRINT.md`. Añadido v3:
+
+- El recorrido de pausa de fase se hace en pantalla grande (1920 o 2560), no solo en la ventana
+  de desarrollo. El problema del "narrow" sobrevivió toda la v2 porque nadie miró el sitio en la
+  resolución real de Erick.
+- F2-A (shape) y F6-C (critique) requieren a Erick presente en la sesión: hay decisiones que el
+  agente no puede tomar solo (concepto del asset, ámbar del hero, sign-off final).
+
+---
+
 ## Archivo: tabla v1 (histórica)
 
 | Fase | Modelo default | Cuándo subir de modelo |

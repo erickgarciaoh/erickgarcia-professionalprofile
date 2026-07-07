@@ -30,6 +30,19 @@ Plan detallado, specs por sección y guardarraíles: `docs/V2-ANIMATION-BLUEPRIN
 
 v2 cerrada por completo: sitio enlazado desde CV y LinkedIn (2026-07-07).
 
+### v3 — rediseño post-feedback (plan aprobado 2026-07-07)
+Origen: cinco inconformidades de Erick con la v2 desplegada (nav de puntos torcido, layout narrow en 1920/2560, hero con WeeklyPulse que ya no aporta, presupuesto de animación corrido una sección, Selected work y Metrics lejos del modelo de referencia). Plan detallado, specs por sección y guardarraíles: `docs/V3-REDESIGN-BLUEPRINT.md` (fuente de verdad, no duplicar aquí). Referencia de gramática (no de registro): https://cloudstudio.es/.
+
+| Fase | Descripción | Estado |
+|---|---|---|
+| 0 | **Hotfix SectionNav** — alinear puntos (label fuera del flujo) + registro sutil sin píldora. Se publica solo e inmediato: el sitio está enlazado desde CV/LinkedIn. | Pendiente |
+| 1 | **Layout fluido full-width** — muere el `.wrap` de 72rem; gutters `clamp()`, composición que llena 1920/2560, medida de texto ≤75ch. Base de todo lo demás. QA pasa a 5 anchos (320/768/1280/1920/2560). | Pendiente |
+| 2 | **Hero nuevo** — nombre como monumento + frase de servicios + asset de firma interactivo (concepto se decide en `/impeccable shape`, P2-01). Se retiran WeeklyPulse, coffee-pulse.json y RotatingWord. | Pendiente |
+| 3 | **Rotación de secciones** — What I do: 3 tarjetas con escenas animadas. What I build: hereda PipelineSteps. Statement → Promise: una frase display con scrub breve. | Pendiente |
+| 4 | **Selected work** — lista izquierda + panel sticky derecho que cambia on-hover/focus (thumbnail + dataset size + stack). Muere mouse-preview. | Pendiente |
+| 5 | **Metrics como banda horizontal** — mismas 3 métricas en strip simple; Toolkit intocado. | Pendiente |
+| 6 | **QA y cierre** — reduced-motion, no-JS, screenshots en 5 anchos, Lighthouse, axe, sign-off de Erick. | Pendiente |
+
 Regla de proceso: idea nueva a mitad de fase → se clasifica contra este plan (va ahora / backlog / descartada) antes de tocar código. No se reordena ni reinicia sin decisión explícita.
 
 Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_SESIONES.md`.
@@ -49,7 +62,7 @@ Guía operativa de modelos y sesiones por fase (para Erick): `context/MODELOS_Y_
 - QA visual: Playwright (screenshots por breakpoint).
 
 ## Datos
-No aplica base de datos en runtime. La dataviz de firma ("Weekly Pulse", fase 3) consume `src/data/coffee-pulse.json`: agregado día×hora (txns + revenue) de las 149,116 transacciones del proyecto coffee-shop, generado one-off desde `XTREMUS\DB001/coffee_shop_sales` (`core.fact_sale_line ⋈ core.dim_date`). Para regenerarlo, re-ejecutar esa query y verificar que el total cuadre con 149,116.
+No aplica base de datos en runtime. La dataviz "Weekly Pulse" (v1 fase 3) y su `src/data/coffee-pulse.json` **se retiran en v3 fase 2** — el análisis vive en el repo del proyecto coffee-shop, esta landing ya no lo embebe. Hasta que esa fase ejecute, el JSON sigue en el repo (agregado día×hora de las 149,116 transacciones, generado one-off desde `XTREMUS\DB001/coffee_shop_sales`). Dato reutilizado en v3: el tamaño del dataset (149,116 rows) se muestra como meta en Selected work.
 
 ## Convenciones
 <!-- Solo deltas respecto al CLAUDE.md global. -->
