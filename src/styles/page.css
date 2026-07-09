@@ -243,8 +243,8 @@ summary:focus-visible {
 
 .hero-field-fallback .signal-line {
 	stroke: var(--data-1);
-	stroke-width: 1;
-	stroke-opacity: 0.55;
+	stroke-width: 1.75;
+	stroke-opacity: 0.8;
 }
 
 /* Below 60rem and on coarse pointers the pointer interaction is pointless —

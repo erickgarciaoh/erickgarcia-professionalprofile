@@ -152,9 +152,9 @@ function bootCanvas(hero: HTMLElement, canvas: HTMLCanvasElement): () => void {
 		if (fit) {
 			const x1 = Math.max(0, anchorPx.x - HERO_FIELD_RADIUS);
 			const x2 = Math.min(width, anchorPx.x + HERO_FIELD_RADIUS);
-			ctx.globalAlpha = 0.55;
+			ctx.globalAlpha = 0.8;
 			ctx.strokeStyle = signalColor;
-			ctx.lineWidth = 1;
+			ctx.lineWidth = 1.75;
 			ctx.beginPath();
 			ctx.moveTo(x1, fit.m * x1 + fit.b);
 			ctx.lineTo(x2, fit.m * x2 + fit.b);

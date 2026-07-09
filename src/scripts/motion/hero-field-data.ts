@@ -63,8 +63,8 @@ export function generateFieldPoints(
 		points.push({
 			x: random(),
 			y: random(),
-			r: 1.5 + random() * 1,
-			alpha: 0.1 + random() * 0.25,
+			r: 2 + random() * 1.5,
+			alpha: 0.35 + random() * 0.25,
 			tone: random() < 0.5 ? 0 : 1,
 			driftPhase: random() * Math.PI * 2,
 			driftSpeed: 0.15 + random() * 0.2,
