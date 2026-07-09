@@ -7,8 +7,10 @@ import { sequence, type SequenceStep } from './terminal';
 // state because the "from" states below only ever get set inside MOTION_OK.
 
 const SCENE_START = 'top 78%';
-const TERM_LINE_DURATION = 0.28;
-const TERM_LINE_GAP = 0.22;
+const CHAR_DURATION = 0.014; // seconds per typed character
+const MIN_LINE_DURATION = 0.25;
+const MAX_LINE_DURATION = 0.7;
+const LINE_PAUSE = 0.06; // pause after one line finishes typing, before the next starts
 
 function q<T extends Element>(root: ParentNode, sel: string): T[] {
 	return Array.from(root.querySelectorAll<T>(sel));
@@ -34,21 +36,27 @@ function buildVizScene(scene: HTMLElement): gsap.core.Timeline {
 	return sequence(steps);
 }
 
-// Automation — condensed terminal, lines rise + fade in sequence.
+// Automation — condensed terminal, lines type themselves out character by character.
 function buildTerminalScene(scene: HTMLElement): gsap.core.Timeline {
-	const lines = q<HTMLElement>(scene, '.terminal-line');
-	gsap.set(lines, { y: 6, autoAlpha: 0 });
+	const textSpans = q<HTMLElement>(scene, '.terminal-line-text');
+	const caret = scene.querySelector<HTMLElement>('.caret');
+	const fullTexts = textSpans.map((span) => span.textContent ?? '');
 
-	const steps: SequenceStep[] = lines.map((line, i) => [
+	gsap.set(textSpans, { text: '' });
+	if (caret) gsap.set(caret, { autoAlpha: 0 });
+
+	const steps: SequenceStep[] = textSpans.map((span, i) => [
 		{
-			targets: line,
-			y: 0,
-			autoAlpha: 1,
-			duration: TERM_LINE_DURATION,
-			ease: 'expo.out',
-			position: i === 0 ? undefined : `<+=${TERM_LINE_GAP}`,
+			targets: span,
+			text: fullTexts[i],
+			duration: gsap.utils.clamp(MIN_LINE_DURATION, MAX_LINE_DURATION, fullTexts[i].length * CHAR_DURATION),
+			ease: 'none',
+			position: i === 0 ? undefined : `+=${LINE_PAUSE}`,
 		},
 	]);
+
+	if (caret) steps.push([{ targets: caret, autoAlpha: 1, duration: 0.15, ease: 'expo.out' }]);
+
 	return sequence(steps);
 }
 

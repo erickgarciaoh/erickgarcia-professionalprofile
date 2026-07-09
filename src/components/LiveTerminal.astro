@@ -14,7 +14,7 @@ const { title, lines, emphasizeLast = false } = Astro.props;
 		{
 			lines.map((line, i) => (
 				<p class:list={['terminal-line', { 'is-emphasized': emphasizeLast && i === lines.length - 1 }]}>
-					{line}
+					<span class="terminal-line-text">{line}</span>
 					{i === lines.length - 1 && <span class="caret" aria-hidden="true" />}
 				</p>
 			))
