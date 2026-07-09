@@ -1,34 +1,95 @@
 ---
-import AnimatedCard from '../AnimatedCard.astro';
+import ServiceCard from '../ServiceCard.astro';
+import LiveTerminal from '../LiveTerminal.astro';
 ---
 
 <section id="what-i-do" data-section-label="What I do" aria-labelledby="what-i-do-heading">
 	<div class="wrap">
 		<h2 id="what-i-do-heading" class="section-heading">What I do</h2>
 		<p class="what-i-do-intro">
-			I don't just crunch numbers. I design the systems around them — so the numbers arrive
-			clean, on time, and mean something.
+			Three capabilities, one goal: numbers that arrive clean, on time, and mean something.
 		</p>
 
 		<div class="cards-grid" data-reveal-group>
-			<AnimatedCard
+			<ServiceCard
 				title="Data visualisation"
 				body="Dashboards and data stories people actually read — Power BI, DAX, and hand-built HTML visuals."
-				iconId="viz"
-				size="wide"
-			/>
-			<AnimatedCard
+				service="viz"
+			>
+				<svg
+					slot="scene"
+					class="scene-viz"
+					viewBox="0 0 160 100"
+					role="img"
+					aria-label="Bar chart with a trend line"
+					focusable="false"
+				>
+					<g class="viz-bars">
+						<rect class="viz-bar" x="24" y="54" width="16" height="34" rx="1.5" />
+						<rect class="viz-bar" x="48" y="36" width="16" height="52" rx="1.5" />
+						<rect class="viz-bar" x="72" y="48" width="16" height="40" rx="1.5" />
+						<rect class="viz-bar" x="96" y="22" width="16" height="66" rx="1.5" />
+						<rect class="viz-bar" x="120" y="42" width="16" height="46" rx="1.5" />
+					</g>
+					<polyline class="viz-line" points="32,30 56,46 80,26 104,58 128,34" />
+					<g class="viz-nodes">
+						<circle class="viz-node" cx="32" cy="30" r="2.4" />
+						<circle class="viz-node" cx="56" cy="46" r="2.4" />
+						<circle class="viz-node" cx="80" cy="26" r="2.4" />
+						<circle class="viz-node" cx="104" cy="58" r="2.4" />
+						<circle class="viz-node" cx="128" cy="34" r="2.4" />
+					</g>
+				</svg>
+			</ServiceCard>
+
+			<ServiceCard
 				title="Automation processes"
 				body="Python and SQL automations that remove the manual steps between raw data and the morning report."
-				iconId="automation"
-				size="std"
-			/>
-			<AnimatedCard
+				service="automation"
+			>
+				<div slot="scene" class="scene-automation">
+					<LiveTerminal
+						title="run_daily_refresh.py"
+						lines={[
+							'$ python run_daily_refresh.py',
+							'extract → transform → publish ... ok',
+							'✓ 0 manual steps',
+						]}
+					/>
+				</div>
+			</ServiceCard>
+
+			<ServiceCard
 				title="Data cleaning"
 				body="Messy operational data turned into models you can trust — validated, documented, reproducible."
-				iconId="cleaning"
-				size="std"
-			/>
+				service="cleaning"
+			>
+				<svg
+					slot="scene"
+					class="scene-clean"
+					viewBox="0 0 160 100"
+					role="img"
+					aria-label="Scattered data points aligning into a clean grid"
+					focusable="false"
+				>
+					<g class="clean-dots">
+						<circle class="clean-dot" cx="58" cy="10" r="3.4" />
+						<circle class="clean-dot" cx="102" cy="10" r="3.4" />
+						<circle class="clean-dot" cx="58" cy="23" r="3.4" />
+						<circle class="clean-dot" cx="102" cy="23" r="3.4" />
+						<circle class="clean-dot" cx="58" cy="37" r="3.4" />
+						<circle class="clean-dot" cx="102" cy="37" r="3.4" />
+						<circle class="clean-dot" cx="58" cy="50" r="3.4" />
+						<circle class="clean-dot" cx="102" cy="50" r="3.4" />
+						<circle class="clean-dot" cx="58" cy="63" r="3.4" />
+						<circle class="clean-dot" cx="102" cy="63" r="3.4" />
+						<circle class="clean-dot" cx="58" cy="77" r="3.4" />
+						<circle class="clean-dot" cx="102" cy="77" r="3.4" />
+						<circle class="clean-dot" cx="58" cy="90" r="3.4" />
+						<circle class="clean-dot" cx="102" cy="90" r="3.4" data-dot="jitter" />
+					</g>
+				</svg>
+			</ServiceCard>
 		</div>
 	</div>
 </section>
@@ -57,12 +118,109 @@ import AnimatedCard from '../AnimatedCard.astro';
 	@media (min-width: 60rem) {
 		.cards-grid {
 			grid-template-columns: repeat(3, 1fr);
-			grid-template-rows: repeat(2, 1fr);
+		}
+	}
+
+	/* --- Scene 1: data visualisation --- */
+	.scene-viz {
+		width: 100%;
+		max-width: 12rem;
+		height: auto;
+	}
+
+	.viz-bar {
+		fill: var(--data-1);
+		stroke: var(--data-1);
+		stroke-width: 1.5;
+	}
+
+	.viz-line {
+		fill: none;
+		stroke: var(--canvas-600);
+		stroke-width: 1.5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.viz-node {
+		fill: var(--canvas-600);
+	}
+
+	/* --- Scene 2: automation terminal --- */
+	.scene-automation {
+		width: 100%;
+	}
+
+	/* --- Scene 3: data cleaning --- */
+	.scene-clean {
+		width: 100%;
+		max-width: 9rem;
+		height: auto;
+	}
+
+	.clean-dot {
+		fill: var(--data-1);
+	}
+
+	/* Hover extras: fine-pointer only, transform-only, one iteration each. */
+	@media (hover: hover) and (pointer: fine) {
+		@keyframes bar-resort {
+			0%,
+			100% {
+				transform: scaleY(1);
+			}
+			45% {
+				transform: scaleY(var(--resort-scale, 1));
+			}
 		}
 
-		.cards-grid :global(.card--wide) {
-			grid-column: span 2;
-			grid-row: span 2;
+		.card[data-service='viz']:hover .viz-bar {
+			transform-box: fill-box;
+			transform-origin: bottom;
+			animation: bar-resort 0.36s ease-in-out 1;
+		}
+
+		.card[data-service='viz']:hover .viz-bar:nth-child(1) {
+			--resort-scale: 0.9;
+			animation-delay: 0s;
+		}
+
+		.card[data-service='viz']:hover .viz-bar:nth-child(2) {
+			--resort-scale: 1.1;
+			animation-delay: 0.025s;
+		}
+
+		.card[data-service='viz']:hover .viz-bar:nth-child(3) {
+			--resort-scale: 0.95;
+			animation-delay: 0.05s;
+		}
+
+		.card[data-service='viz']:hover .viz-bar:nth-child(4) {
+			--resort-scale: 1.15;
+			animation-delay: 0.075s;
+		}
+
+		.card[data-service='viz']:hover .viz-bar:nth-child(5) {
+			--resort-scale: 1.02;
+			animation-delay: 0.1s;
+		}
+
+		@keyframes dot-jitter {
+			0%,
+			100% {
+				transform: translate(0, 0);
+			}
+			30% {
+				transform: translate(7px, -5px);
+			}
+			60% {
+				transform: translate(-5px, 4px);
+			}
+		}
+
+		.card[data-service='cleaning']:hover .clean-dot[data-dot='jitter'] {
+			transform-box: fill-box;
+			animation: dot-jitter 0.5s ease-in-out 1;
 		}
 	}
 </style>

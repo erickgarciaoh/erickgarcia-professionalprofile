@@ -1,0 +1,63 @@
+---
+interface Props {
+	title: string;
+	body: string;
+	service: 'viz' | 'automation' | 'cleaning';
+}
+
+const { title, body, service } = Astro.props;
+---
+
+<article class="card" data-service={service} data-reveal-item>
+	<div class="card-scene">
+		<slot name="scene" />
+	</div>
+	<h3 class="card-title">{title}</h3>
+	<p class="card-body">{body}</p>
+</article>
+
+<style>
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+		padding: clamp(var(--space-6), 3vw, var(--space-8));
+		background: var(--surface-card);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-2);
+		transition:
+			transform var(--motion-base),
+			border-color var(--motion-base),
+			box-shadow var(--motion-base);
+	}
+
+	.card-scene {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: clamp(7rem, 13vw, 9.5rem);
+	}
+
+	.card-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		color: var(--text-primary);
+	}
+
+	.card-body {
+		font-size: 1rem;
+		color: var(--text-secondary);
+		text-wrap: pretty;
+	}
+
+	/* Hover lift only: fine-pointer, transform/border/shadow — no shape motion here. */
+	@media (hover: hover) and (pointer: fine) {
+		.card:hover {
+			transform: translateY(-4px);
+			border-color: var(--canvas-400);
+			box-shadow: var(--shadow-3);
+		}
+	}
+</style>

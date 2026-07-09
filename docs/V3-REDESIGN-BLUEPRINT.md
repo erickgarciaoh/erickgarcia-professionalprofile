@@ -416,7 +416,7 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P3-01 | ServiceCard + three animated scenes per §2.3 (viz draw / condensed terminal / dots snap); new intro line; delete or absorb AnimatedCard | `components/ServiceCard.astro`, `sections/WhatIDo.astro`, `scripts/motion/` scene wiring | §2.3 done-when holds |
+| P3-01 ✅ | ServiceCard + three animated scenes per §2.3 (viz draw / condensed terminal / dots snap); new intro line; delete or absorb AnimatedCard | `components/ServiceCard.astro`, `sections/WhatIDo.astro`, `scripts/motion/` scene wiring | §2.3 done-when holds |
 | P3-02 | Move PipelineSteps into What I build per §2.4; delete the two dead terminals; intro line; selector updates in `pipeline.ts` | `sections/WhatIBuild.astro`, `sections/Statement.astro` (emptied), `scripts/motion/pipeline.ts` | §2.4 done-when holds (full regression of the four scenes) |
 | P3-03 | Promise section per §2.5: rename file/id/label, new copy, `promise.ts` scrub extracted from `pipeline.ts` | `sections/Promise.astro`, `scripts/motion/promise.ts`, `index.astro` | §2.5 done-when holds; zero `#statement` hits |
 

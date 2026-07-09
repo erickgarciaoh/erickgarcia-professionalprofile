@@ -8,6 +8,7 @@ import initMagnetic from './magnetic';
 import initSectionNav from './section-nav';
 import initPipeline from './pipeline';
 import initHeroField from './hero-field';
+import initWhatIDo from './what-i-do';
 
 initSmoothScroll();
 initReveal();
@@ -18,3 +19,4 @@ initMagnetic();
 initSectionNav();
 initPipeline();
 initHeroField();
+initWhatIDo();
