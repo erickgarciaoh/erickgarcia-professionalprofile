@@ -8,7 +8,7 @@ import { SplitText } from 'gsap/SplitText';
 
 const WORD_EACH = 0.4; // per-word alpha/rise duration within the scrub timeline
 const WORD_STEP = 0.14; // stagger between successive words
-const ACCENT_LIGHT = 0.25; // amber colour tween duration
+const ACCENT_LIGHT = 0.6; // amber colour tween duration
 
 function initPromiseType(): (() => void) | void {
 	const sentence = document.querySelector<HTMLElement>('.promise-sentence');
