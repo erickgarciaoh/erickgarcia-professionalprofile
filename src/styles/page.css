@@ -198,9 +198,6 @@ summary:focus-visible {
 
 /* ---------- Hero ---------- */
 
-/* position: relative here so P2-03's full-bleed canvas/SVG asset can be an
-   absolutely positioned sibling of .hero, painted behind it (z-index: 0)
-   without touching this layout. */
 #hero {
 	position: relative;
 	min-height: clamp(34rem, 92vh, 58rem);
@@ -208,56 +205,74 @@ summary:focus-visible {
 	padding-block: clamp(var(--space-12), 8vw, var(--space-20)) clamp(var(--space-10), 6vw, var(--space-16));
 }
 
-/* Signature asset (P2-03) — full-bleed, behind .hero-content/.masthead
-   (z-index: 1). Canvas boots only on (pointer: fine) + >=60rem + no-preference
-   reduced-motion (see hero-field.ts); otherwise the SVG fallback — the same
-   seeded field, already resting on its fitted line — stays the only asset. */
-.hero-field {
-	position: absolute;
-	inset: 0;
-	z-index: 0;
-	overflow: hidden;
+/* Signature asset (P2-03, §2.2.2) — "Density relief", a contained topographic
+   figure. Below 60rem it sits in the hero flow at reduced scale (static SVG);
+   at >=60rem it anchors to the hero's lower-right whitespace and the canvas
+   boots on (pointer: fine) + no-preference reduced-motion (hero-relief.ts
+   gates the same way), crossfading over the identical resting SVG. */
+.hero-relief {
+	position: relative;
+	align-self: flex-end;
+	width: min(100%, 22rem);
+	aspect-ratio: 6 / 5;
+	animation: rise 550ms cubic-bezier(0.16, 1, 0.3, 1) both;
+	animation-delay: 820ms;
 }
 
-.hero-field-canvas,
-.hero-field-fallback {
+@media (min-width: 60rem) {
+	.hero-relief {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		z-index: 0;
+		width: clamp(20rem, 34vw, 34rem);
+		align-self: auto;
+	}
+}
+
+.hero-relief-canvas,
+.hero-relief-fallback {
 	position: absolute;
 	inset: 0;
 	width: 100%;
 	height: 100%;
 }
 
-.hero-field-canvas {
+.hero-relief-canvas {
 	opacity: 0;
 	visibility: hidden;
 	pointer-events: none;
 }
 
-.hero-field-fallback .pt-ink {
-	fill: var(--ink-300);
+.hero-relief-fallback path {
+	fill: none;
+	stroke-width: 1;
 }
 
-.hero-field-fallback .pt-canvas {
-	fill: var(--canvas-400);
+.hero-relief-fallback .lv-outer {
+	stroke: var(--ink-300);
 }
 
-.hero-field-fallback .signal-line {
+.hero-relief-fallback .lv-mid {
+	stroke: var(--ink-400);
+}
+
+.hero-relief-fallback .lv-peak {
 	stroke: var(--data-1);
-	stroke-width: 1.75;
-	stroke-opacity: 0.8;
+	stroke-width: 1.4;
 }
 
 /* Below 60rem and on coarse pointers the pointer interaction is pointless —
-   canvas never boots there (hero-field.ts gates the same way); hide it
+   canvas never boots there (hero-relief.ts gates the same way); hide it
    outright so a stray resize can't leave a dead canvas painted over the SVG. */
 @media (max-width: 60rem), (pointer: coarse) {
-	.hero-field-canvas {
+	.hero-relief-canvas {
 		display: none;
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.hero-field-canvas {
+	.hero-relief-canvas {
 		display: none;
 	}
 }
@@ -270,6 +285,14 @@ summary:focus-visible {
 	justify-content: space-between;
 	gap: clamp(var(--space-12), 10vw, var(--space-20));
 	width: 100%;
+}
+
+/* Content and masthead sit above the relief figure wherever they overlap
+   (the relief is a positioned z-index: 0 layer inside .hero). */
+.hero-content,
+.masthead {
+	position: relative;
+	z-index: 1;
 }
 
 .hero-content {
@@ -340,8 +363,9 @@ summary:focus-visible {
 /* ---------- Hero load choreography ----------
    One rehearsed entrance: the name resolves with a left-to-right wipe (the
    anchor), the supporting lines rise in a tight cascade, and the masthead rules
-   draw in as each row settles. The signature asset (P2-03, hero-field.ts) fades
-   in last via autoAlpha after `load`, on this cascade's tail.
+   draw in as each row settles. The signature asset (P2-03, hero-relief.ts)
+   rises last as static SVG, then the live canvas crossfades over it after
+   `load`, on this cascade's tail.
    Pure CSS load animations: they run without JS and, under reduced-motion, the
    blanket rule at the foot of this file collapses them to their end state. */
 

@@ -7,7 +7,7 @@ import initMagnetic from './magnetic';
 import initSectionNav from './section-nav';
 import initPipeline from './pipeline';
 import initPromise from './promise';
-import initHeroField from './hero-field';
+import initHeroRelief from './hero-relief';
 import initWhatIDo from './what-i-do';
 
 initSmoothScroll();
@@ -18,5 +18,5 @@ initMagnetic();
 initSectionNav();
 initPipeline();
 initPromise();
-initHeroField();
+initHeroRelief();
 initWhatIDo();

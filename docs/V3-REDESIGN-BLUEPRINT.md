@@ -74,7 +74,7 @@ Retirement hygiene is a guardrail (§4): every deletion removes imports, styles,
 ```
 src/
   scripts/motion/
-    hero-field.ts      # NEW — signature hero asset (concept locked in P2-01; §2.2)
+    hero-relief.ts     # NEW — signature hero asset (contract v2 in §2.2.2; + hero-relief-data.ts)
     work-panel.ts      # NEW — Selected-work list→panel switching (§2.6)
     promise.ts         # RENAMED SCOPE — short scrub-read for Promise (extracted from pipeline.ts beat 1)
     pipeline.ts        # KEPT — four one-shot scenes, now triggered inside #what-i-build
@@ -195,8 +195,9 @@ Shared vocabulary: "enter trigger" = ScrollTrigger `start: 'top 78%'`, `once: tr
     Max measure 52ch.
   - CTAs unchanged: `View the work` → `#projects`, `Get in touch` → `#contact`.
   - Masthead `<dl>` (Focus / Currently / Based) survives, repositioned to the hero's lower edge.
-- **Signature asset — concept locked in §2.2.1** (P2-01 `/impeccable shape` session with Erick,
-  2026-07-07). The binding constraints the concept had to satisfy (still binding for P2-03):
+- **Signature asset — current contract in §2.2.2** (v2, locked in the reopened P2-01 session,
+  2026-07-09; §2.2.1 is the discarded v1 kept as history). The binding constraints any concept
+  had to satisfy (still binding for P2-03):
   1. Interactive with pointer movement (`(pointer: fine)` only), data-themed, distinctive — NOT a
      copy of cloudstudio's particle sphere.
   2. Canvas 2D or SVG with **zero new dependencies** by default. Three.js/WebGL only if the shape
@@ -219,8 +220,9 @@ Shared vocabulary: "enter trigger" = ScrollTrigger `start: 'top 78%'`, `once: tr
 
 ### 2.2.1 Signature asset — design contract (locked in P2-01, 2026-07-07)
 
-Erick-approved in the P2-01 `/impeccable shape` session. This is the source of truth P2-03
-implements; the five §2.2 constraints remain binding on top of it.
+Erick-approved in the P2-01 `/impeccable shape` session. **Superseded 2026-07-09:** the concept
+was implemented, then discarded by Erick in visual review (see the note under the Phase 2 table).
+Kept as history; the live contract is §2.2.2.
 
 - **Concept: "Signal in the noise."** A full-bleed field of ~300 drifting data points behind the
   hero content. The pointer is the analyst's attention: points within its radius (~200px) ease
@@ -250,6 +252,46 @@ implements; the five §2.2 constraints remain binding on top of it.
 - **Distinctiveness check:** not cloudstudio's particle sphere (no 3D, no sphere, no
   cursor-orbit); distinct from the §2.3 Data-cleaning card scene (that one snaps dots to a rigid
   grid once; this is continuous regression fitting, never a grid).
+
+### 2.2.2 Signature asset — design contract v2 (locked in reopened P2-01, 2026-07-09)
+
+Erick-approved in the second P2-01 `/impeccable shape` session (2026-07-09), after live canvas
+probes of three candidate concepts. **This supersedes §2.2.1 as the contract P2-03 implements**
+(§2.2.1 stays above as history of the discarded concept); the five §2.2 constraints remain
+binding on top of it. Discovery findings that shaped it: the discarded concept failed on
+(a) invisibility (too ambient to notice), (b) scattered low-alpha dots reading as visual noise
+on the editorial canvas, and (c) a payoff too timid to reward the interaction. The replacement
+must be a **contained figure** with its own zone, at **quiet-but-crisp** energy.
+
+- **Concept: "Density relief."** A contained topographic figure — nested contour lines
+  (marching squares over a scalar field of 2–3 gaussian masses) — sitting in the whitespace
+  right of the name at ≥60rem. The analyst reads the *shape* of the distribution, not the
+  points. At rest the relief breathes slowly (mass centers drift on ~20–30s periods). The
+  pointer is a gravity peak: mass migrates toward it and the whole relief re-flows in cascade;
+  on leave it relaxes (~1s) back to the resting composition. Fixes the three recorded failures:
+  a composed figure (not invisible ambience), continuous engraving-like hairlines (no scattered
+  dots), and a global, unmistakable payoff (the entire figure responds).
+- **Technique:** Canvas 2D, **zero new dependencies**. Modules `src/scripts/motion/hero-relief.ts`
+  + `hero-relief-data.ts` (DOM-free field + marching squares, imported by both the browser module
+  and `Hero.astro` frontmatter, so the build-time SVG fallback renders the *identical* resting
+  figure). Canvas `aria-hidden`, `pointer-events: none`; pointer tracked on the section. Replaces
+  `hero-field.ts`/`hero-field-data.ts`, deleted once this runs.
+- **Palette (no amber):** outer contours `--ink-300`, mid `--ink-400`, innermost 1–2 rings
+  `--data-1` at 1.4px (the peak, marked without spending the accent). No frame — the outermost
+  contour is the figure's own boundary. **The hero's single amber remains the `View the work`
+  solid CTA.**
+- **Interaction gate:** boots only under `(pointer: fine)` AND ≥60rem AND `MOTION_OK`, after the
+  load cascade, fading in last (`autoAlpha`) — LCP stays the h1. Otherwise (touch / <60rem /
+  reduced-motion / no-JS): the static SVG fallback — same resting figure, reduced scale in the
+  hero flow.
+- **Performance plan (vs. the §2.2 budget):** one rAF loop; field sampled on a ~9px cell grid
+  bounded to the figure's box (≈540×450 max → ~3k samples + 9 iso levels per frame), well under
+  4ms; DPR capped at `min(devicePixelRatio, 2)`; pauses via `IntersectionObserver` +
+  `visibilitychange`.
+- **Distinctiveness check:** not cloudstudio's particle sphere (no particles, no 3D, no orbit);
+  nothing else on the page draws continuous curves (§2.3 scenes: bar-draw / terminal /
+  dots-snap-grid; §2.4 PipelineSteps: bars + numerals); and it inverts the discarded §2.2.1
+  concept — composed figure with global response vs. dispersed field with local reveal.
 
 ### 2.3 What I do (Phase 3) — animated service cards
 
@@ -406,11 +448,13 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P2-01 ⚠️ REABIERTA | `/impeccable shape` session WITH Erick: lock the signature asset concept against the 5 constraints in §2.2; append the design contract to this file as §2.2.1 | `docs/V3-REDESIGN-BLUEPRINT.md` | §2.2.1 exists, names technique/fallback/perf plan/amber choice; Erick approved in-session |
+| P2-01 ✅ (×2) | `/impeccable shape` session WITH Erick: lock the signature asset concept against the 5 constraints in §2.2; append the design contract to this file (v1 §2.2.1, discarded; v2 §2.2.2, live) | `docs/V3-REDESIGN-BLUEPRINT.md` | §2.2.2 exists, names technique/fallback/perf plan/amber choice; Erick approved in-session (2026-07-09, after live canvas probes of 3 candidates) |
 | P2-02 ✅ | Hero static rebuild per §2.2: new copy + type scale + masthead reposition; **delete** WeeklyPulse.astro, coffee-pulse.json, RotatingWord.astro, rotating-word.ts; update CLAUDE.md §Datos | `sections/Hero.astro`, `page.css`, `index.astro`, deletions, `CLAUDE.md` | Hero complete without JS at all 5 widths; build green with zero references to deleted files; crunch-numbers phrase gone site-wide |
-| P2-03 ⚠️ REABIERTA | Implement the asset per §2.2.1: `hero-field.ts` (or the name the contract picks), pointer interaction, static fallback, pauses, load choreography hook | `scripts/motion/hero-field.ts`, `sections/Hero.astro`, `scripts/motion/index.ts` | §2.2 done-when holds (LCP = h1, 60fps, fallbacks, single amber) |
+| P2-03 ✅ | Implement the asset per §2.2.2: `hero-relief.ts` + `hero-relief-data.ts`, pointer interaction, static fallback, pauses, load choreography hook; delete `hero-field.ts`/`hero-field-data.ts` | `scripts/motion/hero-relief.ts`, `scripts/motion/hero-relief-data.ts`, `sections/Hero.astro`, `scripts/motion/index.ts`, `page.css` | §2.2 done-when holds (LCP = h1, 60fps, fallbacks, single amber) |
 
 **2026-07-09 — P2-01/P2-03 reabiertas.** El concepto "Signal in the noise" se implementó (hero-field.ts/hero-field-data.ts) y hasta se le subió el contraste, pero Erick decidió en revisión visual que el concepto no convence — no es un problema de tuning, es de concepto. §2.2.1 queda como historial de la decisión original, no como contrato vigente. Código actual de `hero-field.ts`/`hero-field-data.ts` se deja funcionando tal cual (no se retira) hasta elegir el reemplazo, para no bloquear el resto del build. Decisión explícita de Erick: seguir con Fase 3 en paralelo y volver a este punto con una nueva sesión `/impeccable shape` antes de reimplementar.
+
+**2026-07-09 (más tarde) — RESUELTO.** Segunda sesión `/impeccable shape`: discovery contra las tres fallas del concepto v1 (invisible, ensucia el canvas, payoff débil), tres candidatos presentados como demos canvas interactivos en vivo, Erick eligió **"Density relief"** y aprobó el contrato §2.2.2. P2-03 reimplementado el mismo día: `hero-relief.ts` + `hero-relief-data.ts` (figura contenida de contornos topográficos, marching squares, fallback SVG idéntico generado en build), `hero-field.ts`/`hero-field-data.ts` retirados. QA funcional: build verde, LCP = h1, fallbacks no-JS/reduced-motion/<60rem correctos, ámbar único (CTA), loop sostiene 164fps en headless. Fase 2 cerrada; la revisión visual formal en 5 anchos queda en P6-02.
 
 ### Phase 3 — Section rotation
 
@@ -467,7 +511,7 @@ conventions, pnpm-only). v3 additions and amendments:
 7. **No new dependencies, period**, unless P2-01's contract names one and Erick approved it
    in-session.
 8. **Amber map of the final page** (one per viewport, adding a second is a defect):
-   Hero → the `View the work` solid CTA (decided in P2-01; the asset has zero amber, §2.2.1) ·
+   Hero → the `View the work` solid CTA (decided in P2-01, held by both contracts; the asset has zero amber, §2.2.2) ·
    What I do → none · What I build → step-04 peak
    bar · Promise → `optimized end to end` · Selected work → panel's Live link · Metrics/Toolkit →
    none · Contact → Get in touch button.
