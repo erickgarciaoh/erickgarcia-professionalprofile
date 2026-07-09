@@ -1,81 +1,16 @@
 import { gsap, ScrollTrigger, mm, MOTION_OK } from './core';
-import { SplitText } from 'gsap/SplitText';
 import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
 import { sequence, type SequenceStep } from './terminal';
 
-// Two beats, now living in different sections (v3 §2.4/§2.5):
-//   1. Kinetic typography over the Statement/Promise thesis sentence (scrub-read).
-//   2. The four PipelineSteps scenes, relocated to What I build, each a one-shot
-//      timeline on its own enter trigger, built with the shared `sequence()` helper.
+// The four PipelineSteps scenes, anchored inside What I build (v3 §2.4), each
+// a one-shot timeline on its own enter trigger, built with the shared
+// `sequence()` helper. The kinetic-typography beat that used to live here
+// moved to its own module (`promise.ts`, v3 §2.5).
 // Everything is gated behind `mm.add(MOTION_OK, ...)` so reduced-motion users
 // (and no-JS visitors) get the static, fully-composed final scenes with zero
 // timelines created — no runtime `if (reducedMotion)` branches.
 
-// --- Beat 1: kinetic typography (P4-01) ---------------------------------
-
-const WORD_EACH = 0.4; // per-word alpha/rise duration within the scrub timeline
-const WORD_STEP = 0.14; // stagger between successive words
-const ACCENT_LIGHT = 0.25; // amber colour tween duration
-
-function initStatementType(): (() => void) | void {
-	const sentence = document.querySelector<HTMLElement>('.statement-sentence');
-	if (!sentence) return;
-
-	// aria: 'none' — the sentence is already aria-hidden (a permanent .sr-only
-	// twin carries the accessible text), so SplitText must not also inject its
-	// own aria-label onto the <p> (invalid without an explicit ARIA role).
-	const split = new SplitText(sentence, { type: 'words', wordsClass: 'stmt-word', aria: 'none' });
-	const words = split.words as HTMLElement[];
-	if (words.length === 0) {
-		split.revert();
-		return;
-	}
-
-	// Accent words ("understandable visuals") — prefer the authored span, fall
-	// back to matching text so the amber assignment survives SplitText DOM churn.
-	let accentWords = Array.from(sentence.querySelectorAll<HTMLElement>('.accent-words .stmt-word'));
-	if (accentWords.length === 0) {
-		const accentText = new Set(['understandable', 'visuals']);
-		accentWords = words.filter((w) => accentText.has(w.textContent?.trim().toLowerCase() ?? ''));
-	}
-
-	// Resolve concrete colours so GSAP interpolates the amber ignition cleanly.
-	const inkColor = getComputedStyle(words[0]).color;
-	const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-
-	// From-state (JS-only, pattern 1): dim the whole sentence and de-amber the
-	// accent words so they can light up on scroll.
-	gsap.set(words, { autoAlpha: 0.18, y: 12 });
-	if (accentWords.length > 0) gsap.set(accentWords, { color: inkColor });
-
-	const tl = gsap.timeline({
-		scrollTrigger: {
-			trigger: sentence,
-			start: 'top 80%',
-			end: '+=120%', // ~120vh scrub, no pinning
-			scrub: 0.6,
-		},
-	});
-
-	tl.to(words, { autoAlpha: 1, y: 0, ease: 'none', duration: WORD_EACH, stagger: { each: WORD_STEP } }, 0);
-
-	// Amber ignites only once the last accent word's alpha has completed.
-	if (accentWords.length > 0) {
-		const lastAccentIdx = words.indexOf(accentWords[accentWords.length - 1]);
-		const accentDoneAt = (lastAccentIdx < 0 ? words.length - 1 : lastAccentIdx) * WORD_STEP + WORD_EACH;
-		tl.to(accentWords, { color: accentColor, ease: 'none', duration: ACCENT_LIGHT }, accentDoneAt);
-	}
-
-	return () => {
-		tl.scrollTrigger?.kill();
-		tl.kill();
-		split.revert(); // restores the original sentence + static amber accent
-	};
-}
-
-// --- Beat 2: the four PipelineSteps scenes (P4-02) ----------------------
-
-const SCENE_START = 'top 70%'; // each step's own enter trigger, once
+const SCENE_START = 'top 55%'; // each step's own enter trigger, once — fires closer to center so slow scrolls still catch the motion
 
 function q<T extends Element>(root: ParentNode, sel: string): T[] {
 	return Array.from(root.querySelectorAll<T>(sel));
@@ -87,7 +22,7 @@ function buildRawScene(scene: SVGElement): gsap.core.Timeline {
 	gsap.set(rows, { autoAlpha: 0, y: 8 });
 
 	const step: SequenceStep = [
-		{ targets: rows, autoAlpha: 1, y: 0, duration: 0.4, ease: 'expo.out', stagger: { amount: 0.6 } },
+		{ targets: rows, autoAlpha: 1, y: 0, duration: 0.6, ease: 'expo.out', stagger: { amount: 0.9 } },
 	];
 	return sequence([step]);
 }
@@ -102,14 +37,14 @@ function buildExtractScene(scene: SVGElement): gsap.core.Timeline {
 	gsap.set(cylinder, { drawSVG: '0%', fillOpacity: 0 });
 
 	const step: SequenceStep = [
-		{ targets: cylinder, drawSVG: '100%', duration: 1.1, ease: 'power1.inOut', position: 0 },
+		{ targets: cylinder, drawSVG: '100%', duration: 1.6, ease: 'power1.inOut', position: 0 },
 		{
 			targets: particles,
 			autoAlpha: 1,
-			duration: 0.9,
+			duration: 1.3,
 			ease: 'power1.inOut',
-			stagger: 0.04,
-			position: 0.15,
+			stagger: 0.06,
+			position: 0.2,
 			// Each particle curves from a mini-table exit point to its authored
 			// rest position; four exit rows read as ~4 converging streams.
 			motionPath: (i: number, t: SVGCircleElement) => {
@@ -129,7 +64,7 @@ function buildExtractScene(scene: SVGElement): gsap.core.Timeline {
 				};
 			},
 		},
-		{ targets: cylinder, fillOpacity: 1, duration: 0.5, ease: 'none', position: 0.7 },
+		{ targets: cylinder, fillOpacity: 1, duration: 0.7, ease: 'none', position: 1.0 },
 	];
 	return sequence([step]);
 }
@@ -174,9 +109,9 @@ function buildTransformScene(scene: SVGElement): gsap.core.Timeline {
 		{
 			targets: dots,
 			autoAlpha: 0,
-			duration: 0.7,
+			duration: 1.0,
 			ease: 'expo.inOut',
-			stagger: { amount: 0.4 },
+			stagger: { amount: 0.6 },
 			position: 0,
 			x: (_i: number, t: SVGCircleElement) => nearestCenter(Number(t.getAttribute('cx'))) - Number(t.getAttribute('cx')),
 			y: (_i: number, t: SVGCircleElement) => BASE_Y - 4 - Number(t.getAttribute('cy')),
@@ -184,10 +119,10 @@ function buildTransformScene(scene: SVGElement): gsap.core.Timeline {
 		{
 			targets: bars,
 			morphSVG: (i: number) => finalD[i],
-			duration: 0.9,
+			duration: 1.3,
 			ease: 'expo.inOut',
-			stagger: 0.06,
-			position: 0.25,
+			stagger: 0.09,
+			position: 0.35,
 		},
 	];
 
@@ -214,10 +149,10 @@ function buildDecideScene(scene: SVGElement): gsap.core.Timeline {
 	gsap.set(nodes, { autoAlpha: 0 });
 
 	const steps: SequenceStep[] = [
-		[{ targets: strokes, drawSVG: '100%', duration: 0.9, ease: 'none' }],
+		[{ targets: strokes, drawSVG: '100%', duration: 1.3, ease: 'none' }],
 		[
-			{ targets: bars, fillOpacity: 1, y: 0, duration: 0.5, ease: 'expo.out', stagger: 0.08 },
-			{ targets: nodes, autoAlpha: 1, duration: 0.3, ease: 'expo.out', stagger: 0.06, position: '<0.15' },
+			{ targets: bars, fillOpacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.12 },
+			{ targets: nodes, autoAlpha: 1, duration: 0.4, ease: 'expo.out', stagger: 0.09, position: '<0.15' },
 		],
 	];
 	return sequence(steps);
@@ -264,15 +199,5 @@ function initPipelineScenes(): (() => void) | void {
 }
 
 export default function initPipeline(): void {
-	mm.add(MOTION_OK, () => {
-		const cleanups: (() => void)[] = [];
-
-		const typeCleanup = initStatementType();
-		if (typeCleanup) cleanups.push(typeCleanup);
-
-		const scenesCleanup = initPipelineScenes();
-		if (scenesCleanup) cleanups.push(scenesCleanup);
-
-		return () => cleanups.forEach((cleanup) => cleanup());
-	});
+	mm.add(MOTION_OK, () => initPipelineScenes());
 }
