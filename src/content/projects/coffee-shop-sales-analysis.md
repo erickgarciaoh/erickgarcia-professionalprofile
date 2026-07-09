@@ -5,7 +5,7 @@ summary: >-
   business questions — from a revenue-growth decomposition to a basket-affinity
   check — each one verified against the data before being called a finding.
 blurb: "149K coffee-shop transactions turned into five verified business answers."
-datasetSize: "1 table · 11 cols · 149,117 rows"
+datasetSize: "1 table · 11 cols · 149,116 rows"
 stack:
   - SQL Server (T-SQL)
   - Python (pandas, pyodbc)
