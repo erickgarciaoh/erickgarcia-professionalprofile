@@ -662,8 +662,15 @@ summary:focus-visible {
 .panel-meta dd {
 	margin: 0;
 	font-size: 0.9375rem;
+	line-height: 1.45;
 	color: var(--text-primary);
 	text-wrap: pretty;
+}
+
+/* Reserve two lines for the stack value so the panel doesn't jump height when
+   switching between a 3-tool and a 4-tool project (§2.6 no layout shift). */
+.panel-meta-stack dd {
+	min-height: calc(2 * 1.45em);
 }
 
 .panel-live {
@@ -708,43 +715,40 @@ summary:focus-visible {
 		align-self: start;
 		margin: 0;
 	}
-}
 
-/* ---------- Cursor-follow work preview (v2 P3-04) ----------
-   Desktop-only: the floating figure becomes THE image, so the inline row
-   thumbnail steps aside and rows read as tighter text rows. Reduced-motion
-   is folded into the same query — v1's inline thumbnails stay untouched
-   there, satisfying its "simplest: never init the module" clause without
-   any JS-driven class toggle. */
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-	.project-list .row-media {
-		display: none;
+	/* List rows are the panel's controls: the whole row reacts to hover/focus. */
+	.project-row {
+		position: relative;
+		cursor: pointer;
 	}
-}
 
-.work-preview {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 280px;
-	height: 175px;
-	margin: 0;
-	border: 1px solid var(--border-default);
-	border-radius: var(--radius-lg);
-	overflow: hidden;
-	background: var(--ink-800);
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
-	z-index: 40;
-	will-change: transform;
-}
+	/* Inactive rows dim to canvas-500-on-ink (5.9:1 — AA holds); the active row's
+	   title returns to full text-primary. */
+	.project-row .row-title a {
+		color: var(--canvas-500);
+	}
 
-.work-preview img {
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	.project-row.is-active .row-title a {
+		color: var(--text-primary);
+	}
+
+	/* Activation is signalled by the marker + full-opacity title, not amber —
+	   the single persistent amber stays the panel's live link. */
+	.project-row .row-title a:hover {
+		color: var(--text-primary);
+	}
+
+	/* Hairline marker: a short vertical tick in the gutter left of the numeral. */
+	.project-row.is-active::before {
+		content: '';
+		position: absolute;
+		inset-inline-start: calc(-1 * var(--space-6));
+		top: 50%;
+		width: 2px;
+		height: 1.2em;
+		transform: translateY(-50%);
+		background: var(--text-primary);
+	}
 }
 
 /* ---------- Dark-window threshold (phase 4) ----------
@@ -858,14 +862,6 @@ summary:focus-visible {
 @media (max-width: 60rem) {
 	.hero {
 		gap: var(--space-10);
-	}
-
-	/* Below the panel breakpoint the row IS a card: the thumbnail must show even
-	   on hover-capable narrow viewports, overriding the retired cursor-preview
-	   rule that hides it on (hover: hover) devices (that rule dies with
-	   mouse-preview in P4-03). */
-	.project-list .row-media {
-		display: block;
 	}
 }
 

@@ -9,14 +9,27 @@ interface Props {
 const { projects } = Astro.props;
 
 // Server-resolved initial active project (§2.6): no JS needed for the panel to
-// show project 1. P4-03 will switch it on hover/focus.
+// show project 1. work-panel.ts (P4-03) switches it on hover/focus.
 const active = projects[0];
 
-// Pre-resolved at build time for the cursor-follow preview (v2 P3-04, retired in
-// P4-03): the floating figure swaps a plain <img src> per hovered row, so it
-// needs a real URL, not the <Image> component's responsive srcset. Kept intact
-// until P4-03 replaces the whole mechanism with the sticky panel.
-const previews = await Promise.all(projects.map((project) => getImage({ src: project.data.cover, width: 560 })));
+// Per-project panel payload, pre-resolved at build time (§2.6). getImage gives a
+// single real URL (not the <Image> responsive srcset, whose srcset would clobber
+// img.src on swap) sized for the large sticky panel, plus the meta each row hands
+// to work-panel.ts via data-* attributes. Same build-time resolution pattern the
+// retired cursor preview used, now feeding the panel instead of a floating figure.
+const panels = await Promise.all(
+	projects.map(async (project) => {
+		const cover = await getImage({ src: project.data.cover, width: 1200 });
+		return {
+			cover: cover.src,
+			alt: project.data.coverAlt,
+			dataset: project.data.datasetSize ?? '',
+			stack: project.data.stack.join(' · '),
+			live: project.data.liveUrl,
+			title: project.data.title,
+		};
+	}),
+);
 ---
 
 <section id="projects" data-theme="dark" data-section-label="Work" aria-labelledby="projects-heading">
@@ -29,15 +42,20 @@ const previews = await Promise.all(projects.map((project) => getImage({ src: pro
 			</p>
 		</header>
 
-		<figure class="work-preview" aria-hidden="true">
-			<img src="" alt="" />
-		</figure>
-
 		<div class="work-layout">
 			<ol class="project-list">
 				{
 					projects.map((project, index) => (
-						<li class="project-row" style={`--i:${index}`} data-preview-src={previews[index].src}>
+						<li
+							class:list={['project-row', { 'is-active': index === 0 }]}
+							style={`--i:${index}`}
+							data-cover={panels[index].cover}
+							data-cover-alt={panels[index].alt}
+							data-dataset={panels[index].dataset}
+							data-stack={panels[index].stack}
+							data-live={panels[index].live}
+							data-title={panels[index].title}
+						>
 							<span class="row-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
 							<a
 								class="row-media"
@@ -95,25 +113,19 @@ const previews = await Promise.all(projects.map((project) => getImage({ src: pro
 
 			<figure class="work-panel">
 				<div class="work-panel-media">
-					<Image
-						src={active.data.cover}
-						alt={active.data.coverAlt}
-						widths={[480, 800, 1200]}
-						sizes="(max-width: 60rem) 100vw, 60vw"
-						loading="lazy"
-					/>
+					<img src={panels[0].cover} alt={active.data.coverAlt} loading="lazy" decoding="async" />
 				</div>
 				<figcaption>
 					<dl class="panel-meta">
 						{
 							active.data.datasetSize && (
-								<div class="panel-meta-row">
+								<div class="panel-meta-row panel-meta-dataset">
 									<dt>Dataset</dt>
 									<dd>{active.data.datasetSize}</dd>
 								</div>
 							)
 						}
-						<div class="panel-meta-row">
+						<div class="panel-meta-row panel-meta-stack">
 							<dt>Stack</dt>
 							<dd>{active.data.stack.join(' · ')}</dd>
 						</div>

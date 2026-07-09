@@ -426,7 +426,7 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 |---|---|---|---|
 | P4-01 ✅ | Schema + content: add `blurb`/`datasetSize` per §1.3; fill blurbs; **ask Erick for the three unconfirmed dataset sizes** (coffee = 149,116 rows) | `content.config.ts`, `src/content/projects/*.md` | Build green; blurbs ≤ 90 chars; only confirmed sizes present |
 | P4-02 ✅ | Static layout per §2.6: list + sticky panel, mobile stacked cards, no-JS complete; featured flag stops driving layout | `sections/SelectedWork.astro`, `page.css`, `pages/index.astro` | §2.6 no-JS and mobile clauses hold at all 5 widths (screenshots in `qa/v3/phase4/`) |
-| P4-03 | `work-panel.ts` interaction (hover/focus activation, crossfade, dimming); **delete** mouse-preview.ts + `.work-preview` + CSS | `scripts/motion/work-panel.ts`, `scripts/motion/index.ts`, `page.css` | §2.6 done-when holds; mouse-preview zero grep hits |
+| P4-03 ✅ | `work-panel.ts` interaction (hover/focus activation, crossfade, dimming); **delete** mouse-preview.ts + `.work-preview` + CSS | `scripts/motion/work-panel.ts`, `scripts/motion/index.ts`, `page.css` | §2.6 done-when holds; mouse-preview zero grep hits |
 
 ### Phase 5 — Metrics band
 
