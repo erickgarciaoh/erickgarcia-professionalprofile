@@ -3,10 +3,10 @@ import { SplitText } from 'gsap/SplitText';
 import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
 import { sequence, type SequenceStep } from './terminal';
 
-// Statement — the ONE star moment (§2.4). Two beats live here:
-//   1. Kinetic typography over the thesis sentence (scrub-read).
-//   2. The four PipelineSteps scenes, each a one-shot timeline on its own
-//      enter trigger, built with the shared `sequence()` helper (§1.4).
+// Two beats, now living in different sections (v3 §2.4/§2.5):
+//   1. Kinetic typography over the Statement/Promise thesis sentence (scrub-read).
+//   2. The four PipelineSteps scenes, relocated to What I build, each a one-shot
+//      timeline on its own enter trigger, built with the shared `sequence()` helper.
 // Everything is gated behind `mm.add(MOTION_OK, ...)` so reduced-motion users
 // (and no-JS visitors) get the static, fully-composed final scenes with zero
 // timelines created — no runtime `if (reducedMotion)` branches.
