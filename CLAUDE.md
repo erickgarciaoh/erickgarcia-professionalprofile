@@ -40,7 +40,7 @@ Origen: cinco inconformidades de Erick con la v2 desplegada (nav de puntos torci
 | 2 | **Hero nuevo** — nombre como monumento + frase de servicios + asset de firma interactivo (concepto se decide en `/impeccable shape`, P2-01). Se retiran WeeklyPulse, coffee-pulse.json y RotatingWord. | Parcial: copy/layout completo (P2-02); asset de firma **reabierto** (P2-01/P2-03) — concepto "Signal in the noise" descartado por Erick 2026-07-09, ver blueprint |
 | 3 | **Rotación de secciones** — What I do: 3 tarjetas con escenas animadas. What I build: hereda PipelineSteps. Statement → Promise: una frase display con scrub breve. | Pendiente |
 | 4 | **Selected work** — lista izquierda + panel sticky derecho que cambia on-hover/focus (thumbnail + dataset size + stack). Muere mouse-preview. | Pendiente |
-| 5 | **Metrics como banda horizontal** — mismas 3 métricas en strip simple; Toolkit intocado. | Pendiente |
+| 5 | **Metrics como banda horizontal** — mismas 3 métricas en strip simple; Toolkit intocado. | **Completada** (2026-07-09) |
 | 6 | **QA y cierre** — reduced-motion, no-JS, screenshots en 5 anchos, Lighthouse, axe, sign-off de Erick. | Pendiente |
 
 Regla de proceso: idea nueva a mitad de fase → se clasifica contra este plan (va ahora / backlog / descartada) antes de tocar código. No se reordena ni reinicia sin decisión explícita.

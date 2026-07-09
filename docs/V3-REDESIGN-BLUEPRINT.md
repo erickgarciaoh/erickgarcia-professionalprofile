@@ -432,7 +432,7 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 
 | ID | Task | Files | AC |
 |---|---|---|---|
-| P5-01 | Horizontal band restyle per §2.7 (CSS-only; Counter untouched) | `sections/Metrics.astro` | §2.7 done-when holds |
+| P5-01 ✅ | Horizontal band restyle per §2.7 (CSS-only; Counter untouched) | `sections/Metrics.astro` | §2.7 done-when holds |
 
 ### Phase 6 — QA & close
 
