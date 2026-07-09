@@ -7,6 +7,7 @@ import initMousePreview from './mouse-preview';
 import initMagnetic from './magnetic';
 import initSectionNav from './section-nav';
 import initPipeline from './pipeline';
+import initHeroField from './hero-field';
 
 initSmoothScroll();
 initReveal();
@@ -16,3 +17,4 @@ initMousePreview();
 initMagnetic();
 initSectionNav();
 initPipeline();
+initHeroField();

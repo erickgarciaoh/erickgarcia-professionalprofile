@@ -208,6 +208,60 @@ summary:focus-visible {
 	padding-block: clamp(var(--space-12), 8vw, var(--space-20)) clamp(var(--space-10), 6vw, var(--space-16));
 }
 
+/* Signature asset (P2-03) — full-bleed, behind .hero-content/.masthead
+   (z-index: 1). Canvas boots only on (pointer: fine) + >=60rem + no-preference
+   reduced-motion (see hero-field.ts); otherwise the SVG fallback — the same
+   seeded field, already resting on its fitted line — stays the only asset. */
+.hero-field {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	overflow: hidden;
+}
+
+.hero-field-canvas,
+.hero-field-fallback {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.hero-field-canvas {
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.hero-field-fallback .pt-ink {
+	fill: var(--ink-300);
+}
+
+.hero-field-fallback .pt-canvas {
+	fill: var(--canvas-400);
+}
+
+.hero-field-fallback .signal-line {
+	stroke: var(--data-1);
+	stroke-width: 1;
+	stroke-opacity: 0.55;
+}
+
+/* Below 60rem and on coarse pointers the pointer interaction is pointless —
+   canvas never boots there (hero-field.ts gates the same way); hide it
+   outright so a stray resize can't leave a dead canvas painted over the SVG. */
+@media (max-width: 60rem), (pointer: coarse) {
+	.hero-field-canvas {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.hero-field-canvas {
+		display: none;
+	}
+}
+
 .hero {
 	position: relative;
 	z-index: 1;

@@ -408,7 +408,7 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 |---|---|---|---|
 | P2-01 ✅ | `/impeccable shape` session WITH Erick: lock the signature asset concept against the 5 constraints in §2.2; append the design contract to this file as §2.2.1 | `docs/V3-REDESIGN-BLUEPRINT.md` | §2.2.1 exists, names technique/fallback/perf plan/amber choice; Erick approved in-session |
 | P2-02 ✅ | Hero static rebuild per §2.2: new copy + type scale + masthead reposition; **delete** WeeklyPulse.astro, coffee-pulse.json, RotatingWord.astro, rotating-word.ts; update CLAUDE.md §Datos | `sections/Hero.astro`, `page.css`, `index.astro`, deletions, `CLAUDE.md` | Hero complete without JS at all 5 widths; build green with zero references to deleted files; crunch-numbers phrase gone site-wide |
-| P2-03 | Implement the asset per §2.2.1: `hero-field.ts` (or the name the contract picks), pointer interaction, static fallback, pauses, load choreography hook | `scripts/motion/hero-field.ts`, `sections/Hero.astro`, `scripts/motion/index.ts` | §2.2 done-when holds (LCP = h1, 60fps, fallbacks, single amber) |
+| P2-03 ✅ | Implement the asset per §2.2.1: `hero-field.ts` (or the name the contract picks), pointer interaction, static fallback, pauses, load choreography hook | `scripts/motion/hero-field.ts`, `sections/Hero.astro`, `scripts/motion/index.ts` | §2.2 done-when holds (LCP = h1, 60fps, fallbacks, single amber) |
 
 ### Phase 3 — Section rotation
 

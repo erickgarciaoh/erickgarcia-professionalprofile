@@ -1,4 +1,65 @@
+---
+import {
+	HERO_FIELD_REF_WIDTH,
+	HERO_FIELD_REF_HEIGHT,
+	HERO_FIELD_RADIUS,
+	HERO_FIELD_DEFAULT_ANCHOR,
+	generateFieldPoints,
+	fitLocalTrend,
+} from '../../scripts/motion/hero-field-data';
+
+// Static fallback for the hero signature asset (P2-03, blueprint §2.2.1):
+// same seeded field the canvas draws at runtime, with the resting-anchor
+// trend line already fitted — the canvas's own frame before any pointer
+// interaction, so no-JS/reduced-motion/touch/<60rem visitors see the
+// identical "signal found" identity.
+const fieldPoints = generateFieldPoints();
+const anchorPx = {
+	x: HERO_FIELD_DEFAULT_ANCHOR.x * HERO_FIELD_REF_WIDTH,
+	y: HERO_FIELD_DEFAULT_ANCHOR.y * HERO_FIELD_REF_HEIGHT,
+};
+const fieldPointsPx = fieldPoints.map((p) => ({ x: p.x * HERO_FIELD_REF_WIDTH, y: p.y * HERO_FIELD_REF_HEIGHT }));
+const fieldFit = fitLocalTrend(fieldPointsPx, anchorPx, HERO_FIELD_RADIUS);
+const fieldLine = fieldFit && {
+	x1: Math.max(0, anchorPx.x - HERO_FIELD_RADIUS),
+	x2: Math.min(HERO_FIELD_REF_WIDTH, anchorPx.x + HERO_FIELD_RADIUS),
+	fit: fieldFit,
+};
+---
+
 <section id="hero" data-section-label="Home" aria-labelledby="hero-heading">
+	<div class="hero-field" aria-hidden="true">
+		<canvas class="hero-field-canvas" data-hero-field></canvas>
+		<svg
+			class="hero-field-fallback"
+			viewBox={`0 0 ${HERO_FIELD_REF_WIDTH} ${HERO_FIELD_REF_HEIGHT}`}
+			preserveAspectRatio="xMidYMid slice"
+			focusable="false"
+		>
+			{
+				fieldPoints.map((p) => (
+					<circle
+						class={p.tone === 0 ? 'pt-ink' : 'pt-canvas'}
+						cx={p.x * HERO_FIELD_REF_WIDTH}
+						cy={p.y * HERO_FIELD_REF_HEIGHT}
+						r={p.r}
+						fill-opacity={p.alpha.toFixed(2)}
+					/>
+				))
+			}
+			{
+				fieldLine && (
+					<line
+						class="signal-line"
+						x1={fieldLine.x1}
+						y1={fieldLine.fit.m * fieldLine.x1 + fieldLine.fit.b}
+						x2={fieldLine.x2}
+						y2={fieldLine.fit.m * fieldLine.x2 + fieldLine.fit.b}
+					/>
+				)
+			}
+		</svg>
+	</div>
 	<div class="wrap hero">
 		<div class="hero-content">
 			<h1 id="hero-heading" class="hero-heading">Erick García</h1>

@@ -37,7 +37,7 @@ Origen: cinco inconformidades de Erick con la v2 desplegada (nav de puntos torci
 |---|---|---|
 | 0 | **Hotfix SectionNav** — alinear puntos (label fuera del flujo) + registro sutil sin píldora. Se publica solo e inmediato: el sitio está enlazado desde CV/LinkedIn. | **Completada** (2026-07-07) |
 | 1 | **Layout fluido full-width** — muere el `.wrap` de 72rem; gutters `clamp()`, composición que llena 1920/2560, medida de texto ≤75ch. Base de todo lo demás. QA pasa a 5 anchos (320/768/1280/1920/2560). | Pendiente |
-| 2 | **Hero nuevo** — nombre como monumento + frase de servicios + asset de firma interactivo (concepto se decide en `/impeccable shape`, P2-01). Se retiran WeeklyPulse, coffee-pulse.json y RotatingWord. | Pendiente |
+| 2 | **Hero nuevo** — nombre como monumento + frase de servicios + asset de firma interactivo (concepto se decide en `/impeccable shape`, P2-01). Se retiran WeeklyPulse, coffee-pulse.json y RotatingWord. | **Completada** (2026-07-09) |
 | 3 | **Rotación de secciones** — What I do: 3 tarjetas con escenas animadas. What I build: hereda PipelineSteps. Statement → Promise: una frase display con scrub breve. | Pendiente |
 | 4 | **Selected work** — lista izquierda + panel sticky derecho que cambia on-hover/focus (thumbnail + dataset size + stack). Muere mouse-preview. | Pendiente |
 | 5 | **Metrics como banda horizontal** — mismas 3 métricas en strip simple; Toolkit intocado. | Pendiente |
