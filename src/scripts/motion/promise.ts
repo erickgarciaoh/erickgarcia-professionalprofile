@@ -2,7 +2,7 @@ import { gsap, mm, MOTION_OK } from './core';
 import { SplitText } from 'gsap/SplitText';
 
 // The Promise section (v3 §2.5): kinetic typography over the thesis sentence,
-// scrub-read with scroll — no pin, no scenes, ~70vh of scroll. Reduced-motion
+// scrub-read with scroll — no pin, no scenes, ~55vh of scroll. Reduced-motion
 // and no-JS visitors get the static, fully-composed sentence with amber
 // already lit and zero timelines created.
 
@@ -44,18 +44,20 @@ function initPromiseType(): (() => void) | void {
 	const tl = gsap.timeline({
 		scrollTrigger: {
 			trigger: sentence,
-			start: 'top 80%',
-			end: '+=70%', // ~70vh scrub, no pinning — a pause, not a second star moment
-			scrub: 0.6,
+			start: 'top 95%', // fires as the sentence enters, so the reveal has room to
+			// finish before the last line nears the top edge
+			end: '+=55%', // ~55vh scrub, no pinning — a pause, not a second star moment
+			scrub: 0.35, // snappier catch-up than the pipeline's scrub, this is a quick read
 		},
 	});
 
 	tl.to(words, { autoAlpha: 1, y: 0, ease: 'none', duration: WORD_EACH, stagger: { each: WORD_STEP } }, 0);
 
-	// Amber ignites only once the last accent word's alpha has completed.
+	// Amber ignites partway through the last accent word's fade, not after it —
+	// reads as catching up with the words instead of trailing them.
 	if (accentWords.length > 0) {
 		const lastAccentIdx = words.indexOf(accentWords[accentWords.length - 1]);
-		const accentDoneAt = (lastAccentIdx < 0 ? words.length - 1 : lastAccentIdx) * WORD_STEP + WORD_EACH;
+		const accentDoneAt = (lastAccentIdx < 0 ? words.length - 1 : lastAccentIdx) * WORD_STEP + WORD_EACH * 0.5;
 		tl.to(accentWords, { color: accentColor, ease: 'none', duration: ACCENT_LIGHT }, accentDoneAt);
 	}
 
