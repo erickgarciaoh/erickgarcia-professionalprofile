@@ -5,6 +5,7 @@ summary: >-
   boundary artifacts — a false "+140% growth" and a fake "July complaint
   season" — before they became wrong conclusions, plus a logistic-regression
   model of which complaints get paid.
+blurb: "62,516 bank complaints, with two boundary artifacts caught before they misled."
 stack:
   - SQL Server (T-SQL)
   - Python (pandas, statsmodels)

@@ -4,6 +4,8 @@ summary: >-
   149,116 real POS transactions across 3 NYC coffee shops, run through five
   business questions — from a revenue-growth decomposition to a basket-affinity
   check — each one verified against the data before being called a finding.
+blurb: "149K coffee-shop transactions turned into five verified business answers."
+datasetSize: "149,116 rows"
 stack:
   - SQL Server (T-SQL)
   - Python (pandas, pyodbc)

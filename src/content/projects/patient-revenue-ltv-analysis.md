@@ -5,6 +5,7 @@ summary: >-
   cohort retention, and lifetime value: only 29.7% of patients convert from a
   general consultation to specialized care — and that conversion is the real
   revenue engine.
+blurb: "A conversion funnel where 29.7% reach specialized care — the real revenue engine."
 stack:
   - SQL Server (T-SQL)
   - Apache ECharts + vanilla JS

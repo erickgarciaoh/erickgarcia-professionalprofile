@@ -4,6 +4,7 @@ summary: >-
   A fictional e-commerce dataset run through a full growth-analytics stack: a
   7-step conversion funnel, four reconstructed A/B tests (including a losing
   one), and an Oaxaca-style decomposition of a three-year conversion-rate gain.
+blurb: "A growth-analytics teardown: funnel, four A/B tests, one conversion-gain decomposition."
 stack:
   - SQL Server (T-SQL)
   - HTML/CSS/JS
