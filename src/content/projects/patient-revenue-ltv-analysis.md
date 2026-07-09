@@ -6,6 +6,7 @@ summary: >-
   general consultation to specialized care — and that conversion is the real
   revenue engine.
 blurb: "A conversion funnel where 29.7% reach specialized care — the real revenue engine."
+datasetSize: "1 table · 5 cols · 17,295 rows"
 stack:
   - SQL Server (T-SQL)
   - Apache ECharts + vanilla JS

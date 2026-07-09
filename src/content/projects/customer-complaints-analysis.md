@@ -6,6 +6,7 @@ summary: >-
   season" — before they became wrong conclusions, plus a logistic-regression
   model of which complaints get paid.
 blurb: "62,516 bank complaints, with two boundary artifacts caught before they misled."
+datasetSize: "1 table · 12 cols · 62,516 rows"
 stack:
   - SQL Server (T-SQL)
   - Python (pandas, statsmodels)

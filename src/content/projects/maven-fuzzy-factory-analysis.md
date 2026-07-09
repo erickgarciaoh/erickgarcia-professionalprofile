@@ -5,6 +5,7 @@ summary: >-
   7-step conversion funnel, four reconstructed A/B tests (including a losing
   one), and an Oaxaca-style decomposition of a three-year conversion-rate gain.
 blurb: "A growth-analytics teardown: funnel, four A/B tests, one conversion-gain decomposition."
+datasetSize: "6 tables · 36 cols · 1,735,068 rows"
 stack:
   - SQL Server (T-SQL)
   - HTML/CSS/JS
