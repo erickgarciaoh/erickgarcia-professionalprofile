@@ -13,8 +13,6 @@ import SectionNav from '../components/SectionNav.astro';
 import '../styles/page.css';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const featured = projects.find((project) => project.data.featured);
-const rest = projects.filter((project) => !project.data.featured);
 
 const sectionNavItems = [
 	{ id: 'hero', label: 'Home' },
@@ -50,7 +48,7 @@ const sectionNavItems = [
 		<WhatIDo />
 		<WhatIBuild />
 		<PromiseSection />
-		<SelectedWork featured={featured} rest={rest} />
+		<SelectedWork projects={projects} />
 		<Metrics />
 		<Toolkit />
 		<Contact />

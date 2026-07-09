@@ -3,16 +3,20 @@ import { Image, getImage } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-	featured?: CollectionEntry<'projects'>;
-	rest: CollectionEntry<'projects'>[];
+	projects: CollectionEntry<'projects'>[];
 }
 
-const { featured, rest } = Astro.props;
+const { projects } = Astro.props;
 
-// Pre-resolved at build time for the cursor-follow preview (P3-04): the figure
-// swaps a plain <img src> per hovered row, so it needs a real URL, not the
-// <Image> component's responsive srcset.
-const previews = await Promise.all(rest.map((project) => getImage({ src: project.data.cover, width: 560 })));
+// Server-resolved initial active project (§2.6): no JS needed for the panel to
+// show project 1. P4-03 will switch it on hover/focus.
+const active = projects[0];
+
+// Pre-resolved at build time for the cursor-follow preview (v2 P3-04, retired in
+// P4-03): the floating figure swaps a plain <img src> per hovered row, so it
+// needs a real URL, not the <Image> component's responsive srcset. Kept intact
+// until P4-03 replaces the whole mechanism with the sticky panel.
+const previews = await Promise.all(projects.map((project) => getImage({ src: project.data.cover, width: 560 })));
 ---
 
 <section id="projects" data-theme="dark" data-section-label="Work" aria-labelledby="projects-heading">
@@ -25,107 +29,104 @@ const previews = await Promise.all(rest.map((project) => getImage({ src: project
 			</p>
 		</header>
 
-		{
-			featured && (
-				<article class="featured">
-					<a
-						class="featured-media"
-						href={featured.data.liveUrl}
-						aria-label={`Open the live data-story for ${featured.data.title}`}
-						tabindex="-1"
-					>
-						<Image
-							src={featured.data.cover}
-							alt={featured.data.coverAlt}
-							widths={[480, 800, 1200]}
-							sizes="(max-width: 60rem) 100vw, 60vw"
-							loading="eager"
-						/>
-					</a>
-					<div class="featured-body">
-						<p class="project-kicker">Featured</p>
-						<h3 class="featured-title">
-							<a href={featured.data.liveUrl}>{featured.data.title}</a>
-						</h3>
-						<p class="project-summary">{featured.data.summary}</p>
-						<ul class="stack" aria-label="Stack">
-							{featured.data.stack.map((tool) => (
-								<li>{tool}</li>
-							))}
-						</ul>
-						<div class="project-links">
-							<a
-								class="link-live"
-								href={featured.data.liveUrl}
-								aria-label={`Open the live data-story for ${featured.data.title}`}
-							>
-								Live data-story <span aria-hidden="true">↗</span>
-							</a>
-							<a
-								class="link-repo"
-								href={featured.data.repoUrl}
-								aria-label={`View the repository for ${featured.data.title}`}
-							>
-								Repository <span aria-hidden="true">↗</span>
-							</a>
-						</div>
-					</div>
-				</article>
-			)
-		}
-
 		<figure class="work-preview" aria-hidden="true">
 			<img src="" alt="" />
 		</figure>
 
-		<ol class="project-list">
-			{
-				rest.map((project, index) => (
-					<li class="project-row" style={`--i:${index}`} data-preview-src={previews[index].src}>
-						<a
-							class="row-media"
-							href={project.data.liveUrl}
-							aria-label={`Open the live data-story for ${project.data.title}`}
-							tabindex="-1"
-						>
-							<Image
-								src={project.data.cover}
-								alt={project.data.coverAlt}
-								widths={[240, 480]}
-								sizes="(max-width: 46rem) 40vw, 22rem"
-								loading="lazy"
-							/>
-						</a>
-						<div class="row-body">
-							<h3 class="row-title">
-								<a href={project.data.liveUrl}>{project.data.title}</a>
-							</h3>
-							<p class="project-summary">{project.data.summary}</p>
-							<ul class="stack" aria-label="Stack">
-								{project.data.stack.map((tool) => (
-									<li>{tool}</li>
-								))}
-							</ul>
-							<div class="project-links">
+		<div class="work-layout">
+			<ol class="project-list">
+				{
+					projects.map((project, index) => (
+						<li class="project-row" style={`--i:${index}`} data-preview-src={previews[index].src}>
+							<span class="row-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+							<a
+								class="row-media"
+								href={project.data.liveUrl}
+								aria-label={`Open the live data-story for ${project.data.title}`}
+								tabindex="-1"
+							>
+								<Image
+									src={project.data.cover}
+									alt={project.data.coverAlt}
+									widths={[240, 480]}
+									sizes="(max-width: 60rem) 100vw, 22rem"
+									loading="lazy"
+								/>
+							</a>
+							<div class="row-body">
+								<h3 class="row-title">
+									<a href={project.data.liveUrl}>{project.data.title}</a>
+								</h3>
+								<p class="row-blurb">{project.data.blurb ?? project.data.summary}</p>
+								<p class="project-summary row-summary">{project.data.summary}</p>
+								<ul class="stack row-stack" aria-label="Stack">
+									{project.data.stack.map((tool) => (
+										<li>{tool}</li>
+									))}
+								</ul>
+								<div class="project-links row-links">
+									<a
+										class="link-live"
+										href={project.data.liveUrl}
+										aria-label={`Open the live data-story for ${project.data.title}`}
+									>
+										Live data-story <span aria-hidden="true">↗</span>
+									</a>
+									<a
+										class="link-repo"
+										href={project.data.repoUrl}
+										aria-label={`View the repository for ${project.data.title}`}
+									>
+										Repository <span aria-hidden="true">↗</span>
+									</a>
+								</div>
 								<a
-									class="link-live"
-									href={project.data.liveUrl}
-									aria-label={`Open the live data-story for ${project.data.title}`}
-								>
-									Live data-story <span aria-hidden="true">↗</span>
-								</a>
-								<a
-									class="link-repo"
+									class="link-repo row-repo"
 									href={project.data.repoUrl}
 									aria-label={`View the repository for ${project.data.title}`}
 								>
 									Repository <span aria-hidden="true">↗</span>
 								</a>
 							</div>
+						</li>
+					))
+				}
+			</ol>
+
+			<figure class="work-panel">
+				<div class="work-panel-media">
+					<Image
+						src={active.data.cover}
+						alt={active.data.coverAlt}
+						widths={[480, 800, 1200]}
+						sizes="(max-width: 60rem) 100vw, 60vw"
+						loading="lazy"
+					/>
+				</div>
+				<figcaption>
+					<dl class="panel-meta">
+						{
+							active.data.datasetSize && (
+								<div class="panel-meta-row">
+									<dt>Dataset</dt>
+									<dd>{active.data.datasetSize}</dd>
+								</div>
+							)
+						}
+						<div class="panel-meta-row">
+							<dt>Stack</dt>
+							<dd>{active.data.stack.join(' · ')}</dd>
 						</div>
-					</li>
-				))
-			}
-		</ol>
+					</dl>
+					<a
+						class="link-live panel-live"
+						href={active.data.liveUrl}
+						aria-label={`Open the live data-story for ${active.data.title}`}
+					>
+						Live data-story <span aria-hidden="true">↗</span>
+					</a>
+				</figcaption>
+			</figure>
+		</div>
 	</div>
 </section>
