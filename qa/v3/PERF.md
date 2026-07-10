@@ -1,8 +1,8 @@
 # v3 · Phase 6 — Performance (P6-03)
 
 Measured 2026-07-10 against the local production build (`pnpm build` + `pnpm preview`,
-Chromium via Playwright, viewport 1920×1080). Local timings are a floor, not the deployed
-number — see the LCP caveat.
+Chromium via Playwright, viewport 1920×1080) for bundle/rAF checks, and against the deployed
+GitHub Pages URL for the LCP deployed AC (see below) after the v3 push/deploy the same day.
 
 ## LCP (largest contentful paint)
 
@@ -16,12 +16,13 @@ number — see the LCP caveat.
   The signature canvas boots after `load` and fades in over 2.2 s, so it never becomes LCP;
   the SVG fallback is a layout placeholder at `opacity: 0` on boot-capable viewports and is
   not counted either.
-- **LCP time ≤ 2.5 s on the deployed page: NOT YET VERIFIABLE.** The site is not deployed
-  (main is ~21 commits ahead of origin; nothing pushed). Local localhost timing (~60 ms) is
-  meaningless as an absolute for the ≤2.5 s target. Because the LCP node is *text* (renders as
-  soon as CSS + the Cormorant subset are ready) the target is very achievable, but the binary
-  AC "≤ 2.5 s deployed" stays **open until Erick pushes** and a Lighthouse run hits the live
-  GitHub Pages URL. Deferred to the deploy step, not a code defect.
+- **LCP time ≤ 2.5 s on the deployed page: VERIFIED 2026-07-10.** Pushed to `origin/main`
+  (104917a), GitHub Actions deploy completed successfully. Lighthouse (desktop preset, JSON
+  output, Chromium via Playwright's bundled binary since no system Chrome was present) run
+  against `https://erickgarciaoh.github.io/erickgarcia-professionalprofile/`:
+  **LCP = 0.5 s (544.5 ms)**, Performance category score **100/100**, FCP 0.5 s, TBT 0 ms,
+  CLS 0.015. Far under the 2.5 s target — the LCP node is text (hero `h1`), so it renders as
+  soon as CSS + the Cormorant subset are ready, same shape as the local measurement. ✅ AC met.
 
 ## Bundle audit (retirement weight)
 
@@ -67,7 +68,7 @@ Sampled rAF frame intervals over ~1.5–2 s windows on the running canvas.
 | Check | Status |
 |---|---|
 | LCP element = hero h1 | ✅ |
-| LCP ≤ 2.5 s deployed | ⏳ open — site not pushed; verify with Lighthouse post-deploy |
+| LCP ≤ 2.5 s deployed | ✅ 0.5 s measured 2026-07-10, deployed URL |
 | Retired-module weight gone | ✅ |
 | Hero rAF ≤ 4 ms/frame | ✅ (below measurement threshold) |
 | Off-screen / hidden pause | ✅ |

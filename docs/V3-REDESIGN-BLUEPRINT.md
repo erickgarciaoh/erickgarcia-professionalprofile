@@ -517,7 +517,7 @@ still holds as written); this is implementation refinement, not a new decision.
 |---|---|---|---|---|
 | P6-01 | Reduced-motion + no-JS full passes over the new page | — | Zero motion / all content visible; every §2 no-JS clause verified | ✅ |
 | P6-02 | Playwright screenshots 320/768/1280/1920/2560 + interaction states (work panel per row, hero asset, card scenes) → `qa/v3/` | `qa/v3/` | Reviewed; no overflow/truncation/obscured focus | ✅ |
-| P6-03 | Performance: Lighthouse LCP ≤ 2.5s deployed (LCP = hero h1), bundle audit (WeeklyPulse/RotatingWord/mouse-preview weight gone), hero rAF ≤ 4ms/frame, scrub/scenes 60fps → `qa/v3/PERF.md` | `qa/v3/PERF.md` | All thresholds met and recorded | ✅ (local metrics recorded; the "LCP ≤2.5s **deployed**" AC still needs live Lighthouse against the published site post-push — see `qa/v3/PERF.md`) |
+| P6-03 | Performance: Lighthouse LCP ≤ 2.5s deployed (LCP = hero h1), bundle audit (WeeklyPulse/RotatingWord/mouse-preview weight gone), hero rAF ≤ 4ms/frame, scrub/scenes 60fps → `qa/v3/PERF.md` | `qa/v3/PERF.md` | All thresholds met and recorded | ✅ (deployed LCP = 0.5s, verified 2026-07-10 post-push against the live GitHub Pages URL — see `qa/v3/PERF.md`) |
 | P6-04 | A11y: axe-core (wcag2a/aa) 0 real violations, AA contrast on new surfaces (dimmed list rows, band figures, nav labels), full keyboard walk, `aria-hidden` audit | — | All pass | ✅ |
 | P6-05 | Close: CLAUDE.md v3 table final states + memory update + README/OG copy if hero copy changed; **requires Erick's explicit sign-off** | `CLAUDE.md`, memory | Erick approved in-session | ✅ |
 
