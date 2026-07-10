@@ -41,7 +41,9 @@ Origen: cinco inconformidades de Erick con la v2 desplegada (nav de puntos torci
 | 3 | **Rotación de secciones** — What I do: 3 tarjetas con escenas animadas. What I build: hereda PipelineSteps. Statement → Promise: una frase display con scrub breve. | **Completada** (2026-07-09) |
 | 4 | **Selected work** — lista izquierda + panel sticky derecho que cambia on-hover/focus (thumbnail + dataset size + stack). Muere mouse-preview. | **Completada** (2026-07-09) |
 | 5 | **Metrics como banda horizontal** — mismas 3 métricas en strip simple; Toolkit intocado. | **Completada** (2026-07-09) |
-| 6 | **QA y cierre** — reduced-motion, no-JS, screenshots en 5 anchos, Lighthouse, axe, sign-off de Erick. | Pendiente |
+| 6 | **QA y cierre** — reduced-motion, no-JS, screenshots en 5 anchos, Lighthouse, axe, sign-off de Erick. | **Completada** (2026-07-10) |
+
+v3 cerrada por completo (sign-off de Erick 2026-07-10). Detalle de QA y de los 4 defectos corregidos: `docs/V3-REDESIGN-BLUEPRINT.md` §Phase 6, `qa/v3/PERF.md`, `qa/v3/A11Y.md`.
 
 Regla de proceso: idea nueva a mitad de fase → se clasifica contra este plan (va ahora / backlog / descartada) antes de tocar código. No se reordena ni reinicia sin decisión explícita.
 

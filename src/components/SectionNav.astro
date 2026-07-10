@@ -75,12 +75,15 @@ const { sections } = Astro.props;
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
 		white-space: nowrap;
-		color: var(--text-secondary);
+		/* canvas-700, not text-secondary: at 11px this label needs AA 4.5:1 on the
+		   light canvas — secondary is 4.28, canvas-700 is 7.35 (P6-04 A11Y-3). */
+		color: var(--canvas-700);
 		opacity: 0;
 		transform: translateX(4px);
 		transition:
 			opacity var(--motion-base),
-			transform var(--motion-base);
+			transform var(--motion-base),
+			color var(--motion-base);
 	}
 
 	.section-nav a:hover .dot-label,
@@ -95,9 +98,22 @@ const { sections } = Astro.props;
 		transform: scale(1.3);
 	}
 
-	/* Fixed chrome that overlays every section, light and dark alike — hard-coded
-	   to the light-world surface tokens rather than following [data-theme='dark']
-	   so it reads consistently regardless of what's scrolling underneath it. */
+	/* Theme-aware overlay (P6-04 A11Y-3): section-nav.ts adds .is-over-dark while a
+	   dark section (#projects/#metrics/#toolkit) is active, so the label + dots swap
+	   to the light-on-dark palette — canvas-100 label is 15.6:1 on the dark band and
+	   the dots stay legible, where the fixed light-world colours vanished. */
+	.section-nav.is-over-dark .dot {
+		background: var(--canvas-600);
+	}
+
+	.section-nav.is-over-dark a[aria-current='true'] .dot {
+		background: var(--canvas-100);
+	}
+
+	.section-nav.is-over-dark .dot-label {
+		color: var(--canvas-100);
+	}
+
 	@media (max-width: 60rem) {
 		.section-nav {
 			display: none;

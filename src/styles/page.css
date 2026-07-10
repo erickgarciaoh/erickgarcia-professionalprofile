@@ -266,9 +266,12 @@ summary:focus-visible {
    own progressive fade-in (hero-relief.ts, autoAlpha 0→1) is the only visible
    transition, so just one renderer is ever on screen. Never applies where the
    SVG is the permanent fallback (touch, <60rem, reduced-motion, no-JS) — this
-   query mirrors hero-relief.ts's BOOT_QUERY. */
+   query mirrors hero-relief.ts's BOOT_QUERY. Scoped to [data-reveal='js'] (set on
+   <html> before paint) so a CSS media query can't reach it with JS off: without
+   JS the canvas never boots, so the SVG must stay the visible fallback even on a
+   desktop fine-pointer viewport (P6-01 fix). */
 @media (pointer: fine) and (min-width: 60rem) and (prefers-reduced-motion: no-preference) {
-	.hero-relief-fallback {
+	[data-reveal='js'] .hero-relief-fallback {
 		opacity: 0;
 	}
 }
@@ -453,13 +456,15 @@ summary:focus-visible {
 	text-wrap: balance;
 }
 
-/* Small mono label above a section's lead (Promise "My promise"). */
+/* Small mono label above a section's lead (Promise "My promise"). canvas-700,
+   not canvas-500: at 0.7rem this is normal-size text and needs AA 4.5:1 — 500 is
+   2.46:1 on the light canvas, 700 is 7.35:1 (P6-04 fix). */
 .project-kicker {
 	font-family: var(--font-mono);
 	font-size: 0.7rem;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
-	color: var(--canvas-500);
+	color: var(--canvas-700);
 }
 
 /* ---------- Profile (dissolved into Metrics/Toolkit, P1-08) ---------- */
@@ -581,13 +586,18 @@ summary:focus-visible {
 }
 
 /* The single persistent amber in this view = the panel's live-story link. */
-.panel-live,
-.panel-live:visited {
+/* Doubled selector (the link carries both classes): .link-live comes later in
+   source with equal specificity and would otherwise clobber this to neutral,
+   dropping the Selected-work viewport's single amber. .link-live.panel-live wins
+   on specificity so the panel's Live link stays amber per §4's amber map (P6-04
+   fix; --accent-on-dark is 8.31:1 on this dark surface, AA-safe). */
+.link-live.panel-live,
+.link-live.panel-live:visited {
 	color: var(--accent-on-dark);
 	border-bottom-color: color-mix(in srgb, var(--accent-on-dark) 45%, transparent);
 }
 
-.panel-live:hover {
+.link-live.panel-live:hover {
 	border-bottom-color: var(--accent-on-dark);
 }
 
