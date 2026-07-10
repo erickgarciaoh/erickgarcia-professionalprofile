@@ -327,7 +327,18 @@ const linePath = linePoints.map((p) => p.join(',')).join(' ');
 		background: var(--ink-950);
 		border: 1px solid var(--border-default);
 		border-radius: var(--radius-lg);
-		padding: clamp(var(--space-5), 3vw, var(--space-8));
+		padding: clamp(var(--space-4), 2vw, var(--space-6));
+	}
+
+	@media (min-width: 60rem) {
+		.step-panel {
+			/* No justify-self override: a definite max-width under the default
+			   stretch alignment clamps the box AND keeps left-aligned fallback,
+			   while still giving the scene's width:100% a definite basis to
+			   resolve against (justify-self:start would shrink-to-fit instead,
+			   collapsing the SVG to its ~300px intrinsic default). */
+			max-width: 36rem;
+		}
 	}
 
 	.scene {

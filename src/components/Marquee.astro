@@ -1,44 +1,48 @@
 ---
 interface Props {
 	items: string[];
+	/** Total groups rendered in the track (1 real + repeat-1 aria-hidden
+	 * duplicates). With only a handful of short items, two groups can render
+	 * narrower than an ultra-wide viewport — the track runs out of content
+	 * and shows blank space before the loop wraps. More copies keep the
+	 * -translateX loop seamless at any width; the shift fraction below is
+	 * derived from this count, so it stays correct regardless of the value. */
+	repeat?: number;
 }
 
-const { items } = Astro.props;
+const { items, repeat = 8 } = Astro.props;
+const shiftPercent = (100 / repeat).toFixed(4);
 ---
 
 <div class="marquee">
-	<div class="marquee-track">
-		<div class="marquee-group">
-			{
-				items.map((item) => (
-					<>
-						<span class="marquee-item">{item}</span>
-						<span class="marquee-sep" aria-hidden="true">
-							·
-						</span>
-					</>
-				))
-			}
-		</div>
-		<div class="marquee-group" aria-hidden="true">
-			{
-				items.map((item) => (
-					<>
-						<span class="marquee-item">{item}</span>
-						<span class="marquee-sep" aria-hidden="true">
-							·
-						</span>
-					</>
-				))
-			}
-		</div>
+	<div class="marquee-track" style={`--marquee-shift: ${shiftPercent}%`}>
+		{
+			Array.from({ length: repeat }).map((_, i) => (
+				<div class="marquee-group" aria-hidden={i === 0 ? undefined : 'true'}>
+					{
+						items.map((item) => (
+							<>
+								<span class="marquee-item">{item}</span>
+								<span class="marquee-sep" aria-hidden="true">
+									·
+								</span>
+							</>
+						))
+					}
+				</div>
+			))
+		}
 	</div>
 </div>
 
 <style>
 	/* Cheapest component on the page by design: pure CSS, no JS (P1-07). The
-	   track duplicates its content once so translateX(-50%) loops seamlessly —
-	   both groups render identical content+gap, so they're identical width. */
+	   track repeats its content `repeat` times (all groups identical width) so
+	   shifting by exactly one group's width (100/repeat%, --marquee-shift)
+	   loops seamlessly regardless of group count — the count itself only
+	   exists to keep the total track wider than any real viewport (Erick,
+	   2026-07-10: with few short items, 2 copies ran narrower than the
+	   viewport, so the track visibly ran out before the loop wrapped). */
 	.marquee {
 		overflow: hidden;
 	}
@@ -86,12 +90,13 @@ const { items } = Astro.props;
 
 	@keyframes marquee-scroll {
 		to {
-			transform: translateX(-50%);
+			transform: translateX(calc(-1 * var(--marquee-shift, 50%)));
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		/* Static wrapped grid of the 8 labels — no duplicate track, no loop. */
+		/* Static wrapped grid of the real items — every aria-hidden duplicate
+		   group is hidden below, regardless of how many were rendered. */
 		.marquee {
 			overflow: visible;
 		}

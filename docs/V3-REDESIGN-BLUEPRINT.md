@@ -478,6 +478,39 @@ Commits in Spanish; code/comments/content in English. Mark tasks `✅` here when
 |---|---|---|---|
 | P5-01 ✅ | Horizontal band restyle per §2.7 (CSS-only; Counter untouched) | `sections/Metrics.astro` | §2.7 done-when holds |
 
+**2026-07-10 — ad-hoc QA pass by Erick, fixed ahead of Phase 6.** Live review of the shipped
+Density relief asset and already-✅ sections turned up four defects, all fixed same-day (main,
+uncommitted at review time — see commit for this date):
+- **Hero asset:** container was flush against the page edge and narrower than intended (now
+  `right: clamp(1rem, 4vw, 4rem)`, width `clamp(32rem, 55vw, 60rem)`, ≥ half the hero's width);
+  the SVG resting fallback and the live canvas briefly rendered simultaneously on load/refresh
+  ("double" render — the two renderers sample the scalar field at different cell resolutions, so
+  their contours are never pixel-identical) — fixed by keeping the SVG at `opacity: 0` on
+  JS-capable devices and letting only the canvas's own fade-in be visible; pointer attraction was
+  active anywhere in `#hero`, not just over the figure, making it feel magnetically stuck to the
+  nearest edge — gated to the figure's own footprint; the canvas's fade-in read as a loading stall
+  at 0.6s/expo.out — now 2.2s/sine.inOut, a deliberately slow, even reveal.
+- **What I do cards:** the three scenes now loop (`repeat(-1)`, `repeatDelay` 10s idle, rebuilt
+  with `fromTo()` instead of `to()` + a separate `gsap.set()` so every property has an explicit,
+  repeat-safe "from" value; the cleaning scene's scatter re-randomizes each cycle via
+  `repeatRefresh: true`). Fixed a layout-shift bug this uncovered: the automation scene's middle
+  terminal line collapsed to 0 height when its text reset to `''` between replays (an empty `<p>`
+  has no strut in this engine), shrinking the whole card row by a line each cycle —
+  `LiveTerminal.astro`'s `.terminal-line` now reserves `min-height: 1lh`. (A repeat-on-scroll
+  option for the cards' entrance reveal was tried and explicitly reverted — `reveal.ts` is back to
+  its original `once: true` for every group, unchanged from before this pass.)
+- **Toolkit marquee:** with only 8 short items, two track copies rendered narrower than the
+  viewport on wide screens, so the band visibly ran dry before the loop wrapped —
+  `Marquee.astro` now renders `repeat` (default 8) copies with the CSS shift fraction
+  (`--marquee-shift: ${100/repeat}%`) derived from that count, so it stays seamless at any width;
+  reduced-motion's static grid is unaffected (still just the real 8 items — every duplicate group
+  carries `aria-hidden`).
+
+Files touched: `sections/Hero.astro`, `scripts/motion/hero-relief.ts`,
+`scripts/motion/hero-relief-data.ts`, `styles/page.css`, `scripts/motion/what-i-do.ts`,
+`components/LiveTerminal.astro`, `components/Marquee.astro`. No blueprint contract changed (§2.2.2
+still holds as written); this is implementation refinement, not a new decision.
+
 ### Phase 6 — QA & close
 
 | ID | Task | Files | AC |

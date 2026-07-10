@@ -53,6 +53,12 @@ const { title, lines, emphasizeLast = false } = Astro.props;
 		line-height: 1.5;
 		color: var(--text-secondary);
 		overflow-wrap: anywhere;
+		/* A <p> with a fully empty text node collapses to 0 height in some
+		   engines — the typewriter tween (what-i-do.ts) resets each line's
+		   text to '' at the start of every replay, which otherwise reflows the
+		   whole card grid by a line's height for an instant. Reserving one
+		   line keeps it stable without changing the settled, fully-typed look. */
+		min-height: 1lh;
 	}
 
 	.terminal-line.is-emphasized {

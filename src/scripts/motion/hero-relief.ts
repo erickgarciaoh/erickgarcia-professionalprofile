@@ -22,7 +22,10 @@ import {
 const BOOT_QUERY = `(pointer: fine) and (min-width: 60rem) and ${MOTION_OK}`;
 const POSITION_EASE = 0.09;
 const STRENGTH_EASE = 0.055;
-const FADE_IN_DURATION = 0.6;
+// Slow and even on purpose (Erick, 2026-07-10): a quick expo-out fade read as
+// the asset having been slow to load, not as a deliberate reveal. A longer
+// duration on a gentle, symmetric ease makes the "coming to life" intentional.
+const FADE_IN_DURATION = 2.2;
 
 function waitForCascade(callback: () => void): void {
 	const run = () => {
@@ -79,12 +82,25 @@ function bootCanvas(hero: HTMLElement, box: HTMLElement, canvas: HTMLCanvasEleme
 		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 	}
 
+	// Listens on `hero`, not `box`, so the peak still tracks correctly when the
+	// figure sits partially behind `.hero-content` (which stacks above it and
+	// would otherwise swallow pointer events over the overlap). But the peak
+	// must only engage while the pointer is actually over the figure's own
+	// footprint — outside it, relax to rest instead of clamping to the nearest
+	// edge, which read as the relief being magnetically stuck to the pointer
+	// from anywhere in the hero.
 	function onPointerMove(event: PointerEvent) {
 		if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
 		const rect = box.getBoundingClientRect();
 		if (rect.width === 0 || rect.height === 0) return;
-		targetX = clamp((event.clientX - rect.left) / rect.width, RELIEF_PEAK_CLAMP.minX, RELIEF_PEAK_CLAMP.maxX);
-		targetY = clamp((event.clientY - rect.top) / rect.height, RELIEF_PEAK_CLAMP.minY, RELIEF_PEAK_CLAMP.maxY);
+		const nx = (event.clientX - rect.left) / rect.width;
+		const ny = (event.clientY - rect.top) / rect.height;
+		if (nx < 0 || nx > 1 || ny < 0 || ny > 1) {
+			targetStrength = 0;
+			return;
+		}
+		targetX = clamp(nx, RELIEF_PEAK_CLAMP.minX, RELIEF_PEAK_CLAMP.maxX);
+		targetY = clamp(ny, RELIEF_PEAK_CLAMP.minY, RELIEF_PEAK_CLAMP.maxY);
 		targetStrength = 1;
 	}
 
@@ -165,9 +181,12 @@ function bootCanvas(hero: HTMLElement, box: HTMLElement, canvas: HTMLCanvasEleme
 	};
 	document.addEventListener('visibilitychange', onVisibilityChange);
 
+	// The SVG is already invisible here (page.css's pre-boot rule) — only the
+	// canvas's own progressive fade-in is ever visible, so there's no second
+	// renderer to crossfade against.
 	canvas.style.display = 'block';
 	gsap.set(canvas, { autoAlpha: 0 });
-	gsap.to(canvas, { autoAlpha: 1, duration: FADE_IN_DURATION, ease: 'expo.out' });
+	gsap.to(canvas, { autoAlpha: 1, duration: FADE_IN_DURATION, ease: 'sine.inOut' });
 	svgFallback?.setAttribute('hidden', '');
 
 	return () => {

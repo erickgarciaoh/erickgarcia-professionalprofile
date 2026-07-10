@@ -63,7 +63,9 @@ export const RELIEF_PEAK_CLAMP = { minX: 0.2, maxX: 0.8, minY: 0.22, maxY: 0.78 
 
 // Window that fades the field to zero near the box edges, guaranteeing every
 // contour closes inside the box — the outermost contour IS the figure's edge.
-const EDGE_MARGIN = 0.1;
+// Wide enough that the fade reads as an ambient vignette, not a hard crop
+// against the box's own rectangle.
+const EDGE_MARGIN = 0.22;
 
 function edgeWindow(n: number): number {
 	const d = Math.min(n, 1 - n);
